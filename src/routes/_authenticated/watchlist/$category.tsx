@@ -123,6 +123,23 @@ function WatchlistCategoryPage() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    setShowLogoutConfirm(false);
+    try {
+      await fbSignOut(auth);
+      setItems([]);
+      setCurrentUid(null);
+      await navigate({ to: "/login", replace: true });
+    } catch (err: any) {
+      console.error("Failed to log out:", err);
+      toast.error("Logout failed. Please try again.");
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   useEffect(() => {
     const saved = getSavedTheme();
@@ -196,7 +213,9 @@ function WatchlistCategoryPage() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
+        setItems([]);
         setLoading(false);
+        void navigate({ to: "/login", replace: true });
         return;
       }
       setLoading(true);
@@ -213,7 +232,7 @@ function WatchlistCategoryPage() {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [navigate]);
 
   const openAddModal = () => {
     setEditingItem(null);
@@ -1282,13 +1301,12 @@ function WatchlistCategoryPage() {
                 Cancel
               </button>
               <button
-                onClick={() => {
-                  setShowLogoutConfirm(false);
-                  void fbSignOut(auth);
-                }}
-                className="flex-1 min-h-[44px] rounded-xl border border-destructive/60 bg-destructive/20 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-destructive hover:bg-destructive/30 transition-colors flex items-center justify-center active:scale-95"
+                type="button"
+                disabled={isLoggingOut}
+                onClick={() => void handleLogout()}
+                className="flex-1 min-h-[44px] rounded-xl border border-destructive/60 bg-destructive/20 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-destructive hover:bg-destructive/30 transition-colors flex items-center justify-center active:scale-95 disabled:opacity-50"
               >
-                Log Out
+                {isLoggingOut ? "LOGGING OUT…" : "Log Out"}
               </button>
             </div>
           </div>
