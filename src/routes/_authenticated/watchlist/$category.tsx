@@ -880,16 +880,16 @@ function WatchlistCategoryPage() {
                 );
               }
 
-              /* BOOK CATEGORY: PORTRAIT BOOK COVER CARD WITH AUTHOR METADATA & STATUS BADGE */
+              /* BOOK CATEGORY: PURE COVER-FIRST BOOK CARD (NO DUPLICATE TEXT BELOW COVER) */
               if (item.media_type === "book") {
                 return (
                   <li
                     key={item.id}
                     tabIndex={0}
-                    className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17]/90 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-neon/80 hover:shadow-[0_0_25px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_25px_var(--neon)] flex flex-col justify-between max-w-[320px] w-full mx-auto sm:max-w-none"
+                    className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17] transition-all duration-300 hover:-translate-y-1.5 hover:border-neon/80 hover:shadow-[0_0_25px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_25px_var(--neon)] max-w-[280px] w-full mx-auto sm:max-w-none flex flex-col"
                   >
-                    {/* 1. Portrait Book Cover Viewport (2/3 Aspect Ratio) */}
-                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-t-2xl">
+                    {/* 1. Cover Viewport */}
+                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] flex items-center justify-center">
                       {item.cover_url ? (
                         <img
                           src={item.cover_url}
@@ -902,9 +902,10 @@ function WatchlistCategoryPage() {
                           className="h-full w-full object-cover object-center transition-all duration-300 group-hover:scale-[1.02] group-hover:brightness-105"
                         />
                       ) : (
-                        <div className="flex h-full flex-col items-center justify-center gap-2 text-muted-foreground p-6 text-center">
+                        <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground p-6 text-center">
                           <BookOpen className="h-10 w-10 opacity-40 text-neon" />
-                          <span className="text-xs uppercase tracking-[0.2em] font-mono">No cover</span>
+                          <span className="text-xs font-bold uppercase tracking-[0.16em] text-foreground/80">{item.title}</span>
+                          {item.author && <span className="text-[11px] tracking-wide text-neon/80 font-semibold">{item.author}</span>}
                         </div>
                       )}
 
@@ -917,48 +918,28 @@ function WatchlistCategoryPage() {
                       </div>
 
                       {/* CRT Scanline & Subtle Vignette Overlay */}
-                      <div className="absolute inset-0 scanlines opacity-20 pointer-events-none" />
-                      <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.4)] pointer-events-none" />
-                    </div>
+                      <div className="absolute inset-0 scanlines opacity-20 pointer-events-none z-10" />
+                      <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] pointer-events-none z-10" />
 
-                    {/* 2. Book Metadata Section Below Cover */}
-                    <div className="p-4 flex flex-col justify-between flex-1 space-y-3">
-                      <div>
-                        <h3 className="font-display text-base sm:text-lg font-bold uppercase tracking-[0.14em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
-                          {item.title}
-                        </h3>
+                      {/* Gradient Overlay at Bottom for Action Controls readability */}
+                      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#07090e]/95 via-[#07090e]/60 to-transparent opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-250 pointer-events-none z-20" />
 
-                        {/* Author Name */}
-                        {item.author && (
-                          <p className="mt-0.5 text-xs sm:text-sm font-semibold tracking-wide text-neon/90 line-clamp-1">
-                            {item.author}
-                          </p>
-                        )}
-
-                        <p className="mt-1 text-xs font-mono uppercase tracking-[0.18em] text-muted-foreground/70">
-                          BOOK
-                        </p>
-                      </div>
-
-                      {/* Action Controls Area */}
-                      <div className="space-y-2 pt-0.5">
-                        {/* Compact Action Buttons — Revealed smoothly on hover/focus without layout shift */}
-                        <div className="grid grid-cols-2 gap-2 text-xs uppercase tracking-[0.16em] transition-all duration-250 ease-out max-h-0 opacity-0 overflow-hidden group-hover:max-h-14 group-hover:opacity-100 group-hover:mt-2 group-focus-within:max-h-14 group-focus-within:opacity-100 group-focus-within:mt-2 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
-                          <button
-                            onClick={() => openEditModal(item)}
-                            className="min-h-[36px] rounded-xl border border-border/60 bg-secondary/50 hover:border-neon/70 hover:bg-neon/15 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm"
-                          >
-                            <Edit2 className="h-3.5 w-3.5 shrink-0" />
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => setDeletingItem(item)}
-                            className="min-h-[36px] rounded-xl border border-border/40 bg-destructive/15 hover:border-destructive/60 hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm"
-                          >
-                            <Trash2 className="h-3.5 w-3.5 shrink-0" />
-                            Delete
-                          </button>
-                        </div>
+                      {/* Hover Action Controls — Overlayed on lower cover area */}
+                      <div className="absolute inset-x-0 bottom-0 z-30 p-3 flex items-center gap-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-250 ease-out pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
+                        <button
+                          onClick={() => openEditModal(item)}
+                          className="flex-1 min-h-[36px] rounded-xl border border-neon/50 bg-[#0c0e17]/90 hover:border-neon/80 hover:bg-neon/20 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 backdrop-blur-md shadow-lg"
+                        >
+                          <Edit2 className="h-3.5 w-3.5 shrink-0" />
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => setDeletingItem(item)}
+                          className="flex-1 min-h-[36px] rounded-xl border border-destructive/50 bg-[#0c0e17]/90 hover:border-destructive/80 hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 backdrop-blur-md shadow-lg"
+                        >
+                          <Trash2 className="h-3.5 w-3.5 shrink-0" />
+                          Delete
+                        </button>
                       </div>
                     </div>
                   </li>
