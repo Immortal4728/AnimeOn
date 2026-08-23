@@ -496,7 +496,7 @@ function WatchlistCategoryPage() {
                 <Sparkles className="h-3 w-3 shrink-0 animate-pulse" />
                 <span>PERSONAL ARCHIVE</span>
               </div>
-              <h1 className="font-display text-2xl sm:text-4xl font-bold uppercase tracking-[0.14em] sm:tracking-[0.16em] text-foreground truncate max-w-full">
+              <h1 className="font-display text-xl sm:text-3xl lg:text-4xl font-bold uppercase tracking-[0.12em] sm:tracking-[0.16em] text-foreground truncate max-w-full">
                 MY WATCHLIST
               </h1>
               <p className="text-xs text-muted-foreground tracking-[0.1em]">

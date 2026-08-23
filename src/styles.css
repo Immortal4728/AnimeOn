@@ -217,3 +217,12 @@
 .font-cinematic {
   font-family: 'Outfit', 'Space Grotesk', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 }
+
+/* HIDE SCROLLBARS FOR CLEAN HORIZONTAL MOBILE SWIPING */
+.scrollbar-none {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
