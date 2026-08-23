@@ -762,9 +762,6 @@ function WatchlistCategoryPage() {
                         <h3 className="font-display text-xl sm:text-[22px] leading-tight font-bold uppercase tracking-[0.1em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
                           {item.title}
                         </h3>
-                        <p className="mt-1 text-xs sm:text-sm font-mono font-semibold uppercase tracking-[0.2em] text-muted-foreground/80">
-                          ANIME
-                        </p>
                       </div>
 
                       {/* Hover Action Controls — Collapsible, no empty space when hidden */}
