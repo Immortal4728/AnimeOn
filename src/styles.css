@@ -212,3 +212,8 @@
   letter-spacing: 0.04em;
   line-height: 1.2;
 }
+
+/* CINEMATIC DISPLAY FONT FOR MOVIES, K-DRAMAS & WEB SERIES */
+.font-cinematic {
+  font-family: 'Outfit', 'Space Grotesk', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}

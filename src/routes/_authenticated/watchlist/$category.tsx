@@ -970,7 +970,7 @@ function WatchlistCategoryPage() {
                       ) : (
                         <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground p-6 text-center">
                           <Film className="h-10 w-10 opacity-40 text-neon" />
-                          <span className="text-xs font-bold uppercase tracking-[0.16em] text-white">{item.title}</span>
+                          <span className="font-cinematic text-xs font-bold uppercase tracking-[0.12em] text-white">{item.title}</span>
                         </div>
                       )}
 
@@ -990,7 +990,7 @@ function WatchlistCategoryPage() {
                     <div className="absolute top-[100%] inset-x-0 pt-2 z-40 space-y-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-250 ease-out pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
                       <div className="rounded-xl border border-border/40 bg-[#0c0e17]/95 p-3 space-y-2 shadow-2xl backdrop-blur-md">
                         <div className="text-center">
-                          <h3 className="font-display text-sm sm:text-base font-bold uppercase tracking-[0.12em] text-white line-clamp-1">
+                          <h3 className="font-cinematic text-base sm:text-lg font-bold uppercase tracking-[0.08em] text-white line-clamp-1">
                             {item.title}
                           </h3>
                         </div>
