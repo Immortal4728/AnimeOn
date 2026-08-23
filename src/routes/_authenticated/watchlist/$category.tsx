@@ -395,7 +395,7 @@ function WatchlistCategoryPage() {
       <div className="fixed top-0 left-1/4 -z-10 h-96 w-96 rounded-full bg-neon/10 blur-[150px] pointer-events-none" />
       <div className="fixed bottom-0 right-1/4 -z-10 h-96 w-96 rounded-full bg-neon-2/10 blur-[150px] pointer-events-none" />
 
-      <div className="mx-auto max-w-7xl px-3.5 sm:px-6 lg:px-12 space-y-5 sm:space-y-8 pt-3 sm:pt-6">
+      <div className="mx-auto w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] lg:w-[calc(100%-4rem)] max-w-[1700px] space-y-5 sm:space-y-8 pt-3 sm:pt-6">
         {/* TOP NAVBAR HEADER */}
         <header className="sticky top-2 sm:top-4 z-40 rounded-2xl border border-border/40 bg-[#0c0e17]/80 px-3.5 sm:px-6 py-2.5 sm:py-3.5 backdrop-blur-xl shadow-[0_0_30px_rgba(0,0,0,0.5)]">
           <div className="flex items-center justify-between gap-2 sm:gap-4">
@@ -490,7 +490,7 @@ function WatchlistCategoryPage() {
 
         {/* CONTROLS HEADER & SEARCH AREA */}
         <div className="space-y-4 sm:space-y-6">
-          <div className="flex flex-col gap-3.5 md:flex-row md:items-end md:justify-between">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div className="space-y-1">
               <div className="inline-flex items-center gap-2 rounded-full border border-neon/40 bg-neon/10 px-3 py-0.5 sm:py-1 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-neon shadow-[0_0_15px_rgba(236,72,153,0.2)]">
                 <Sparkles className="h-3 w-3 shrink-0 animate-pulse" />
@@ -505,7 +505,7 @@ function WatchlistCategoryPage() {
             </div>
 
             {/* Search Input Bar */}
-            <div className="relative w-full md:w-72">
+            <div className="relative w-full md:w-80 lg:w-96">
               <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <input
                 value={search}
@@ -536,7 +536,7 @@ function WatchlistCategoryPage() {
           </div>
 
           {/* LEVEL 2: STATUS FILTER & TOOLBAR CONTAINER */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-card/40 rounded-2xl border border-border/40 p-3 sm:px-5 sm:py-3 backdrop-blur-xl shadow-lg">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-card/40 rounded-2xl border border-border/40 p-3 sm:px-5 sm:py-3 backdrop-blur-xl shadow-lg w-full">
             {/* STATUS FILTER STRIP */}
             {["anime", "movie", "kdrama", "web", "book"].includes(selectedType) ? (
               <div className="inline-flex items-center gap-1.5 bg-[#0c0e17]/80 border border-border/40 p-1.5 rounded-xl max-w-full overflow-x-auto scrollbar-none snap-x touch-pan-x">
@@ -639,8 +639,8 @@ function WatchlistCategoryPage() {
             </div>
           </div>
         ) : (
-          /* MEDIA CARDS LIST */
-          <ul className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-stretch">
+          /* MEDIA CARDS LIST — Wide dashboard responsive grid layout */
+          <ul className="grid gap-6 sm:gap-7 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 justify-start items-start">
             {visibleItems.map((item) => {
               /* GAMES CATEGORY: CINEMATIC FULL-COVER VIDEO GAME CARD */
               if (item.media_type === "game") {
