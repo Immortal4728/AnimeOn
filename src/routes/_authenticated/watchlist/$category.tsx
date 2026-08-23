@@ -8,6 +8,7 @@ import {
   Trash2,
   ExternalLink,
   Film,
+  BookOpen,
   LogOut,
   X,
   Palette,
@@ -43,6 +44,7 @@ export const Route = createFileRoute("/_authenticated/watchlist/$category")({
     else if (slug === "web-series") categoryName = "Web Series";
     else if (slug === "games") categoryName = "Games";
     else if (slug === "porn") categoryName = "Porn";
+    else if (slug === "books" || slug === "book") categoryName = "Books";
 
     return {
       meta: [
@@ -65,6 +67,7 @@ const MEDIA_FILTERS: { label: string; value: MediaType; slug: string }[] = [
   { label: "Web Series", value: "web", slug: "web-series" },
   { label: "Games", value: "game", slug: "games" },
   { label: "Porn", value: "porn", slug: "porn" },
+  { label: "Books", value: "book", slug: "books" },
 ];
 
 const STATUS_FILTERS: { label: string; value: WatchStatus }[] = [
@@ -107,6 +110,7 @@ function WatchlistCategoryPage() {
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     title: "",
+    author: "",
     actress_name: "",
     media_type: selectedType as MediaType,
     status: "want" as WatchStatus,
@@ -176,12 +180,18 @@ function WatchlistCategoryPage() {
 
   const handleCategoryChange = (type: MediaType) => {
     const slug = mediaTypeToSlug(type);
-    setSelectedStatus("all");
+    setSelectedStatus(type === "book" ? "want" : "all");
     void navigate({
       to: "/watchlist/$category",
       params: { category: slug },
     });
   };
+
+  useEffect(() => {
+    if (selectedType === "book" && selectedStatus === "all") {
+      setSelectedStatus("want");
+    }
+  }, [selectedType, selectedStatus]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -209,6 +219,7 @@ function WatchlistCategoryPage() {
     setEditingItem(null);
     setForm({
       title: "",
+      author: "",
       actress_name: "",
       media_type: selectedType,
       status: "want",
@@ -223,6 +234,7 @@ function WatchlistCategoryPage() {
     setEditingItem(item);
     setForm({
       title: item.title,
+      author: item.author || "",
       actress_name: item.actressName || item.actress_name || "",
       media_type: item.media_type,
       status: item.status,
@@ -248,6 +260,7 @@ function WatchlistCategoryPage() {
       if (editingItem) {
         await updateWatchlistItem(user.uid, editingItem.id, {
           title: form.title,
+          author: form.author || null,
           actressName: form.actress_name || null,
           status: form.status,
           imageUrl: form.cover_url || null,
@@ -259,15 +272,16 @@ function WatchlistCategoryPage() {
           prev.map((i) =>
             i.id === editingItem.id
               ? {
-                  ...i,
-                  title: form.title,
-                  actressName: form.actress_name || null,
-                  actress_name: form.actress_name || null,
-                  status: form.status,
-                  cover_url: form.cover_url || null,
-                  link: form.link || null,
-                  notes: form.notes || null,
-                }
+                ...i,
+                title: form.title,
+                author: form.author || null,
+                actressName: form.actress_name || null,
+                actress_name: form.actress_name || null,
+                status: form.status,
+                cover_url: form.cover_url || null,
+                link: form.link || null,
+                notes: form.notes || null,
+              }
               : i
           )
         );
@@ -275,6 +289,7 @@ function WatchlistCategoryPage() {
       } else {
         const newItem = await addWatchlistItem(user.uid, {
           title: form.title,
+          author: form.author || null,
           actressName: form.actress_name || null,
           type: selectedType,
           status: form.status,
@@ -331,6 +346,7 @@ function WatchlistCategoryPage() {
       const q = search.toLowerCase();
       return (
         item.title.toLowerCase().includes(q) ||
+        (item.author && item.author.toLowerCase().includes(q)) ||
         (item.notes && item.notes.toLowerCase().includes(q))
       );
     }
@@ -340,6 +356,9 @@ function WatchlistCategoryPage() {
   const statusLabel = (st: WatchStatus, type?: MediaType) => {
     if (type === "game") {
       return st === "want" ? "Want to Play" : "Completed";
+    }
+    if (type === "book") {
+      return st === "want" ? "Want to Read" : "Completed";
     }
     return st === "want" ? "Want to Watch" : "Completed";
   };
@@ -363,6 +382,8 @@ function WatchlistCategoryPage() {
         return "+ Add Game";
       case "porn":
         return "+ Add Link";
+      case "book":
+        return "+ Add Book";
       default:
         return "+ Add Item";
     }
@@ -421,11 +442,10 @@ function WatchlistCategoryPage() {
                             key={t.id}
                             type="button"
                             onClick={() => void handleSelectTheme(t.id)}
-                            className={`w-full flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition-all min-h-[40px] ${
-                              isActive
+                            className={`w-full flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition-all min-h-[40px] ${isActive
                                 ? "bg-secondary/60 text-foreground border border-neon/40 shadow-[0_0_10px_rgba(236,72,153,0.15)]"
                                 : "text-muted-foreground hover:text-foreground hover:bg-secondary/30"
-                            }`}
+                              }`}
                             role="menuitem"
                           >
                             <div className="flex items-center gap-2.5 min-w-0">
@@ -504,11 +524,10 @@ function WatchlistCategoryPage() {
                 <button
                   key={f.value}
                   onClick={() => handleCategoryChange(f.value)}
-                  className={`shrink-0 snap-start min-h-[42px] sm:min-h-[44px] rounded-xl px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] sm:tracking-[0.2em] transition-all duration-200 active:scale-95 ${
-                    isActive
+                  className={`shrink-0 snap-start min-h-[42px] sm:min-h-[44px] rounded-xl px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] sm:tracking-[0.2em] transition-all duration-200 active:scale-95 ${isActive
                       ? "border border-neon/60 bg-primary/20 text-foreground shadow-[0_0_20px_rgba(236,72,153,0.25)]"
                       : "text-muted-foreground hover:text-foreground hover:bg-secondary/40"
-                  }`}
+                    }`}
                 >
                   {f.label}
                 </button>
@@ -519,19 +538,24 @@ function WatchlistCategoryPage() {
           {/* LEVEL 2: STATUS FILTER & TOOLBAR CONTAINER */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-card/40 rounded-2xl border border-border/40 p-3 sm:px-5 sm:py-3 backdrop-blur-xl shadow-lg">
             {/* STATUS FILTER STRIP */}
-            {["anime", "movie", "kdrama", "web"].includes(selectedType) ? (
+            {["anime", "movie", "kdrama", "web", "book"].includes(selectedType) ? (
               <div className="inline-flex items-center gap-1.5 bg-[#0c0e17]/80 border border-border/40 p-1.5 rounded-xl max-w-full overflow-x-auto scrollbar-none snap-x touch-pan-x">
                 {STATUS_FILTERS.map((s) => {
                   const isActive = selectedStatus === s.value;
                   return (
                     <button
                       key={s.value}
-                      onClick={() => setSelectedStatus(isActive ? "all" : s.value)}
-                      className={`shrink-0 snap-start min-h-[38px] rounded-lg px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.14em] sm:tracking-[0.16em] transition-all duration-200 active:scale-95 ${
-                        isActive
+                      onClick={() => {
+                        if (selectedType === "book") {
+                          setSelectedStatus(s.value);
+                        } else {
+                          setSelectedStatus(isActive ? "all" : s.value);
+                        }
+                      }}
+                      className={`shrink-0 snap-start min-h-[38px] rounded-lg px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.14em] sm:tracking-[0.16em] transition-all duration-200 active:scale-95 ${isActive
                           ? "border border-neon/60 bg-neon/15 text-neon shadow-[0_0_15px_rgba(236,72,153,0.3)]"
                           : "text-muted-foreground hover:text-foreground hover:bg-secondary/40"
-                      }`}
+                        }`}
                     >
                       {statusLabel(s.value, selectedType)}
                     </button>
@@ -575,13 +599,22 @@ function WatchlistCategoryPage() {
               <Bookmark className="h-8 w-8" />
             </div>
 
-            {selectedStatus !== "all" ? (
+            {selectedStatus !== "all" && selectedType !== "book" ? (
               <div className="space-y-2 max-w-md mx-auto">
                 <h3 className="font-display text-xl sm:text-2xl font-bold uppercase tracking-[0.18em] text-foreground">
                   NO ITEMS MATCH THIS FILTER
                 </h3>
                 <p className="text-xs text-muted-foreground tracking-[0.1em]">
                   Try selecting another filter or search term.
+                </p>
+              </div>
+            ) : selectedType === "book" ? (
+              <div className="space-y-2 max-w-md mx-auto">
+                <h3 className="font-display text-xl sm:text-2xl font-bold uppercase tracking-[0.18em] text-foreground">
+                  YOUR LIBRARY IS EMPTY
+                </h3>
+                <p className="text-xs text-muted-foreground tracking-[0.1em]">
+                  "Add something worth reading."
                 </p>
               </div>
             ) : (
@@ -761,17 +794,102 @@ function WatchlistCategoryPage() {
                 );
               }
 
-              /* PORN CATEGORY: COMPACT LANDSCAPE CARD (16:9 ASPECT RATIO) */
+              /* PORN CATEGORY: LANDSCAPE BANNER CARD WITH EXTERNAL METADATA & ACTRESS NAME */
               if (item.media_type === "porn") {
                 const actress = item.actressName || item.actress_name;
                 return (
                   <li
                     key={item.id}
                     tabIndex={0}
-                    className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17]/90 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-neon/80 hover:shadow-[0_0_25px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_25px_var(--neon)] flex flex-col justify-between max-w-[380px] w-full mx-auto sm:max-w-none"
+                    className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17]/90 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-neon/80 hover:shadow-[0_0_35px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_35px_var(--neon)] flex flex-col justify-between max-w-[400px] w-full mx-auto sm:max-w-none col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2"
                   >
-                    {/* 1. Compact Landscape Cover Viewport (16:9 Aspect Ratio) */}
+                    {/* 1. Landscape Cover Viewport (16:9 Aspect Ratio) */}
                     <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#07090e] rounded-t-2xl">
+                      {item.cover_url ? (
+                        <img
+                          src={item.cover_url}
+                          alt={item.title}
+                          loading="lazy"
+                          decoding="async"
+                          onError={(e) => {
+                            (e.target as HTMLElement).style.display = "none";
+                          }}
+                          className="h-full w-full object-cover object-center transition-all duration-500 group-hover:scale-[1.03] group-hover:brightness-110"
+                        />
+                      ) : (
+                        <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground p-6 text-center">
+                          <Film className="h-10 w-10 opacity-40 text-neon" />
+                          <span className="text-xs uppercase tracking-[0.2em] font-mono">No cover</span>
+                        </div>
+                      )}
+
+                      {/* CRT Scanline & Subtle Vignette Overlay */}
+                      <div className="absolute inset-0 scanlines opacity-20 pointer-events-none" />
+                      <div className="absolute inset-0 shadow-[inset_0_0_25px_rgba(0,0,0,0.4)] pointer-events-none" />
+                    </div>
+
+                    {/* 2. Card Information Section Outside Image */}
+                    <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 space-y-3">
+                      <div>
+                        <h3 className="font-display text-base sm:text-lg font-bold uppercase tracking-[0.14em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
+                          {item.title}
+                        </h3>
+
+                        {/* Actress Name */}
+                        {actress && (
+                          <p className="mt-1 text-sm font-semibold tracking-wide text-neon/90 line-clamp-1">
+                            {actress}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Action Buttons Area */}
+                      <div className="space-y-2 pt-1">
+                        {item.link ? (
+                          <a
+                            href={item.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full min-h-[38px] flex items-center justify-center gap-2 rounded-xl border border-neon/60 bg-neon/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-neon hover:bg-neon/20 transition-all shadow-[0_0_14px_var(--neon)] active:scale-95"
+                          >
+                            <ExternalLink className="h-4 w-4 shrink-0" />
+                            Open Link
+                          </a>
+                        ) : null}
+
+                        {/* Compact Action Buttons — Smoothly revealed on hover/focus without empty space when hidden */}
+                        <div className="grid grid-cols-2 gap-2.5 text-xs uppercase tracking-[0.16em] transition-all duration-250 ease-out max-h-0 opacity-0 overflow-hidden group-hover:max-h-14 group-hover:opacity-100 group-hover:mt-2 group-focus-within:max-h-14 group-focus-within:opacity-100 group-focus-within:mt-2 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
+                          <button
+                            onClick={() => openEditModal(item)}
+                            className="min-h-[38px] rounded-xl border border-border/60 bg-secondary/50 hover:border-neon/70 hover:bg-neon/15 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm"
+                          >
+                            <Edit2 className="h-4 w-4 shrink-0" />
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => setDeletingItem(item)}
+                            className="min-h-[38px] rounded-xl border border-border/40 bg-destructive/15 hover:border-destructive/60 hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm"
+                          >
+                            <Trash2 className="h-4 w-4 shrink-0" />
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                );
+              }
+
+              /* BOOK CATEGORY: PORTRAIT BOOK COVER CARD WITH AUTHOR METADATA & STATUS BADGE */
+              if (item.media_type === "book") {
+                return (
+                  <li
+                    key={item.id}
+                    tabIndex={0}
+                    className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17]/90 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-neon/80 hover:shadow-[0_0_25px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_25px_var(--neon)] flex flex-col justify-between max-w-[320px] w-full mx-auto sm:max-w-none"
+                  >
+                    {/* 1. Portrait Book Cover Viewport (2/3 Aspect Ratio) */}
+                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-t-2xl">
                       {item.cover_url ? (
                         <img
                           src={item.cover_url}
@@ -784,37 +902,45 @@ function WatchlistCategoryPage() {
                           className="h-full w-full object-cover object-center transition-all duration-300 group-hover:scale-[1.02] group-hover:brightness-105"
                         />
                       ) : (
-                        <div className="flex h-full flex-col items-center justify-center gap-2 text-muted-foreground p-4 text-center">
-                          <Film className="h-8 w-8 opacity-40 text-neon" />
-                          <span className="text-[10px] uppercase tracking-[0.2em] font-mono">No cover</span>
+                        <div className="flex h-full flex-col items-center justify-center gap-2 text-muted-foreground p-6 text-center">
+                          <BookOpen className="h-10 w-10 opacity-40 text-neon" />
+                          <span className="text-xs uppercase tracking-[0.2em] font-mono">No cover</span>
                         </div>
                       )}
+
+                      {/* Status Badge Top Left */}
+                      <div className="absolute top-3 left-3 z-20">
+                        <span className="inline-flex items-center gap-1.5 rounded-lg border border-neon/60 bg-[#07090e]/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-neon backdrop-blur-md shadow-[0_0_12px_var(--neon)]">
+                          <span className="h-1.5 w-1.5 rounded-full bg-neon animate-pulse shrink-0" />
+                          {statusLabel(item.status, "book")}
+                        </span>
+                      </div>
 
                       {/* CRT Scanline & Subtle Vignette Overlay */}
                       <div className="absolute inset-0 scanlines opacity-20 pointer-events-none" />
                       <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.4)] pointer-events-none" />
                     </div>
 
-                    {/* 2. Compact Information Section Outside Image */}
-                    <div className="p-4 flex flex-col justify-between space-y-2.5">
+                    {/* 2. Book Metadata Section Below Cover */}
+                    <div className="p-4 flex flex-col justify-between flex-1 space-y-3">
                       <div>
                         <h3 className="font-display text-base sm:text-lg font-bold uppercase tracking-[0.14em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
                           {item.title}
                         </h3>
 
-                        {/* Actress Name */}
-                        {actress && (
+                        {/* Author Name */}
+                        {item.author && (
                           <p className="mt-0.5 text-xs sm:text-sm font-semibold tracking-wide text-neon/90 line-clamp-1">
-                            {actress}
+                            {item.author}
                           </p>
                         )}
 
                         <p className="mt-1 text-xs font-mono uppercase tracking-[0.18em] text-muted-foreground/70">
-                          PORN
+                          BOOK
                         </p>
                       </div>
 
-                      {/* Action Buttons Area */}
+                      {/* Action Controls Area */}
                       <div className="space-y-2 pt-0.5">
                         {item.link ? (
                           <a
@@ -828,7 +954,7 @@ function WatchlistCategoryPage() {
                           </a>
                         ) : null}
 
-                        {/* Compact Action Buttons — Smoothly revealed on hover/focus without empty space when hidden */}
+                        {/* Compact Action Buttons — Revealed smoothly on hover/focus without layout shift */}
                         <div className="grid grid-cols-2 gap-2 text-xs uppercase tracking-[0.16em] transition-all duration-250 ease-out max-h-0 opacity-0 overflow-hidden group-hover:max-h-14 group-hover:opacity-100 group-hover:mt-2 group-focus-within:max-h-14 group-focus-within:opacity-100 group-focus-within:mt-2 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
                           <button
                             onClick={() => openEditModal(item)}
@@ -943,7 +1069,7 @@ function WatchlistCategoryPage() {
           >
             <div className="flex items-center justify-between border-b border-border/20 pb-3.5">
               <h2 className="font-display text-base sm:text-lg font-bold uppercase tracking-[0.18em] text-foreground truncate pr-2">
-                {editingItem ? "EDIT ITEM" : "ADD TO WATCHLIST"}
+                {editingItem ? "EDIT ITEM" : form.media_type === "book" ? "ADD BOOK" : "ADD TO WATCHLIST"}
               </h2>
               <button
                 type="button"
@@ -969,6 +1095,21 @@ function WatchlistCategoryPage() {
                   className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-foreground outline-none focus:border-neon focus:ring-1 focus:ring-neon min-h-[44px]"
                 />
               </div>
+
+              {/* Author for Book category */}
+              {form.media_type === "book" && (
+                <div>
+                  <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+                    Author
+                  </label>
+                  <input
+                    value={form.author}
+                    onChange={(e) => setForm({ ...form, author: e.target.value })}
+                    placeholder="Author name"
+                    className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-foreground outline-none focus:border-neon focus:ring-1 focus:ring-neon min-h-[44px]"
+                  />
+                </div>
+              )}
 
               {/* Actress Name for Porn category */}
               {form.media_type === "porn" && (
@@ -998,8 +1139,8 @@ function WatchlistCategoryPage() {
                 />
               </div>
 
-              {/* FOR PORN CATEGORY: LINK FIELD ONLY */}
-              {form.media_type === "porn" ? (
+              {/* FOR PORN AND BOOK CATEGORIES: LINK FIELD */}
+              {(form.media_type === "porn" || form.media_type === "book") && (
                 <div>
                   <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
                     Link
@@ -1011,9 +1152,9 @@ function WatchlistCategoryPage() {
                     className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-foreground outline-none focus:border-neon focus:ring-1 focus:ring-neon truncate min-h-[44px]"
                   />
                 </div>
-              ) : form.media_type === "game" ? (
-                null
-              ) : (
+              )}
+
+              {form.media_type === "porn" ? null : form.media_type === "game" ? null : (
                 <>
                   {/* Status */}
                   <div>

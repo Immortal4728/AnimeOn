@@ -16,6 +16,7 @@ import type { WatchlistItem, Shelf, MediaType, WatchStatus } from "@/lib/watchli
 
 export interface CreateWatchlistItemInput {
   title: string;
+  author?: string | null;
   imageUrl: string | null;
   link?: string | null;
   actressName?: string | null;
@@ -185,6 +186,7 @@ export async function fetchUserWatchlist(uid: string): Promise<WatchlistItem[]> 
         id: docSnap.id,
         user_id: uid,
         title: data["title"] || "",
+        author: data["author"] || null,
         cover_url: data["imageUrl"] || data["cover_url"] || null,
         link: data["link"] || null,
         actressName: data["actressName"] || data["actress_name"] || null,
@@ -227,6 +229,7 @@ export async function addWatchlistItem(
 
     const docData: Record<string, any> = {
       title: input.title.trim(),
+      author: input.author ? input.author.trim() : null,
       imageUrl: input.imageUrl || null,
       link: input.link || null,
       actressName: input.actressName ? input.actressName.trim() : null,
@@ -246,6 +249,7 @@ export async function addWatchlistItem(
       id: docRef.id,
       user_id: uid,
       title: input.title.trim(),
+      author: input.author ? input.author.trim() : null,
       cover_url: input.imageUrl || null,
       link: input.link || null,
       actressName: input.actressName ? input.actressName.trim() : null,
@@ -278,6 +282,7 @@ export async function updateWatchlistItem(
     };
 
     if (updates.title !== undefined) updateData["title"] = updates.title.trim();
+    if (updates.author !== undefined) updateData["author"] = updates.author ? updates.author.trim() : null;
     if (updates.imageUrl !== undefined) updateData["imageUrl"] = updates.imageUrl || null;
     if (updates.link !== undefined) updateData["link"] = updates.link || null;
     if (updates.actressName !== undefined) updateData["actressName"] = updates.actressName ? updates.actressName.trim() : null;

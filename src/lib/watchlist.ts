@@ -1,4 +1,4 @@
-export type MediaType = "anime" | "movie" | "kdrama" | "web" | "game" | "porn" | "tv" | "other";
+export type MediaType = "anime" | "movie" | "kdrama" | "web" | "game" | "porn" | "book" | "tv" | "other";
 export type WatchStatus = "want" | "completed";
 
 export const MEDIA_TYPES: { value: MediaType; label: string }[] = [
@@ -8,6 +8,7 @@ export const MEDIA_TYPES: { value: MediaType; label: string }[] = [
   { value: "web", label: "Web Series" },
   { value: "game", label: "Game" },
   { value: "porn", label: "Porn" },
+  { value: "book", label: "Books" },
   { value: "tv", label: "TV Show" },
   { value: "other", label: "Other" },
 ];
@@ -19,6 +20,7 @@ export const MEDIA_FILTERS: { value: MediaType; label: string }[] = [
   { value: "web", label: "Web Series" },
   { value: "game", label: "Games" },
   { value: "porn", label: "Porn" },
+  { value: "book", label: "Books" },
 ];
 
 export const FILTERS: { value: "all" | MediaType; label: string }[] = [
@@ -34,15 +36,15 @@ export const STATUS_FILTERS: { value: WatchStatus; label: string }[] = [
 ];
 
 export function statusLabel(status: string, type: string): string {
-  const game = type === "game";
-  switch (status) {
-    case "want":
-      return game ? "Want to Play" : "Want to Watch";
-    case "completed":
-      return "Completed";
-    default:
-      return status;
+  if (status === "want") {
+    if (type === "game") return "Want to Play";
+    if (type === "book") return "Want to Read";
+    return "Want to Watch";
   }
+  if (status === "completed") {
+    return "Completed";
+  }
+  return status;
 }
 
 export function categorySlugToType(slug?: string): MediaType {
@@ -65,6 +67,9 @@ export function categorySlugToType(slug?: string): MediaType {
       return "game";
     case "porn":
       return "porn";
+    case "books":
+    case "book":
+      return "book";
     default:
       return "anime";
   }
@@ -84,6 +89,8 @@ export function mediaTypeToSlug(type: MediaType): string {
       return "games";
     case "porn":
       return "porn";
+    case "book":
+      return "books";
     default:
       return "anime";
   }
@@ -106,6 +113,7 @@ export interface WatchlistItem {
   id: string;
   user_id: string;
   title: string;
+  author?: string | null;
   cover_url: string | null;
   link?: string | null;
   actressName?: string | null;
