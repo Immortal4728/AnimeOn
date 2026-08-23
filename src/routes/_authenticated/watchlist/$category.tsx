@@ -924,6 +924,17 @@ function WatchlistCategoryPage() {
                       {/* Gradient Overlay at Bottom for Action Controls readability */}
                       <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#07090e]/95 via-[#07090e]/60 to-transparent opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-250 pointer-events-none z-20" />
 
+                      {/* Signature-style Author Name Reveal on Hover */}
+                      {item.author && (
+                        <div className="absolute inset-x-0 bottom-14 z-25 px-3 text-center pointer-events-none overflow-hidden flex items-center justify-center">
+                          <span
+                            className="signature-animation font-signature inline-block text-xl sm:text-2xl font-bold italic tracking-wider text-pink-100 drop-shadow-[0_0_12px_var(--neon)] whitespace-nowrap overflow-hidden max-w-[90%]"
+                          >
+                            ~ {item.author} ~
+                          </span>
+                        </div>
+                      )}
+
                       {/* Hover Action Controls — Overlayed on lower cover area */}
                       <div className="absolute inset-x-0 bottom-0 z-30 p-3 flex items-center gap-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-250 ease-out pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
                         <button
