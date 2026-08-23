@@ -1,23 +1,57 @@
 import { useState } from "react";
 import { toast } from "sonner";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
+import { auth } from "@/lib/firebase";
 import { lovable } from "@/integrations/lovable/index";
+import { recordUserProfile } from "@/lib/user-registry";
 
 export function GoogleButton({ className = "" }: { className?: string }) {
   const [loading, setLoading] = useState(false);
 
   async function signIn() {
     setLoading(true);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if (result.error) {
+    try {
+      // 1. Direct Firebase Google Authentication Popup
+      const provider = new GoogleAuthProvider();
+      const userCredential = await signInWithPopup(auth, provider);
+
+      if (userCredential.user) {
+        const u = userCredential.user;
+        recordUserProfile({
+          id: u.uid,
+          email: u.email,
+          created_at: u.metadata.creationTime ? new Date(u.metadata.creationTime).toISOString() : new Date().toISOString(),
+        });
+
+        toast.success(`Welcome ${u.displayName || u.email || ""}`);
+        window.location.href = "/watchlist";
+        return;
+      }
+    } catch (err: any) {
+      console.warn("Firebase Google Popup notice:", err?.message || err);
+
+      // 2. Fallback to Lovable OAuth if popup is blocked or closed by user
+      try {
+        const result = await lovable.auth.signInWithOAuth("google", {
+          redirect_uri: window.location.origin,
+        });
+
+        if (result.error) {
+          setLoading(false);
+          toast.error("Could not sign in with Google: " + (err?.message || "Auth Error"));
+          return;
+        }
+
+        if (result.redirected) return;
+        window.location.href = "/watchlist";
+      } catch (fallbackErr: any) {
+        setLoading(false);
+        toast.error("Google sign-in error: " + (err?.message || "Authentication failed"));
+      }
+    } finally {
       setLoading(false);
-      toast.error("Could not sign in with Google");
-      return;
     }
-    if (result.redirected) return;
-    window.location.href = "/watchlist";
   }
 
   return (
