@@ -942,18 +942,6 @@ function WatchlistCategoryPage() {
 
                       {/* Action Controls Area */}
                       <div className="space-y-2 pt-0.5">
-                        {item.link ? (
-                          <a
-                            href={item.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="w-full min-h-[36px] flex items-center justify-center gap-2 rounded-xl border border-neon/60 bg-neon/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-neon hover:bg-neon/20 transition-all shadow-[0_0_12px_var(--neon)] active:scale-95"
-                          >
-                            <ExternalLink className="h-3.5 w-3.5 shrink-0" />
-                            Open Link
-                          </a>
-                        ) : null}
-
                         {/* Compact Action Buttons — Revealed smoothly on hover/focus without layout shift */}
                         <div className="grid grid-cols-2 gap-2 text-xs uppercase tracking-[0.16em] transition-all duration-250 ease-out max-h-0 opacity-0 overflow-hidden group-hover:max-h-14 group-hover:opacity-100 group-hover:mt-2 group-focus-within:max-h-14 group-focus-within:opacity-100 group-focus-within:mt-2 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
                           <button
@@ -1139,8 +1127,8 @@ function WatchlistCategoryPage() {
                 />
               </div>
 
-              {/* FOR PORN AND BOOK CATEGORIES: LINK FIELD */}
-              {(form.media_type === "porn" || form.media_type === "book") && (
+              {/* FOR PORN CATEGORY: LINK FIELD ONLY */}
+              {form.media_type === "porn" && (
                 <div>
                   <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
                     Link
@@ -1154,40 +1142,40 @@ function WatchlistCategoryPage() {
                 </div>
               )}
 
-              {form.media_type === "porn" ? null : form.media_type === "game" ? null : (
-                <>
-                  {/* Status */}
-                  <div>
-                    <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
-                      Status
-                    </label>
-                    <select
-                      value={form.status}
-                      onChange={(e) => setForm({ ...form, status: e.target.value as WatchStatus })}
-                      className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-foreground outline-none focus:border-neon min-h-[44px]"
-                    >
-                      {STATUSES.map((s) => (
-                        <option key={s} value={s}>
-                          {statusLabel(s, form.media_type)}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+              {/* STATUS FIELD FOR ANIME, MOVIE, KDRAMA, WEB, AND BOOK */}
+              {["anime", "movie", "kdrama", "web", "book"].includes(form.media_type) && (
+                <div>
+                  <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+                    Status
+                  </label>
+                  <select
+                    value={form.status}
+                    onChange={(e) => setForm({ ...form, status: e.target.value as WatchStatus })}
+                    className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-foreground outline-none focus:border-neon min-h-[44px]"
+                  >
+                    {STATUSES.map((s) => (
+                      <option key={s} value={s}>
+                        {statusLabel(s, form.media_type)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
-                  {/* Notes */}
-                  <div>
-                    <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
-                      Notes (optional)
-                    </label>
-                    <textarea
-                      value={form.notes}
-                      onChange={(e) => setForm({ ...form, notes: e.target.value })}
-                      placeholder="Personal thoughts, episode progress..."
-                      rows={3}
-                      className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-foreground outline-none focus:border-neon focus:ring-1 focus:ring-neon"
-                    />
-                  </div>
-                </>
+              {/* NOTES FIELD (OPTIONAL) — EXCLUDED FOR PORN, GAME, AND BOOK */}
+              {["anime", "movie", "kdrama", "web"].includes(form.media_type) && (
+                <div>
+                  <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+                    Notes (optional)
+                  </label>
+                  <textarea
+                    value={form.notes}
+                    onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                    placeholder="Personal thoughts, episode progress..."
+                    rows={3}
+                    className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-foreground outline-none focus:border-neon focus:ring-1 focus:ring-neon"
+                  />
+                </div>
               )}
             </div>
 
