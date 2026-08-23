@@ -119,7 +119,10 @@ function WatchlistPage() {
         .eq("id", editing.id)
         .select()
         .single();
-      if (error || !data) return toast.error("Could not save changes");
+      if (error || !data) {
+        toast.error("Could not save changes");
+        return;
+      }
       setItems((prev) => prev.map((i) => (i.id === data.id ? (data as WatchlistItem) : i)));
     } else {
       const { data, error } = await supabase
@@ -127,7 +130,10 @@ function WatchlistPage() {
         .insert({ ...payload, user_id: user.id })
         .select()
         .single();
-      if (error || !data) return toast.error("Could not add item");
+      if (error || !data) {
+        toast.error("Could not add item");
+        return;
+      }
       setItems((prev) => [data as WatchlistItem, ...prev]);
     }
     setOpen(false);
