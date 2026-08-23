@@ -40,6 +40,6 @@ Anime On is a minimalist, retro-futuristic personal media shelf designed for kee
 
 ## 👨‍💻 Developer & Maintenance
 
-Built with ❤️ by **Rishi ** ([@immortal4728](https://github.com/immortal4728)).
+Built with ❤️ by Rishi  ([@immortal4728](https://github.com/immortal4728)).
 
 © 2026 ANIME ON · All rights reserved.
