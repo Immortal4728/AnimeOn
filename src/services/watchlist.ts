@@ -237,7 +237,7 @@ export async function addWatchlistItem(
 
     console.log("attempting Firestore write");
     const docRef = await addDoc(colRef, docData);
-    console.log("Firestore write successful:", docRef.id);
+    console.log("🔥 FIRESTORE WRITE SUCCESS:", docRef.id);
 
     const nowIso = new Date().toISOString();
 

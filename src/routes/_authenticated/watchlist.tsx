@@ -220,21 +220,22 @@ function WatchlistPage() {
   // Save Item (Create or Edit) with explicit step logs and error reporting
   async function handleSaveItem(e: React.FormEvent) {
     e.preventDefault();
-    console.log("SAVE clicked");
+    console.log("🔥 SAVE HANDLER EXECUTED");
+
+    console.log("[SAVE DEBUG] user:", auth.currentUser);
+    console.log("[SAVE DEBUG] uid:", auth.currentUser?.uid);
 
     if (!form.title.trim()) {
+      console.warn("[SAVE DEBUG] Early return: Title is empty");
       toast.error("Please enter a title");
       return;
     }
 
     const currentUser = auth.currentUser;
-    console.log("currentUser:", currentUser);
-    console.log("uid:", currentUser?.uid);
-
     const uid = currentUser?.uid || currentUid;
 
     if (!uid) {
-      console.error("Firestore SAVE failed: Authentication UID missing (currentUser is null).");
+      console.error("[SAVE DEBUG] Early return: UID is null");
       toast.error("Authentication required to save items. Please sign in with Google.");
       setIsItemModalOpen(false);
       navigate({ to: "/login" });
@@ -282,7 +283,6 @@ function WatchlistPage() {
       } else {
         console.log("attempting Firestore write");
         const newItem = await addWatchlistItem(uid, payload);
-        console.log("Firestore write successful:", newItem.id);
         setItems((prev) => [newItem, ...prev]);
         toast.success("Added to your watchlist");
       }
