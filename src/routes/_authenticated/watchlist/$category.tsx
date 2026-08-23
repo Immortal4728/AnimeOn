@@ -953,7 +953,93 @@ function WatchlistCategoryPage() {
                 );
               }
 
-              /* STANDARD RETRO VHS ARCHIVE CASE CARD FOR ANIME / MOVIES / K-DRAMAS / WEB / PORN */
+              /* MOVIES / K-DRAMAS / WEB SERIES: COVER-FIRST CARD matching Books Design System */
+              if (item.media_type === "movie" || item.media_type === "kdrama" || item.media_type === "web") {
+                return (
+                  <li
+                    key={item.id}
+                    tabIndex={0}
+                    className="group relative rounded-2xl border border-border/40 bg-[#0c0e17] transition-all duration-300 hover:-translate-y-1.5 hover:border-neon/80 hover:shadow-[0_0_25px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_25px_var(--neon)] max-w-[280px] w-full mx-auto sm:max-w-none flex flex-col"
+                  >
+                    {/* 1. Cover Viewport (2:3 Aspect Ratio) */}
+                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-2xl">
+                      {item.cover_url ? (
+                        <img
+                          src={item.cover_url}
+                          alt={item.title}
+                          loading="lazy"
+                          decoding="async"
+                          onError={(e) => {
+                            (e.target as HTMLElement).style.display = "none";
+                          }}
+                          className="h-full w-full object-cover object-center transition-all duration-500 group-hover:scale-[1.02] group-hover:brightness-105"
+                        />
+                      ) : (
+                        <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground p-6 text-center">
+                          <Film className="h-10 w-10 opacity-40 text-neon" />
+                          <span className="text-xs font-bold uppercase tracking-[0.16em] text-foreground/80">{item.title}</span>
+                          <span className="text-[11px] tracking-wide text-neon/80 font-semibold">{typeLabel(item.media_type)}</span>
+                        </div>
+                      )}
+
+                      {/* Status Badge Top Left */}
+                      <div className="absolute top-3 left-3 z-20">
+                        <span className="inline-flex items-center gap-1.5 rounded-lg border border-neon/60 bg-[#07090e]/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-neon backdrop-blur-md shadow-[0_0_12px_var(--neon)]">
+                          <span className="h-1.5 w-1.5 rounded-full bg-neon animate-pulse shrink-0" />
+                          {statusLabel(item.status, item.media_type)}
+                        </span>
+                      </div>
+
+                      {/* CRT Scanline & Subtle Vignette Overlay */}
+                      <div className="absolute inset-0 scanlines opacity-20 pointer-events-none z-10" />
+                      <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] pointer-events-none z-10" />
+
+                      {/* Hover Action Controls & Title Metadata Overlay */}
+                      <div className="absolute inset-x-0 bottom-0 z-30 p-3 space-y-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-250 ease-out pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto bg-gradient-to-t from-[#07090e]/95 via-[#07090e]/80 to-transparent pt-10">
+                        <div>
+                          <h3 className="font-display text-sm sm:text-base font-bold uppercase tracking-[0.12em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_10px_var(--neon)]">
+                            {item.title}
+                          </h3>
+                          <p className="mt-0.5 text-[11px] font-mono uppercase tracking-[0.16em] text-muted-foreground/90 line-clamp-1">
+                            {typeLabel(item.media_type)}
+                          </p>
+                        </div>
+
+                        {item.link && (
+                          <a
+                            href={item.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full min-h-[32px] flex items-center justify-center gap-1.5 rounded-xl border border-neon/60 bg-neon/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-neon hover:bg-neon/20 transition-all shadow-[0_0_10px_var(--neon)] active:scale-95"
+                          >
+                            <ExternalLink className="h-3.5 w-3.5 shrink-0" />
+                            Open Link
+                          </a>
+                        )}
+
+                        <div className="flex items-center gap-2 text-xs uppercase tracking-[0.16em]">
+                          <button
+                            onClick={() => openEditModal(item)}
+                            className="flex-1 min-h-[34px] rounded-xl border border-neon/50 bg-[#0c0e17]/90 hover:border-neon/80 hover:bg-neon/20 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 backdrop-blur-md shadow-lg"
+                          >
+                            <Edit2 className="h-3.5 w-3.5 shrink-0" />
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => setDeletingItem(item)}
+                            className="flex-1 min-h-[34px] rounded-xl border border-destructive/50 bg-[#0c0e17]/90 hover:border-destructive/80 hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 backdrop-blur-md shadow-lg"
+                          >
+                            <Trash2 className="h-3.5 w-3.5 shrink-0" />
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                );
+              }
+
+              /* STANDARD RETRO VHS ARCHIVE CASE CARD */
               return (
                 <li
                   key={item.id}
@@ -1021,7 +1107,7 @@ function WatchlistCategoryPage() {
                         </button>
                         <button
                           onClick={() => setDeletingItem(item)}
-                          className="flex-1 min-h-[42px] rounded-xl border border-border/40 bg-destructive/10 hover:border-destructive/60 hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm"
+                          className="flex-1 min-h-[42px] rounded-xl border border-border/40 bg-destructive/10 hover:border-destructive/60 hover:bg-destructive/30 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm"
                         >
                           <Trash2 className="h-4 w-4 shrink-0" />
                           Delete
