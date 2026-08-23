@@ -717,16 +717,16 @@ function WatchlistCategoryPage() {
                 );
               }
 
-              /* ANIME CATEGORY: COMPACT RETRO ANIME POSTER CARD */
+              /* ANIME CATEGORY: WIDER & BALANCED RETRO ANIME POSTER CARD */
               if (item.media_type === "anime") {
                 return (
                   <li
                     key={item.id}
                     tabIndex={0}
-                    className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17]/90 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-neon/80 hover:shadow-[0_0_35px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_35px_var(--neon)] flex flex-col justify-between max-w-[360px] w-full mx-auto sm:max-w-none"
+                    className="group relative overflow-hidden rounded-[18px] border border-border/40 bg-[#0c0e17]/95 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-neon/80 hover:shadow-[0_0_30px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_30px_var(--neon)] flex flex-col max-w-[320px] w-full mx-auto sm:max-w-none"
                   >
-                    {/* 1. Fixed Poster Image Viewport (Normalized 2/3 Aspect Ratio) */}
-                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-t-2xl">
+                    {/* 1. Poster Image Viewport (Normalized 2:3 Aspect Ratio) */}
+                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-t-[17px]">
                       {item.cover_url ? (
                         <img
                           src={item.cover_url}
@@ -736,7 +736,7 @@ function WatchlistCategoryPage() {
                           onError={(e) => {
                             (e.target as HTMLElement).style.display = "none";
                           }}
-                          className="h-full w-full object-cover object-center transition-all duration-500 group-hover:scale-[1.04] group-hover:brightness-110"
+                          className="h-full w-full object-cover object-center transition-all duration-500 group-hover:scale-[1.03] group-hover:brightness-105"
                         />
                       ) : (
                         <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground p-6 text-center">
@@ -745,47 +745,47 @@ function WatchlistCategoryPage() {
                         </div>
                       )}
 
-                      {/* Gradient Overlay Fade toward Info Section */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0c0e17] via-[#0c0e17]/20 to-transparent pointer-events-none" />
-
-                      {/* CRT Scanline & Subtle Vignette Overlay */}
-                      <div className="absolute inset-0 scanlines opacity-20 pointer-events-none" />
-                      <div className="absolute inset-0 shadow-[inset_0_0_25px_rgba(0,0,0,0.4)] pointer-events-none" />
-
                       {/* Status Badge Top Left */}
-                      <div className="absolute top-3.5 left-3.5 z-10">
-                        <span className="inline-flex items-center gap-2 rounded-lg border border-neon/60 bg-[#07090e]/90 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-neon backdrop-blur-md shadow-[0_0_14px_var(--neon)]">
-                          <span className="h-2 w-2 rounded-full bg-neon animate-pulse shrink-0" />
+                      <div className="absolute top-3 left-3 z-10">
+                        <span className="inline-flex items-center gap-1.5 rounded-lg border border-neon/60 bg-[#07090e]/90 px-2.5 py-1 text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] text-neon backdrop-blur-md shadow-[0_0_12px_var(--neon)]">
+                          <span className="h-1.5 w-1.5 rounded-full bg-neon animate-pulse shrink-0" />
                           {statusLabel(item.status, item.media_type)}
                         </span>
                       </div>
+
+                      {/* Subtle Bottom Fade onto Image */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0c0e17] via-transparent to-transparent opacity-80 pointer-events-none" />
+
+                      {/* CRT Scanline & Subtle Vignette Overlay */}
+                      <div className="absolute inset-0 scanlines opacity-20 pointer-events-none" />
+                      <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.4)] pointer-events-none" />
                     </div>
 
-                    {/* 2. Compact Information Section & Collapsible Action Buttons */}
-                    <div className="p-4 sm:p-5 flex flex-col justify-between flex-1">
+                    {/* 2. Text Information Section Underneath Poster */}
+                    <div className="p-4 sm:p-4.5 flex flex-col justify-between">
                       <div>
-                        <h3 className="font-display text-base sm:text-lg font-bold uppercase tracking-[0.14em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
+                        <h3 className="font-display text-xl sm:text-[22px] leading-tight font-bold uppercase tracking-[0.1em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
                           {item.title}
                         </h3>
-                        <p className="mt-0.5 text-xs font-mono uppercase tracking-[0.18em] text-muted-foreground/80">
+                        <p className="mt-1 text-xs sm:text-sm font-mono font-semibold uppercase tracking-[0.2em] text-muted-foreground/80">
                           ANIME
                         </p>
                       </div>
 
-                      {/* Compact Action Buttons — Smoothly revealed on hover/focus without empty space when hidden */}
-                      <div className="grid grid-cols-2 gap-2.5 text-xs uppercase tracking-[0.16em] transition-all duration-250 ease-out max-h-0 opacity-0 overflow-hidden group-hover:max-h-14 group-hover:opacity-100 group-hover:mt-3 group-focus-within:max-h-14 group-focus-within:opacity-100 group-focus-within:mt-3 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
+                      {/* Hover Action Controls — Collapsible, no empty space when hidden */}
+                      <div className="grid grid-cols-2 gap-2 text-xs uppercase tracking-[0.16em] transition-all duration-250 ease-out max-h-0 opacity-0 overflow-hidden group-hover:max-h-14 group-hover:opacity-100 group-hover:mt-3 group-focus-within:max-h-14 group-focus-within:opacity-100 group-focus-within:mt-3 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
                         <button
                           onClick={() => openEditModal(item)}
-                          className="min-h-[38px] rounded-xl border border-border/60 bg-secondary/50 hover:border-neon/70 hover:bg-neon/15 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm"
+                          className="min-h-[36px] rounded-xl border border-neon/50 bg-[#0c0e17] hover:border-neon hover:bg-neon/20 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm"
                         >
-                          <Edit2 className="h-4 w-4 shrink-0" />
+                          <Edit2 className="h-3.5 w-3.5 shrink-0" />
                           Edit
                         </button>
                         <button
                           onClick={() => setDeletingItem(item)}
-                          className="min-h-[38px] rounded-xl border border-border/40 bg-destructive/15 hover:border-destructive/60 hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm"
+                          className="min-h-[36px] rounded-xl border border-destructive/50 bg-[#0c0e17] hover:border-destructive hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm"
                         >
-                          <Trash2 className="h-4 w-4 shrink-0" />
+                          <Trash2 className="h-3.5 w-3.5 shrink-0" />
                           Delete
                         </button>
                       </div>
