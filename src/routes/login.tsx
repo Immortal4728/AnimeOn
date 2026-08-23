@@ -54,21 +54,23 @@ function Login() {
         <div className="absolute top-1/3 left-1/4 h-80 w-80 rounded-full bg-neon/15 blur-[120px] pointer-events-none" />
 
         <div className="z-10 pt-16 space-y-4">
-          <div className="inline-flex items-center gap-2 rounded-full border border-neon/40 bg-neon/10 px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-neon backdrop-blur-md shadow-[0_0_20px_rgba(236,72,153,0.2)]">
+          <div className="inline-flex items-center gap-2 rounded-full border border-neon/40 bg-neon/10 px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-neon backdrop-blur-md shadow-[0_0_20px_rgba(236,72,153,0.2)] crt-flicker">
             <span className="h-2 w-2 rounded-full bg-neon animate-pulse" />
             PERSONAL ARCHIVE
           </div>
-          <h2 className="font-display text-4xl font-bold uppercase tracking-[0.16em] text-foreground drop-shadow-[0_0_25px_var(--neon)] leading-tight max-w-lg">
-            One quiet shelf for everything worth remembering.
+          <h2 className="font-display text-4xl lg:text-5xl font-extrabold uppercase tracking-[0.14em] sm:tracking-[0.16em] text-foreground drop-shadow-[0_0_25px_var(--neon)] leading-tight max-w-xl">
+            <span className="crt-glitch" data-text="One quiet shelf for everything worth remembering.">
+              One quiet shelf for everything worth remembering.
+            </span>
           </h2>
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground max-w-md leading-relaxed">
+          <p className="text-xs sm:text-sm uppercase tracking-[0.2em] text-muted-foreground max-w-md leading-relaxed">
             Save anime, movies, K-dramas, web series, and games to your private collection.
           </p>
         </div>
 
         <div className="z-10 flex items-center justify-between text-[11px] uppercase tracking-[0.2em] text-muted-foreground/80 border-t border-border/20 pt-6">
           <span>© 2026 ANIME ON</span>
-          <span className="text-neon/80 font-bold">RETRO EDITION</span>
+          <span className="text-neon/80 font-bold crt-flicker">RETRO EDITION</span>
         </div>
       </div>
 
@@ -85,27 +87,31 @@ function Login() {
 
         <div className="relative w-full max-w-md space-y-6 sm:space-y-8 text-center rounded-3xl border border-border/40 bg-card/40 p-6 sm:p-12 backdrop-blur-2xl shadow-[0_0_50px_rgba(0,0,0,0.8)] mt-12 lg:mt-0">
           <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 font-display text-lg sm:text-xl uppercase tracking-[0.22em] text-foreground drop-shadow-[0_0_20px_var(--neon)]">
+            <div className="inline-flex items-center gap-2 font-display text-xl sm:text-2xl uppercase tracking-[0.22em] text-foreground drop-shadow-[0_0_20px_var(--neon)]">
               <span className="h-2 w-2 rounded-full bg-neon animate-ping" />
-              ANIME ON
+              <span className="crt-glitch" data-text="ANIME ON">
+                ANIME ON
+              </span>
             </div>
-            <h1 className="font-display text-2xl sm:text-4xl font-bold uppercase tracking-[0.16em] text-foreground">
-              WELCOME BACK
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-[0.14em] sm:tracking-[0.16em] text-foreground drop-shadow-[0_0_25px_var(--neon)]">
+              <span className="crt-glitch" data-text="WELCOME BACK">
+                WELCOME BACK
+              </span>
             </h1>
-            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            <p className="text-xs sm:text-sm uppercase tracking-[0.2em] text-muted-foreground font-medium">
               Your saved worlds are waiting.
             </p>
           </div>
 
           <div className="pt-2">
-            <GoogleButton className="w-full py-4 text-xs font-bold min-h-[44px]" />
+            <GoogleButton className="w-full py-4 text-xs sm:text-sm font-bold min-h-[44px]" />
           </div>
 
           <div className="space-y-3 pt-2 border-t border-border/20">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground/80">
+            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground/90 font-mono">
               One account · Private Firestore storage
             </p>
-            <div className="flex flex-wrap justify-center gap-2 text-[10px] uppercase tracking-[0.18em] text-muted-foreground/60">
+            <div className="flex flex-wrap justify-center gap-2 text-[11px] uppercase tracking-[0.18em] text-muted-foreground/70 font-mono">
               <span>Anime</span> · <span>Movies</span> · <span>K-Dramas</span> · <span>Games</span>
             </div>
           </div>
