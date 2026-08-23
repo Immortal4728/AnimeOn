@@ -2,29 +2,32 @@
 
 > **Save what catches your attention. Come back whenever you're ready.**
 
-Anime On is a minimalist, retro-futuristic personal media shelf designed for keeping track of your favorite anime, movies, K-dramas, web series, and games without social noise, rating wars, or algorithmic feeds.
+Anime On is a minimalist, retro-futuristic personal media shelf designed for keeping track of your favorite anime, movies, K-dramas, web series, books, games, and links — without social noise, rating wars, or algorithmic feeds.
 
 ---
 
-## ✨ Key Features
+## ✨ Highlights & Features
 
-- 🎌 **Multi-Category Archive**: Track **Anime**, **Movies**, **K-Dramas**, **Web Series**, **Games**, and **Links** under a unified dashboard.
-- 🎨 **Dynamic Theme System**: Switch between custom themes (*Neon Pink*, *Cyber Purple*, *Electric Blue*, *Crimson*, *Matrix Green*, and more) stored per authenticated user in Cloud Firestore.
-- ⚡ **Instant Search & Filters**: Filter by status (*Want to Watch*, *Completed*) or perform real-time search across titles and notes.
-- 📱 **Mobile-First Responsive Layout**: Built and optimized for seamless experience across all viewports (from 320px mobile phones to ultra-wide displays).
-- 🔒 **Private & Secure**: User data is isolated and protected via strict Firestore Security Rules tied to Firebase Authentication (Google Auth).
-- 🛡️ **Admin Gateway**: Restricted portal for system administrators to view real-time platform statistics and user analytics.
+- 🎌 **Unified Media Vault**: Seamlessly track **Anime**, **Movies**, **K-Dramas**, **Web Series**, **Books**, **Games**, and **Links** under a unified dashboard.
+- 🎨 **Dynamic Cyberpunk Aesthetics**: Custom theme engine supporting vibrant neon color palettes (*Neon Pink*, *Cyber Purple*, *Electric Blue*, *Crimson*, *Matrix Green*, etc.) persisted across devices.
+- 📚 **Category-Tailored Card Systems**:
+  - **Books**: Cover-first design with signature author reveal.
+  - **Movies / K-Dramas / Web Series**: Modern cinematic typography with sleek outside-the-card hover details.
+  - **Games & Anime**: Full-bleed retro poster viewports.
+- ⚡ **Instant Filtering & Search**: Real-time title search and status toggles (*Watching*, *Completed*, *Plan to Watch*).
+- 📱 **Mobile-First 2-Column Grid**: Fully responsive 2-column layout on mobile viewports (320px–430px) that scales seamlessly up to a 6-column dashboard on desktop.
+- 🔒 **Private & Isolated**: User data is isolated per authenticated account via cloud persistence.
+- 🛡️ **Admin Analytics**: Dedicated admin gateway for platform metrics and system monitoring.
 
 ---
 
-## 🛠️ Technology Stack
+## 🛠️ Tech Stack
 
-- **Frontend**: [React](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), [Vite](https://vitejs.dev/)
+- **Frontend Framework**: [React 18](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), [Vite](https://vitejs.dev/)
 - **Routing**: [TanStack Router](https://tanstack.com/router)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/), Lucide Icons
-- **Backend & Auth**: [Firebase Auth](https://firebase.google.com/docs/auth), [Cloud Firestore](https://firebase.google.com/docs/firestore)
-- **Database & Integrations**: [Supabase](https://supabase.com/)
-- **Toasts & UI**: Sonner
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/), [Lucide React Icons](https://lucide.dev/)
+- **Backend & Authentication**: [Firebase Auth & Cloud Firestore](https://firebase.google.com/), [Supabase](https://supabase.com/)
+- **UI Notifications**: [Sonner](https://sonner.emilkowal.si/)
 
 ---
 
@@ -47,33 +50,33 @@ cd AnimeOn
 npm install
 ```
 
-### 3. Start development server
+### 3. Configure Environment Variables
+
+Create a `.env` file in the root directory with your Firebase configuration:
+
+```env
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+```
+
+### 4. Start the development server
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) or the port displayed in your terminal.
+Open [http://localhost:3000](http://localhost:3000) (or the port displayed in your terminal) in your browser.
 
 ---
 
-## 🛡️ Security Rules (Firestore)
+## 🔒 Security & Data Privacy
 
-User watchlists and preferences are isolated to each authenticated user:
-
-```rules
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /users/{uid}/watchlist/{itemId} {
-      allow read, write: if request.auth != null && request.auth.uid == uid;
-    }
-    match /users/{uid}/preferences/{preferenceId} {
-      allow read, write: if request.auth != null && request.auth.uid == uid;
-    }
-  }
-}
-```
+- **Account Isolation**: Every user's media library and theme settings are bound strictly to their authenticated account UID.
+- **Zero Social Noise**: Pure personal tracking without public profiles, follower feeds, or rating pressure.
 
 ---
 
