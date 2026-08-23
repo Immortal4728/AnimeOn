@@ -607,7 +607,8 @@ function WatchlistCategoryPage() {
                 return (
                   <li
                     key={item.id}
-                    className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17] transition-all duration-300 hover:-translate-y-2 hover:border-neon/80 hover:shadow-[0_0_35px_var(--neon)] max-w-[360px] w-full mx-auto sm:max-w-none aspect-[2/3]"
+                    tabIndex={0}
+                    className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17] transition-all duration-300 hover:-translate-y-2 hover:border-neon/80 hover:shadow-[0_0_35px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_35px_var(--neon)] max-w-[360px] w-full mx-auto sm:max-w-none aspect-[2/3]"
                   >
                     {/* Full Game Cover Image */}
                     <div className="absolute inset-0 overflow-hidden bg-[#07090e]">
@@ -653,8 +654,8 @@ function WatchlistCategoryPage() {
                         </p>
                       </div>
 
-                      {/* Compact Action Buttons */}
-                      <div className="flex items-center gap-3 text-xs uppercase tracking-[0.16em] pt-1">
+                      {/* Compact Action Buttons — Revealed smoothly on hover/focus */}
+                      <div className="flex items-center gap-3 text-xs uppercase tracking-[0.16em] pt-1 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 translate-y-1.5 group-hover:translate-y-0 group-focus-within:translate-y-0 transition-all duration-200 ease-out pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
                         <button
                           onClick={() => openEditModal(item)}
                           className="flex-1 min-h-[40px] rounded-xl border border-border/60 bg-secondary/50 hover:border-neon/70 hover:bg-neon/15 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm backdrop-blur-md"
@@ -679,7 +680,8 @@ function WatchlistCategoryPage() {
               return (
                 <li
                   key={item.id}
-                  className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17]/90 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-neon/80 hover:shadow-[0_0_35px_var(--neon)] flex flex-col justify-between max-w-[360px] w-full mx-auto sm:max-w-none"
+                  tabIndex={0}
+                  className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17]/90 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-neon/80 hover:shadow-[0_0_35px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_35px_var(--neon)] flex flex-col justify-between max-w-[360px] w-full mx-auto sm:max-w-none"
                 >
                   {/* 1. Fixed Poster Image Viewport (Normalized 2/3 Aspect Ratio) */}
                   <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-t-2xl">
@@ -746,8 +748,8 @@ function WatchlistCategoryPage() {
                         </a>
                       ) : null}
 
-                      {/* Compact Action Buttons */}
-                      <div className="flex items-center gap-3 text-xs uppercase tracking-[0.16em]">
+                      {/* Compact Action Buttons — Revealed smoothly on hover/focus */}
+                      <div className="flex items-center gap-3 text-xs uppercase tracking-[0.16em] opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 translate-y-1.5 group-hover:translate-y-0 group-focus-within:translate-y-0 transition-all duration-200 ease-out pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
                         <button
                           onClick={() => openEditModal(item)}
                           className="flex-1 min-h-[42px] rounded-xl border border-border/60 bg-secondary/40 hover:border-neon/70 hover:bg-neon/15 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm"
