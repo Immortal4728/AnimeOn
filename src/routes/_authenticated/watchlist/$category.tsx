@@ -685,14 +685,11 @@ function WatchlistCategoryPage() {
 
                     {/* Bottom Information & Action Overlay */}
                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#07090e] via-[#07090e]/90 via-65% to-transparent p-4 sm:p-5 pt-20 z-20 flex flex-col justify-end">
-                      {/* Game Title & Platform Subtitle */}
+                      {/* Game Title */}
                       <div className="transition-transform duration-200 ease-out group-hover:-translate-y-0.5 group-focus-within:-translate-y-0.5">
                         <h3 className="font-display text-base sm:text-lg font-bold uppercase tracking-[0.14em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
                           {item.title}
                         </h3>
-                        <p className="mt-0.5 text-xs font-mono uppercase tracking-[0.18em] text-muted-foreground/90">
-                          VIDEO GAME
-                        </p>
                       </div>
 
                       {/* Compact Action Buttons — Revealed smoothly on hover/focus without empty space when hidden */}
