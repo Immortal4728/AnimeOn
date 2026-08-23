@@ -179,24 +179,36 @@
 
 .signature-reveal {
   display: inline-block;
-  max-width: 0%;
-  overflow: hidden;
+  clip-path: inset(0 100% 0 0);
+  opacity: 0;
   white-space: nowrap;
-  vertical-align: bottom;
-  transition: max-width 0.3s ease-out;
+  vertical-align: middle;
 }
 
 .group:hover .signature-reveal,
 .group:focus-within .signature-reveal {
-  max-width: 100%;
-  transition: max-width 1.3s cubic-bezier(0.25, 1, 0.5, 1);
+  animation: signatureWrite 1.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes signatureWrite {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
 }
 
 .signature-text {
   display: inline-block;
   white-space: nowrap;
   font-family: 'Caveat', 'Dancing Script', cursive, Georgia, serif;
-  font-size: 1.65rem;
+  font-size: 1.6rem; /* 25.6px */
   font-weight: 700;
   font-style: italic;
   color: #fce7f3;

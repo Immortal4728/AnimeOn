@@ -879,7 +879,7 @@ function WatchlistCategoryPage() {
                 );
               }
 
-              /* BOOK CATEGORY: PURE COVER-FIRST BOOK CARD (NO DUPLICATE TEXT BELOW COVER) */
+              /* BOOK CATEGORY: PURE COVER-FIRST BOOK CARD WITH UNDER-COVER HANDWRITTEN SIGNATURE REVEAL */
               if (item.media_type === "book") {
                 const authorName = item.author || (item as any).authorName || (item as any).author_name;
                 console.log("[BOOK SIGNATURE DEBUG]", { id: item.id, title: item.title, author: authorName });
@@ -888,10 +888,10 @@ function WatchlistCategoryPage() {
                   <li
                     key={item.id}
                     tabIndex={0}
-                    className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17] transition-all duration-300 hover:-translate-y-1.5 hover:border-neon/80 hover:shadow-[0_0_25px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_25px_var(--neon)] max-w-[280px] w-full mx-auto sm:max-w-none flex flex-col"
+                    className="group relative rounded-2xl border border-border/40 bg-[#0c0e17] transition-all duration-300 hover:-translate-y-1.5 hover:border-neon/80 hover:shadow-[0_0_25px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_25px_var(--neon)] max-w-[280px] w-full mx-auto sm:max-w-none flex flex-col"
                   >
                     {/* 1. Cover Viewport */}
-                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] flex items-center justify-center">
+                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-t-2xl">
                       {item.cover_url ? (
                         <img
                           src={item.cover_url}
@@ -901,7 +901,7 @@ function WatchlistCategoryPage() {
                           onError={(e) => {
                             (e.target as HTMLElement).style.display = "none";
                           }}
-                          className="h-full w-full object-cover object-center transition-all duration-300 group-hover:scale-[1.02] group-hover:brightness-105"
+                          className="h-full w-full object-cover object-center transition-all duration-500 group-hover:scale-[1.02] group-hover:brightness-105"
                         />
                       ) : (
                         <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground p-6 text-center">
@@ -923,37 +923,34 @@ function WatchlistCategoryPage() {
                       <div className="absolute inset-0 scanlines opacity-20 pointer-events-none z-10" />
                       <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] pointer-events-none z-10" />
 
-                      {/* Gradient Overlay at Bottom for Action Controls & Signature readability */}
-                      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#07090e]/95 via-[#07090e]/70 to-transparent opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-250 pointer-events-none z-15" />
-
-                      {/* Signature-style Author Name Reveal on Hover */}
-                      {authorName && (
-                        <div className="absolute inset-x-0 bottom-[58px] z-25 px-3 pointer-events-none flex justify-center items-center">
-                          <div className="signature-reveal">
-                            <span className="signature-text font-signature">
-                              {authorName}
-                            </span>
-                          </div>
-                        </div>
-                      )}
-
                       {/* Hover Action Controls — Overlayed on lower cover area */}
-                      <div className="absolute inset-x-0 bottom-0 z-30 p-3 flex items-center gap-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-250 ease-out pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
+                      <div className="absolute inset-x-0 bottom-0 z-30 p-2.5 flex items-center gap-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-250 ease-out pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto bg-gradient-to-t from-[#07090e]/95 via-[#07090e]/75 to-transparent pt-8">
                         <button
                           onClick={() => openEditModal(item)}
-                          className="flex-1 min-h-[36px] rounded-xl border border-neon/50 bg-[#0c0e17]/90 hover:border-neon/80 hover:bg-neon/20 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 backdrop-blur-md shadow-lg"
+                          className="flex-1 min-h-[34px] rounded-xl border border-neon/50 bg-[#0c0e17]/90 hover:border-neon/80 hover:bg-neon/20 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 backdrop-blur-md shadow-lg"
                         >
                           <Edit2 className="h-3.5 w-3.5 shrink-0" />
                           Edit
                         </button>
                         <button
                           onClick={() => setDeletingItem(item)}
-                          className="flex-1 min-h-[36px] rounded-xl border border-destructive/50 bg-[#0c0e17]/90 hover:border-destructive/80 hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 backdrop-blur-md shadow-lg"
+                          className="flex-1 min-h-[34px] rounded-xl border border-destructive/50 bg-[#0c0e17]/90 hover:border-destructive/80 hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 backdrop-blur-md shadow-lg"
                         >
                           <Trash2 className="h-3.5 w-3.5 shrink-0" />
                           Delete
                         </button>
                       </div>
+                    </div>
+
+                    {/* 2. Signature Section Underneath Cover Image (Unclipped, progressive left-to-right reveal on hover) */}
+                    <div className="p-3 bg-[#0c0e17] rounded-b-2xl flex items-center justify-center min-h-[46px] relative overflow-visible">
+                      {authorName ? (
+                        <div className="signature-reveal overflow-visible px-1">
+                          <span className="signature-text font-signature">
+                            {authorName}
+                          </span>
+                        </div>
+                      ) : null}
                     </div>
                   </li>
                 );
