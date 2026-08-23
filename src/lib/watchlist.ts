@@ -108,6 +108,8 @@ export interface WatchlistItem {
   title: string;
   cover_url: string | null;
   link?: string | null;
+  actressName?: string | null;
+  actress_name?: string | null;
   media_type: MediaType;
   shelf_id: string | null;
   shelf_name: string | null;

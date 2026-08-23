@@ -107,6 +107,7 @@ function WatchlistCategoryPage() {
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     title: "",
+    actress_name: "",
     media_type: selectedType as MediaType,
     status: "want" as WatchStatus,
     cover_url: "",
@@ -208,6 +209,7 @@ function WatchlistCategoryPage() {
     setEditingItem(null);
     setForm({
       title: "",
+      actress_name: "",
       media_type: selectedType,
       status: "want",
       cover_url: "",
@@ -221,6 +223,7 @@ function WatchlistCategoryPage() {
     setEditingItem(item);
     setForm({
       title: item.title,
+      actress_name: item.actressName || item.actress_name || "",
       media_type: item.media_type,
       status: item.status,
       cover_url: item.cover_url || "",
@@ -245,6 +248,7 @@ function WatchlistCategoryPage() {
       if (editingItem) {
         await updateWatchlistItem(user.uid, editingItem.id, {
           title: form.title,
+          actressName: form.actress_name || null,
           status: form.status,
           imageUrl: form.cover_url || null,
           link: form.link || null,
@@ -257,6 +261,8 @@ function WatchlistCategoryPage() {
               ? {
                   ...i,
                   title: form.title,
+                  actressName: form.actress_name || null,
+                  actress_name: form.actress_name || null,
                   status: form.status,
                   cover_url: form.cover_url || null,
                   link: form.link || null,
@@ -269,6 +275,7 @@ function WatchlistCategoryPage() {
       } else {
         const newItem = await addWatchlistItem(user.uid, {
           title: form.title,
+          actressName: form.actress_name || null,
           type: selectedType,
           status: form.status,
           imageUrl: form.cover_url || null,
@@ -754,6 +761,96 @@ function WatchlistCategoryPage() {
                 );
               }
 
+              /* PORN CATEGORY: LANDSCAPE BANNER CARD WITH EXTERNAL METADATA & ACTRESS NAME */
+              if (item.media_type === "porn") {
+                const actress = item.actressName || item.actress_name;
+                return (
+                  <li
+                    key={item.id}
+                    tabIndex={0}
+                    className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17]/90 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-neon/80 hover:shadow-[0_0_35px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_35px_var(--neon)] flex flex-col justify-between max-w-[400px] w-full mx-auto sm:max-w-none col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2"
+                  >
+                    {/* 1. Landscape Cover Viewport (16:9 Aspect Ratio) */}
+                    <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#07090e] rounded-t-2xl">
+                      {item.cover_url ? (
+                        <img
+                          src={item.cover_url}
+                          alt={item.title}
+                          loading="lazy"
+                          decoding="async"
+                          onError={(e) => {
+                            (e.target as HTMLElement).style.display = "none";
+                          }}
+                          className="h-full w-full object-cover object-center transition-all duration-500 group-hover:scale-[1.03] group-hover:brightness-110"
+                        />
+                      ) : (
+                        <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground p-6 text-center">
+                          <Film className="h-10 w-10 opacity-40 text-neon" />
+                          <span className="text-xs uppercase tracking-[0.2em] font-mono">No cover</span>
+                        </div>
+                      )}
+
+                      {/* CRT Scanline & Subtle Vignette Overlay */}
+                      <div className="absolute inset-0 scanlines opacity-20 pointer-events-none" />
+                      <div className="absolute inset-0 shadow-[inset_0_0_25px_rgba(0,0,0,0.4)] pointer-events-none" />
+                    </div>
+
+                    {/* 2. Card Information Section Outside Image */}
+                    <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 space-y-3">
+                      <div>
+                        <h3 className="font-display text-base sm:text-lg font-bold uppercase tracking-[0.14em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
+                          {item.title}
+                        </h3>
+
+                        {/* Actress Name */}
+                        {actress && (
+                          <p className="mt-1 text-sm font-semibold tracking-wide text-neon/90 line-clamp-1">
+                            {actress}
+                          </p>
+                        )}
+
+                        <p className="mt-1 text-xs font-mono uppercase tracking-[0.18em] text-muted-foreground/80">
+                          PORN
+                        </p>
+                      </div>
+
+                      {/* Action Buttons Area */}
+                      <div className="space-y-2 pt-1">
+                        {item.link ? (
+                          <a
+                            href={item.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full min-h-[38px] flex items-center justify-center gap-2 rounded-xl border border-neon/60 bg-neon/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-neon hover:bg-neon/20 transition-all shadow-[0_0_14px_var(--neon)] active:scale-95"
+                          >
+                            <ExternalLink className="h-4 w-4 shrink-0" />
+                            Open Link
+                          </a>
+                        ) : null}
+
+                        {/* Compact Action Buttons — Smoothly revealed on hover/focus without empty space when hidden */}
+                        <div className="grid grid-cols-2 gap-2.5 text-xs uppercase tracking-[0.16em] transition-all duration-250 ease-out max-h-0 opacity-0 overflow-hidden group-hover:max-h-14 group-hover:opacity-100 group-hover:mt-2 group-focus-within:max-h-14 group-focus-within:opacity-100 group-focus-within:mt-2 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
+                          <button
+                            onClick={() => openEditModal(item)}
+                            className="min-h-[38px] rounded-xl border border-border/60 bg-secondary/50 hover:border-neon/70 hover:bg-neon/15 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm"
+                          >
+                            <Edit2 className="h-4 w-4 shrink-0" />
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => setDeletingItem(item)}
+                            className="min-h-[38px] rounded-xl border border-border/40 bg-destructive/15 hover:border-destructive/60 hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm"
+                          >
+                            <Trash2 className="h-4 w-4 shrink-0" />
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                );
+              }
+
               /* STANDARD RETRO VHS ARCHIVE CASE CARD FOR ANIME / MOVIES / K-DRAMAS / WEB / PORN */
               return (
                 <li
@@ -789,14 +886,12 @@ function WatchlistCategoryPage() {
                     <div className="absolute inset-0 shadow-[inset_0_0_25px_rgba(0,0,0,0.4)] pointer-events-none" />
 
                     {/* 2. Retro Status Badge */}
-                    {item.media_type !== "porn" && (
-                      <div className="absolute top-3.5 left-3.5 z-10">
-                        <span className="inline-flex items-center gap-2 rounded-lg border border-neon/60 bg-[#07090e]/90 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-neon backdrop-blur-md shadow-[0_0_14px_var(--neon)]">
-                          <span className="h-2 w-2 rounded-full bg-neon animate-pulse shrink-0" />
-                          {statusLabel(item.status, item.media_type)}
-                        </span>
-                      </div>
-                    )}
+                    <div className="absolute top-3.5 left-3.5 z-10">
+                      <span className="inline-flex items-center gap-2 rounded-lg border border-neon/60 bg-[#07090e]/90 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-neon backdrop-blur-md shadow-[0_0_14px_var(--neon)]">
+                        <span className="h-2 w-2 rounded-full bg-neon animate-pulse shrink-0" />
+                        {statusLabel(item.status, item.media_type)}
+                      </span>
+                    </div>
                   </div>
 
                   {/* 3. Card Information Section & Action Buttons */}
@@ -805,26 +900,13 @@ function WatchlistCategoryPage() {
                       <h3 className="font-display text-base sm:text-lg font-bold uppercase tracking-[0.14em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
                         {item.title}
                       </h3>
-                      {item.media_type !== "porn" && (
-                        <p className="mt-1 text-xs font-mono uppercase tracking-[0.18em] text-muted-foreground/80">
-                          {typeLabel(item.media_type)}
-                        </p>
-                      )}
+                      <p className="mt-1 text-xs font-mono uppercase tracking-[0.18em] text-muted-foreground/80">
+                        {typeLabel(item.media_type)}
+                      </p>
                     </div>
 
                     {/* 4. Action Controls Area */}
                     <div className="space-y-2.5 pt-1">
-                      {item.media_type === "porn" && item.link ? (
-                        <a
-                          href={item.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-full min-h-[42px] flex items-center justify-center gap-2 rounded-xl border border-neon/60 bg-neon/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-neon hover:bg-neon/20 transition-all shadow-[0_0_14px_var(--neon)] mb-1 active:scale-95"
-                        >
-                          <ExternalLink className="h-4 w-4 shrink-0" />
-                          Open Link
-                        </a>
-                      ) : null}
 
                       {/* Compact Action Buttons — Revealed smoothly on hover/focus */}
                       <div className="flex items-center gap-3 text-xs uppercase tracking-[0.16em] opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 translate-y-1.5 group-hover:translate-y-0 group-focus-within:translate-y-0 transition-all duration-200 ease-out pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
@@ -887,6 +969,21 @@ function WatchlistCategoryPage() {
                   className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-foreground outline-none focus:border-neon focus:ring-1 focus:ring-neon min-h-[44px]"
                 />
               </div>
+
+              {/* Actress Name for Porn category */}
+              {form.media_type === "porn" && (
+                <div>
+                  <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+                    Actress Name
+                  </label>
+                  <input
+                    value={form.actress_name}
+                    onChange={(e) => setForm({ ...form, actress_name: e.target.value })}
+                    placeholder="Actress name"
+                    className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-foreground outline-none focus:border-neon focus:ring-1 focus:ring-neon min-h-[44px]"
+                  />
+                </div>
+              )}
 
               {/* Cover / Banner URL */}
               <div>

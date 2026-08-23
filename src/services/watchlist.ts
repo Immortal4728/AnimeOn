@@ -18,6 +18,7 @@ export interface CreateWatchlistItemInput {
   title: string;
   imageUrl: string | null;
   link?: string | null;
+  actressName?: string | null;
   type: MediaType;
   shelfId?: string | null;
   shelfName?: string | null;
@@ -186,6 +187,8 @@ export async function fetchUserWatchlist(uid: string): Promise<WatchlistItem[]> 
         title: data["title"] || "",
         cover_url: data["imageUrl"] || data["cover_url"] || null,
         link: data["link"] || null,
+        actressName: data["actressName"] || data["actress_name"] || null,
+        actress_name: data["actressName"] || data["actress_name"] || null,
         media_type: (data["type"] || data["media_type"] || "anime") as MediaType,
         shelf_id: data["shelfId"] || data["shelf_id"] || null,
         shelf_name: data["shelfName"] || data["shelf_name"] || null,
@@ -226,6 +229,7 @@ export async function addWatchlistItem(
       title: input.title.trim(),
       imageUrl: input.imageUrl || null,
       link: input.link || null,
+      actressName: input.actressName ? input.actressName.trim() : null,
       type: input.type,
       shelfId: input.shelfId || null,
       shelfName: input.shelfName || null,
@@ -244,6 +248,8 @@ export async function addWatchlistItem(
       title: input.title.trim(),
       cover_url: input.imageUrl || null,
       link: input.link || null,
+      actressName: input.actressName ? input.actressName.trim() : null,
+      actress_name: input.actressName ? input.actressName.trim() : null,
       media_type: input.type,
       shelf_id: input.shelfId || null,
       shelf_name: input.shelfName || null,
@@ -274,6 +280,7 @@ export async function updateWatchlistItem(
     if (updates.title !== undefined) updateData["title"] = updates.title.trim();
     if (updates.imageUrl !== undefined) updateData["imageUrl"] = updates.imageUrl || null;
     if (updates.link !== undefined) updateData["link"] = updates.link || null;
+    if (updates.actressName !== undefined) updateData["actressName"] = updates.actressName ? updates.actressName.trim() : null;
     if (updates.type !== undefined) updateData["type"] = updates.type;
     if (updates.shelfId !== undefined) updateData["shelfId"] = updates.shelfId || null;
     if (updates.shelfName !== undefined) updateData["shelfName"] = updates.shelfName || null;
