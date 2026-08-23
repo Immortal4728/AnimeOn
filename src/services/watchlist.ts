@@ -27,7 +27,6 @@ export interface CreateWatchlistItemInput {
 
 /* ============================================================================
  * 1. SHELVES API (users/{uid}/shelves/{shelfId})
- * Standardized Schema: name, mediaType, createdAt, updatedAt
  * ============================================================================ */
 
 export async function fetchUserShelves(uid: string): Promise<Shelf[]> {
@@ -162,8 +161,6 @@ export async function deleteShelf(uid: string, shelfId: string): Promise<void> {
 
 /* ============================================================================
  * 2. WATCHLIST ITEMS API (users/{uid}/watchlist/{itemId})
- * Standardized Schema:
- * title, imageUrl, type, status, language, notes, shelfId, shelfName, createdAt, updatedAt
  * ============================================================================ */
 
 export async function fetchUserWatchlist(uid: string): Promise<WatchlistItem[]> {
@@ -219,17 +216,10 @@ export async function addWatchlistItem(
   uid: string,
   input: CreateWatchlistItemInput
 ): Promise<WatchlistItem> {
-  console.log("[addWatchlistItem] received uid:", uid, "input:", input);
-
-  if (!uid) {
-    const err = new Error("User UID required to create watchlist item");
-    console.error("[addWatchlistItem ERROR] Aborting due to empty UID", err);
-    throw err;
-  }
+  if (!uid) throw new Error("User UID required to create watchlist item");
 
   try {
     const colRef = collection(db, "users", uid, "watchlist");
-    console.log("[addWatchlistItem] Target collection path:", colRef.path);
 
     const docData: Record<string, any> = {
       title: input.title.trim(),
@@ -245,7 +235,7 @@ export async function addWatchlistItem(
       updatedAt: serverTimestamp(),
     };
 
-    console.log("[addWatchlistItem] Executing addDoc() with docData:", docData);
+    console.log("attempting Firestore write");
     const docRef = await addDoc(colRef, docData);
     console.log("Firestore write successful:", docRef.id);
 

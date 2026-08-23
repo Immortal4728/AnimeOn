@@ -5,7 +5,6 @@ import { onAuthStateChanged } from "firebase/auth";
 
 import retroHero from "@/assets/retro-hero.jpg";
 import { GoogleButton } from "@/components/google-button";
-import { supabase } from "@/integrations/supabase/client";
 import { auth } from "@/lib/firebase";
 
 export const Route = createFileRoute("/login")({
@@ -23,14 +22,11 @@ function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Only navigate to watchlist when Firebase Auth user is present
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         navigate({ to: "/watchlist", replace: true });
       }
-    });
-
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/watchlist", replace: true });
     });
 
     return () => unsubscribe();

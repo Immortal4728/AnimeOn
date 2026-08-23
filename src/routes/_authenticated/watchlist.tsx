@@ -217,27 +217,27 @@ function WatchlistPage() {
     setIsItemModalOpen(true);
   }
 
-  // Save Item (Create or Edit) with robust error handling and step logging
+  // Save Item (Create or Edit) with explicit step logs and error reporting
   async function handleSaveItem(e: React.FormEvent) {
     e.preventDefault();
     console.log("SAVE clicked");
 
-    const currentUser = auth.currentUser;
-    console.log("currentUser:", currentUser);
-    console.log("uid:", currentUser?.uid);
-    console.log("currentUid state:", currentUid);
-
     if (!form.title.trim()) {
-      console.warn("SAVE aborted: Title is empty");
       toast.error("Please enter a title");
       return;
     }
 
+    const currentUser = auth.currentUser;
+    console.log("currentUser:", currentUser);
+    console.log("uid:", currentUser?.uid);
+
     const uid = currentUser?.uid || currentUid;
 
     if (!uid) {
-      console.error("Firestore SAVE failed: No authenticated user UID found.");
-      toast.error("Save failed: Authentication required. Please sign in with Google.");
+      console.error("Firestore SAVE failed: Authentication UID missing (currentUser is null).");
+      toast.error("Authentication required to save items. Please sign in with Google.");
+      setIsItemModalOpen(false);
+      navigate({ to: "/login" });
       return;
     }
 
@@ -256,12 +256,11 @@ function WatchlistPage() {
       notes: isPorn || isGame ? null : form.notes.trim() || null,
     };
 
-    console.log("attempting Firestore write");
     setSubmitting(true);
 
     try {
       if (editingItem) {
-        console.log("attempting Firestore update for ID:", editingItem.id);
+        console.log("attempting Firestore update");
         await updateWatchlistItem(uid, editingItem.id, payload);
         setItems((prev) =>
           prev.map((i) =>
@@ -281,15 +280,16 @@ function WatchlistPage() {
         );
         toast.success("Watchlist item updated");
       } else {
+        console.log("attempting Firestore write");
         const newItem = await addWatchlistItem(uid, payload);
         console.log("Firestore write successful:", newItem.id);
         setItems((prev) => [newItem, ...prev]);
         toast.success("Added to your watchlist");
       }
       setIsItemModalOpen(false);
-    } catch (err: any) {
-      console.error("Firestore SAVE failed:", err);
-      toast.error(`Save failed: ${err?.message || "Firestore permission or write error"}`);
+    } catch (error: any) {
+      console.error("Firestore SAVE failed:", error);
+      toast.error(`Save failed: ${error?.message || "Firestore write error"}`);
     } finally {
       setSubmitting(false);
     }
@@ -728,7 +728,6 @@ function WatchlistPage() {
               </button>
               <button
                 type="submit"
-                onClick={handleSaveItem}
                 disabled={submitting}
                 className="rounded-xl border border-neon/60 bg-primary px-6 py-2.5 font-bold text-primary-foreground shadow-[0_0_25px_var(--neon)] hover:bg-primary/90 disabled:opacity-50"
               >
