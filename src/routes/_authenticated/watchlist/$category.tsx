@@ -879,7 +879,7 @@ function WatchlistCategoryPage() {
                 );
               }
 
-              /* BOOK CATEGORY: PURE COVER-FIRST BOOK CARD WITH UNDER-COVER HANDWRITTEN SIGNATURE REVEAL */
+              /* BOOK CATEGORY: PURE COVER-FIRST BOOK CARD (ZERO EMPTY SPACE WHEN NOT HOVERED) */
               if (item.media_type === "book") {
                 const authorName = item.author || (item as any).authorName || (item as any).author_name || "Dahlia Adler";
                 console.log("[BOOK SIGNATURE DEBUG]", { id: item.id, title: item.title, author: authorName });
@@ -891,7 +891,7 @@ function WatchlistCategoryPage() {
                     className="group relative rounded-2xl border border-border/40 bg-[#0c0e17] transition-all duration-300 hover:-translate-y-1.5 hover:border-neon/80 hover:shadow-[0_0_25px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_25px_var(--neon)] max-w-[280px] w-full mx-auto sm:max-w-none flex flex-col"
                   >
                     {/* 1. Cover Viewport */}
-                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-t-2xl">
+                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-2xl">
                       {item.cover_url ? (
                         <img
                           src={item.cover_url}
@@ -942,8 +942,8 @@ function WatchlistCategoryPage() {
                       </div>
                     </div>
 
-                    {/* 2. Signature Section Underneath Cover Image (Unclipped, progressive left-to-right reveal on hover) */}
-                    <div className="px-3 py-2 bg-[#0c0e17] rounded-b-2xl flex items-center justify-center min-h-[46px] relative overflow-visible">
+                    {/* 2. Floating Signature (Absolutely positioned below card bottom edge — zero layout space when idle) */}
+                    <div className="absolute top-[100%] inset-x-0 pt-2 flex justify-center items-center pointer-events-none z-30 overflow-visible">
                       <div className="signature-container flex justify-center items-center w-full overflow-visible">
                         <div className="signature-reveal px-1">
                           <span className="signature-text font-signature">
