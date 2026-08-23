@@ -175,7 +175,6 @@ export async function fetchUserWatchlist(uid: string): Promise<WatchlistItem[]> 
       const q = query(colRef, orderBy("createdAt", "desc"));
       snapshot = await getDocs(q);
     } catch {
-      // Fallback for missing index or unindexed timestamp ordering
       snapshot = await getDocs(colRef);
     }
 
@@ -220,12 +219,18 @@ export async function addWatchlistItem(
   uid: string,
   input: CreateWatchlistItemInput
 ): Promise<WatchlistItem> {
-  if (!uid) throw new Error("User UID required to create watchlist item");
+  console.log("[addWatchlistItem] received uid:", uid, "input:", input);
+
+  if (!uid) {
+    const err = new Error("User UID required to create watchlist item");
+    console.error("[addWatchlistItem ERROR] Aborting due to empty UID", err);
+    throw err;
+  }
 
   try {
     const colRef = collection(db, "users", uid, "watchlist");
+    console.log("[addWatchlistItem] Target collection path:", colRef.path);
 
-    // Standardized camelCase schema only
     const docData: Record<string, any> = {
       title: input.title.trim(),
       imageUrl: input.imageUrl || null,
@@ -240,9 +245,9 @@ export async function addWatchlistItem(
       updatedAt: serverTimestamp(),
     };
 
-    console.log(`[Firestore Write] Saving item to users/${uid}/watchlist:`, docData);
+    console.log("[addWatchlistItem] Executing addDoc() with docData:", docData);
     const docRef = await addDoc(colRef, docData);
-    console.log(`[Firestore Success] Created document ID: ${docRef.id}`);
+    console.log("Firestore write successful:", docRef.id);
 
     const nowIso = new Date().toISOString();
 
@@ -262,7 +267,7 @@ export async function addWatchlistItem(
       updated_at: nowIso,
     };
   } catch (error) {
-    console.error(`[Firestore Error] Failed to add item to users/${uid}/watchlist:`, error);
+    console.error("Firestore SAVE failed:", error);
     throw error;
   }
 }
