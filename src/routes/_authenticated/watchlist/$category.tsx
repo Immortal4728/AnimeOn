@@ -362,14 +362,14 @@ function WatchlistCategoryPage() {
   };
 
   return (
-    <main className="scanlines min-h-screen bg-[#07090e] text-foreground pb-24">
+    <main className="scanlines min-h-screen bg-[#07090e] text-foreground pb-24 touch-manipulation">
       {/* BACKGROUND ATMOSPHERIC GLOWS */}
       <div className="fixed top-0 left-1/4 -z-10 h-96 w-96 rounded-full bg-neon/10 blur-[150px] pointer-events-none" />
       <div className="fixed bottom-0 right-1/4 -z-10 h-96 w-96 rounded-full bg-neon-2/10 blur-[150px] pointer-events-none" />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-12 space-y-6 sm:space-y-8 pt-4 sm:pt-6">
+      <div className="mx-auto max-w-7xl px-3.5 sm:px-6 lg:px-12 space-y-5 sm:space-y-8 pt-3 sm:pt-6">
         {/* TOP NAVBAR HEADER */}
-        <header className="sticky top-2 sm:top-4 z-40 rounded-2xl border border-border/40 bg-card/60 px-4 sm:px-6 py-3 sm:py-3.5 backdrop-blur-xl shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+        <header className="sticky top-2 sm:top-4 z-40 rounded-2xl border border-border/40 bg-[#0c0e17]/80 px-3.5 sm:px-6 py-2.5 sm:py-3.5 backdrop-blur-xl shadow-[0_0_30px_rgba(0,0,0,0.5)]">
           <div className="flex items-center justify-between gap-2 sm:gap-4">
             <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
               <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-neon animate-ping" />
@@ -384,12 +384,12 @@ function WatchlistCategoryPage() {
                 <button
                   type="button"
                   onClick={() => setIsThemeOpen((prev) => !prev)}
-                  className="inline-flex items-center justify-center gap-1.5 min-h-[38px] sm:min-h-[44px] rounded-xl border border-border/40 bg-secondary/30 px-3 sm:px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-muted-foreground transition-all hover:border-border hover:bg-secondary/60 hover:text-foreground active:scale-95"
+                  className="inline-flex items-center justify-center gap-1.5 min-h-[40px] sm:min-h-[44px] rounded-xl border border-border/40 bg-secondary/30 px-3 sm:px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-muted-foreground transition-all hover:border-border hover:bg-secondary/60 hover:text-foreground active:scale-95"
                   aria-label="Select Theme"
                   aria-expanded={isThemeOpen}
                 >
                   <Palette className="h-3.5 w-3.5 shrink-0" />
-                  <span className="hidden xs:inline sm:inline">Themes</span>
+                  <span className="text-xs">Themes</span>
                 </button>
 
                 {/* Theme Selector Popover */}
@@ -414,7 +414,7 @@ function WatchlistCategoryPage() {
                             key={t.id}
                             type="button"
                             onClick={() => void handleSelectTheme(t.id)}
-                            className={`w-full flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition-all min-h-[38px] ${
+                            className={`w-full flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition-all min-h-[40px] ${
                               isActive
                                 ? "bg-secondary/60 text-foreground border border-neon/40 shadow-[0_0_10px_rgba(236,72,153,0.15)]"
                                 : "text-muted-foreground hover:text-foreground hover:bg-secondary/30"
@@ -452,7 +452,7 @@ function WatchlistCategoryPage() {
 
               <button
                 onClick={() => setShowLogoutConfirm(true)}
-                className="inline-flex items-center justify-center gap-1.5 min-h-[38px] sm:min-h-[44px] rounded-xl border border-border/40 bg-secondary/30 px-3 sm:px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-muted-foreground transition-all hover:border-border hover:bg-secondary/60 hover:text-foreground active:scale-95"
+                className="inline-flex items-center justify-center gap-1.5 min-h-[40px] sm:min-h-[44px] rounded-xl border border-border/40 bg-secondary/30 px-3 sm:px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-muted-foreground transition-all hover:border-border hover:bg-secondary/60 hover:text-foreground active:scale-95"
               >
                 <LogOut className="h-3.5 w-3.5 shrink-0" />
                 <span className="hidden sm:inline">Logout</span>
@@ -463,10 +463,10 @@ function WatchlistCategoryPage() {
 
         {/* CONTROLS HEADER & SEARCH AREA */}
         <div className="space-y-4 sm:space-y-6">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div className="flex flex-col gap-3.5 md:flex-row md:items-end md:justify-between">
             <div className="space-y-1">
-              <div className="inline-flex items-center gap-2 rounded-full border border-neon/40 bg-neon/10 px-3 py-1 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-neon shadow-[0_0_15px_rgba(236,72,153,0.2)]">
-                <Sparkles className="h-3 w-3 shrink-0" />
+              <div className="inline-flex items-center gap-2 rounded-full border border-neon/40 bg-neon/10 px-3 py-0.5 sm:py-1 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-neon shadow-[0_0_15px_rgba(236,72,153,0.2)]">
+                <Sparkles className="h-3 w-3 shrink-0 animate-pulse" />
                 <span>PERSONAL ARCHIVE</span>
               </div>
               <h1 className="font-display text-2xl sm:text-4xl font-bold uppercase tracking-[0.14em] sm:tracking-[0.16em] text-foreground truncate max-w-full">
@@ -484,20 +484,20 @@ function WatchlistCategoryPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search archive..."
-                className="w-full rounded-xl border border-border/60 bg-secondary/50 pl-10 pr-4 py-2.5 text-xs text-foreground outline-none transition placeholder:text-muted-foreground focus:border-neon focus:ring-1 focus:ring-neon"
+                className="w-full rounded-xl border border-border/60 bg-secondary/50 pl-10 pr-4 py-2.5 text-base sm:text-xs text-foreground outline-none transition placeholder:text-muted-foreground focus:border-neon focus:ring-1 focus:ring-neon min-h-[44px]"
               />
             </div>
           </div>
 
-          {/* LEVEL 1: PRIMARY MEDIA TYPE NAVIGATION */}
-          <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-border/20 max-w-full">
+          {/* LEVEL 1: PRIMARY MEDIA TYPE NAVIGATION — Touch swipeable with edge scroll */}
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-border/20 max-w-full -mx-3.5 px-3.5 sm:mx-0 sm:px-0 snap-x touch-pan-x">
             {MEDIA_FILTERS.map((f) => {
               const isActive = selectedType === f.value;
               return (
                 <button
                   key={f.value}
                   onClick={() => handleCategoryChange(f.value)}
-                  className={`shrink-0 min-h-[38px] sm:min-h-[44px] rounded-xl px-3.5 sm:px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] sm:tracking-[0.2em] transition-all duration-200 ${
+                  className={`shrink-0 snap-start min-h-[42px] sm:min-h-[44px] rounded-xl px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] sm:tracking-[0.2em] transition-all duration-200 active:scale-95 ${
                     isActive
                       ? "border border-neon/60 bg-primary/20 text-foreground shadow-[0_0_20px_rgba(236,72,153,0.25)]"
                       : "text-muted-foreground hover:text-foreground hover:bg-secondary/40"
@@ -513,14 +513,14 @@ function WatchlistCategoryPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-card/40 rounded-2xl border border-border/40 p-3 sm:px-5 sm:py-3 backdrop-blur-xl shadow-lg">
             {/* STATUS FILTER STRIP */}
             {["anime", "movie", "kdrama", "web"].includes(selectedType) ? (
-              <div className="inline-flex items-center gap-1.5 bg-[#0c0e17]/80 border border-border/40 p-1.5 rounded-xl max-w-full overflow-x-auto scrollbar-none">
+              <div className="inline-flex items-center gap-1.5 bg-[#0c0e17]/80 border border-border/40 p-1.5 rounded-xl max-w-full overflow-x-auto scrollbar-none snap-x touch-pan-x">
                 {STATUS_FILTERS.map((s) => {
                   const isActive = selectedStatus === s.value;
                   return (
                     <button
                       key={s.value}
                       onClick={() => setSelectedStatus(isActive ? "all" : s.value)}
-                      className={`shrink-0 min-h-[36px] rounded-lg px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.14em] sm:tracking-[0.16em] transition-all duration-200 ${
+                      className={`shrink-0 snap-start min-h-[38px] rounded-lg px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.14em] sm:tracking-[0.16em] transition-all duration-200 active:scale-95 ${
                         isActive
                           ? "border border-neon/60 bg-neon/15 text-neon shadow-[0_0_15px_rgba(236,72,153,0.3)]"
                           : "text-muted-foreground hover:text-foreground hover:bg-secondary/40"
@@ -538,7 +538,7 @@ function WatchlistCategoryPage() {
             {/* CONTEXTUAL ADD BUTTON */}
             <button
               onClick={openAddModal}
-              className="w-full sm:w-auto shrink-0 min-h-[44px] inline-flex items-center justify-center gap-2 rounded-xl border border-neon/60 bg-primary px-4 py-2.5 text-xs font-bold uppercase tracking-[0.18em] text-primary-foreground shadow-[0_0_25px_-5px_var(--neon)] transition-all hover:scale-[1.02] hover:bg-primary/90 active:scale-95 sm:ml-auto"
+              className="w-full sm:w-auto shrink-0 min-h-[46px] inline-flex items-center justify-center gap-2 rounded-xl border border-neon/60 bg-primary px-5 py-2.5 text-xs font-bold uppercase tracking-[0.18em] text-primary-foreground shadow-[0_0_25px_-5px_var(--neon)] transition-all hover:scale-[1.02] hover:bg-primary/90 active:scale-[0.98] sm:ml-auto"
             >
               <Plus className="h-4 w-4 shrink-0" />
               {getAddButtonLabel()}
@@ -563,7 +563,7 @@ function WatchlistCategoryPage() {
           </div>
         ) : visibleItems.length === 0 ? (
           /* EMPTY STATE */
-          <div className="rounded-3xl border border-border/30 bg-card/20 py-16 sm:py-20 px-4 sm:px-6 text-center space-y-6 backdrop-blur-sm">
+          <div className="rounded-3xl border border-border/30 bg-card/20 py-14 sm:py-20 px-4 sm:px-6 text-center space-y-6 backdrop-blur-sm">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-neon/30 bg-neon/10 text-neon shadow-[0_0_30px_rgba(236,72,153,0.2)]">
               <Bookmark className="h-8 w-8" />
             </div>
@@ -591,7 +591,7 @@ function WatchlistCategoryPage() {
             <div>
               <button
                 onClick={openAddModal}
-                className="inline-flex items-center justify-center gap-2 min-h-[44px] rounded-xl border border-neon/60 bg-primary px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground shadow-[0_0_25px_var(--neon)] transition-all hover:scale-105"
+                className="inline-flex items-center justify-center gap-2 min-h-[46px] rounded-xl border border-neon/60 bg-primary px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-primary-foreground shadow-[0_0_25px_var(--neon)] transition-all active:scale-95"
               >
                 <Plus className="h-4 w-4" />
                 {getAddButtonLabel()}
@@ -607,7 +607,7 @@ function WatchlistCategoryPage() {
                 className="group relative overflow-hidden rounded-2xl border border-border/40 bg-card/40 backdrop-blur-md transition-all duration-300 hover:border-neon/60 hover:shadow-[0_0_30px_rgba(236,72,153,0.2)] flex flex-col justify-between"
               >
                 {/* Cover Image Container */}
-                <div className="relative aspect-[2/3] w-full overflow-hidden bg-secondary/50">
+                <div className="relative aspect-[2/3] w-full overflow-hidden bg-secondary/50 max-h-[420px]">
                   {item.cover_url ? (
                     <img
                       src={item.cover_url}
@@ -639,7 +639,7 @@ function WatchlistCategoryPage() {
                 {/* Card Information & Actions */}
                 <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="font-display text-sm sm:text-base font-bold uppercase tracking-[0.12em] text-foreground line-clamp-2 group-hover:text-neon transition-colors">
+                    <h3 className="font-display text-base sm:text-base font-bold uppercase tracking-[0.12em] text-foreground line-clamp-2 group-hover:text-neon transition-colors">
                       {item.title}
                     </h3>
                     {item.media_type !== "porn" && item.media_type !== "game" && (
@@ -656,24 +656,25 @@ function WatchlistCategoryPage() {
                         href={item.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-full min-h-[38px] flex items-center justify-center gap-1.5 rounded-lg border border-neon/50 bg-neon/10 px-2 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-neon hover:bg-neon/20 transition-all shadow-[0_0_10px_rgba(236,72,153,0.2)] mb-2"
+                        className="w-full min-h-[42px] flex items-center justify-center gap-1.5 rounded-xl border border-neon/50 bg-neon/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-neon hover:bg-neon/20 transition-all shadow-[0_0_10px_rgba(236,72,153,0.2)] mb-2 active:scale-95"
                       >
-                        <ExternalLink className="h-3 w-3 shrink-0" />
+                        <ExternalLink className="h-3.5 w-3.5 shrink-0" />
                         Open Link
                       </a>
                     ) : null}
 
-                    <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.16em]">
+                    {/* Touch optimized Edit & Delete buttons */}
+                    <div className="flex items-center justify-between gap-2 text-xs uppercase tracking-[0.16em]">
                       <button
                         onClick={() => openEditModal(item)}
-                        className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5 min-h-[36px] py-1 px-2 rounded-lg"
+                        className="flex-1 min-h-[40px] px-3 py-2 rounded-xl bg-secondary/40 hover:bg-secondary/70 text-foreground transition-all flex items-center justify-center gap-1.5 font-bold active:scale-95 border border-border/30 sm:border-transparent sm:bg-transparent sm:text-muted-foreground sm:hover:text-foreground"
                       >
                         <Edit2 className="h-3.5 w-3.5 shrink-0" />
                         Edit
                       </button>
                       <button
                         onClick={() => setDeletingItem(item)}
-                        className="text-muted-foreground hover:text-destructive transition-colors flex items-center gap-1.5 min-h-[36px] py-1 px-2 rounded-lg"
+                        className="flex-1 min-h-[40px] px-3 py-2 rounded-xl bg-destructive/15 hover:bg-destructive/30 text-destructive transition-all flex items-center justify-center gap-1.5 font-bold active:scale-95 border border-destructive/30 sm:border-transparent sm:bg-transparent sm:text-muted-foreground sm:hover:text-destructive"
                       >
                         <Trash2 className="h-3.5 w-3.5 shrink-0" />
                         Delete
@@ -687,12 +688,12 @@ function WatchlistCategoryPage() {
         )}
       </div>
 
-      {/* ADD / EDIT ITEM MODAL */}
+      {/* ADD / EDIT ITEM MODAL — Mobile sheet slide-up / Centered modal */}
       {isItemModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-3 sm:p-6 backdrop-blur-md overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 p-0 sm:p-6 backdrop-blur-md overflow-y-auto">
           <form
             onSubmit={handleSaveItem}
-            className="w-full max-w-lg space-y-4 rounded-2xl border border-border/40 bg-[#0c0e17] p-5 sm:p-8 shadow-2xl max-h-[85vh] sm:max-h-[90vh] overflow-y-auto"
+            className="w-full max-w-lg space-y-4 rounded-t-3xl sm:rounded-2xl border border-border/40 bg-[#0c0e17] p-5 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-5 sm:animate-none"
           >
             <div className="flex items-center justify-between border-b border-border/20 pb-3.5">
               <h2 className="font-display text-base sm:text-lg font-bold uppercase tracking-[0.18em] text-foreground truncate pr-2">
@@ -701,7 +702,7 @@ function WatchlistCategoryPage() {
               <button
                 type="button"
                 onClick={() => setIsItemModalOpen(false)}
-                className="text-muted-foreground hover:text-foreground p-1 rounded-lg"
+                className="text-muted-foreground hover:text-foreground p-1.5 rounded-lg active:scale-90"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -719,7 +720,7 @@ function WatchlistCategoryPage() {
                   value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
                   placeholder="Title"
-                  className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-2.5 text-sm text-foreground outline-none focus:border-neon focus:ring-1 focus:ring-neon"
+                  className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-foreground outline-none focus:border-neon focus:ring-1 focus:ring-neon min-h-[44px]"
                 />
               </div>
 
@@ -732,7 +733,7 @@ function WatchlistCategoryPage() {
                   value={form.cover_url}
                   onChange={(e) => setForm({ ...form, cover_url: e.target.value })}
                   placeholder="https://..."
-                  className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-2.5 text-sm text-foreground outline-none focus:border-neon focus:ring-1 focus:ring-neon truncate"
+                  className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-foreground outline-none focus:border-neon focus:ring-1 focus:ring-neon truncate min-h-[44px]"
                 />
               </div>
 
@@ -746,7 +747,7 @@ function WatchlistCategoryPage() {
                     value={form.link}
                     onChange={(e) => setForm({ ...form, link: e.target.value })}
                     placeholder="https://..."
-                    className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-2.5 text-sm text-foreground outline-none focus:border-neon focus:ring-1 focus:ring-neon truncate"
+                    className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-foreground outline-none focus:border-neon focus:ring-1 focus:ring-neon truncate min-h-[44px]"
                   />
                 </div>
               ) : form.media_type === "game" ? (
@@ -761,7 +762,7 @@ function WatchlistCategoryPage() {
                     <select
                       value={form.status}
                       onChange={(e) => setForm({ ...form, status: e.target.value as WatchStatus })}
-                      className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-2.5 text-sm text-foreground outline-none focus:border-neon"
+                      className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-foreground outline-none focus:border-neon min-h-[44px]"
                     >
                       {STATUSES.map((s) => (
                         <option key={s} value={s}>
@@ -781,25 +782,25 @@ function WatchlistCategoryPage() {
                       onChange={(e) => setForm({ ...form, notes: e.target.value })}
                       placeholder="Personal thoughts, episode progress..."
                       rows={3}
-                      className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-2.5 text-sm text-foreground outline-none focus:border-neon focus:ring-1 focus:ring-neon"
+                      className="w-full rounded-xl border border-border/60 bg-secondary/50 px-3.5 sm:px-4 py-3 text-base sm:text-sm text-foreground outline-none focus:border-neon focus:ring-1 focus:ring-neon"
                     />
                   </div>
                 </>
               )}
             </div>
 
-            <div className="flex justify-end gap-3 text-xs uppercase tracking-[0.18em] pt-4 border-t border-border/20">
+            <div className="flex items-center justify-end gap-3 text-xs uppercase tracking-[0.18em] pt-4 border-t border-border/20">
               <button
                 type="button"
                 onClick={() => setIsItemModalOpen(false)}
-                className="min-h-[44px] px-4 py-2 text-muted-foreground hover:text-foreground flex items-center"
+                className="flex-1 sm:flex-none min-h-[46px] px-4 py-2.5 text-muted-foreground hover:text-foreground flex items-center justify-center rounded-xl bg-secondary/30 active:scale-95"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={submitting}
-                className="min-h-[44px] rounded-xl border border-neon/60 bg-primary px-6 py-2.5 font-bold text-primary-foreground shadow-[0_0_25px_var(--neon)] hover:bg-primary/90 disabled:opacity-50 flex items-center justify-center"
+                className="flex-1 sm:flex-none min-h-[46px] rounded-xl border border-neon/60 bg-primary px-6 py-2.5 font-bold text-primary-foreground shadow-[0_0_25px_var(--neon)] hover:bg-primary/90 disabled:opacity-50 flex items-center justify-center active:scale-95"
               >
                 {submitting ? "SAVING…" : "SAVE"}
               </button>
@@ -823,7 +824,7 @@ function WatchlistCategoryPage() {
             <div className="flex gap-3">
               <button
                 onClick={() => setShowLogoutConfirm(false)}
-                className="flex-1 min-h-[44px] rounded-xl border border-border/50 bg-secondary/30 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground hover:bg-secondary/60 transition-colors flex items-center justify-center"
+                className="flex-1 min-h-[44px] rounded-xl border border-border/50 bg-secondary/30 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground hover:bg-secondary/60 transition-colors flex items-center justify-center active:scale-95"
               >
                 Cancel
               </button>
@@ -832,7 +833,7 @@ function WatchlistCategoryPage() {
                   setShowLogoutConfirm(false);
                   void fbSignOut(auth);
                 }}
-                className="flex-1 min-h-[44px] rounded-xl border border-destructive/60 bg-destructive/20 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-destructive hover:bg-destructive/30 transition-colors flex items-center justify-center"
+                className="flex-1 min-h-[44px] rounded-xl border border-destructive/60 bg-destructive/20 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-destructive hover:bg-destructive/30 transition-colors flex items-center justify-center active:scale-95"
               >
                 Log Out
               </button>
@@ -874,12 +875,12 @@ function WatchlistCategoryPage() {
               </p>
             </div>
 
-            <div className="flex justify-end gap-3 text-xs uppercase tracking-[0.18em] pt-4 border-t border-border/20">
+            <div className="flex items-center justify-end gap-3 text-xs uppercase tracking-[0.18em] pt-4 border-t border-border/20">
               <button
                 type="button"
                 disabled={isDeleting}
                 onClick={() => setDeletingItem(null)}
-                className="min-h-[44px] rounded-xl border border-border/50 bg-secondary/30 px-5 py-2.5 font-semibold text-muted-foreground hover:bg-secondary/60 hover:text-foreground transition-colors disabled:opacity-50 flex items-center justify-center"
+                className="flex-1 sm:flex-none min-h-[44px] rounded-xl border border-border/50 bg-secondary/30 px-5 py-2.5 font-semibold text-muted-foreground hover:bg-secondary/60 hover:text-foreground transition-colors disabled:opacity-50 flex items-center justify-center active:scale-95"
               >
                 Cancel
               </button>
@@ -887,7 +888,7 @@ function WatchlistCategoryPage() {
                 type="button"
                 disabled={isDeleting}
                 onClick={() => void handleConfirmDelete()}
-                className="min-h-[44px] rounded-xl border border-destructive/60 bg-destructive/20 px-6 py-2.5 font-bold text-destructive shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:bg-destructive/30 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 sm:flex-none min-h-[44px] rounded-xl border border-destructive/60 bg-destructive/20 px-6 py-2.5 font-bold text-destructive shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:bg-destructive/30 transition-all disabled:opacity-50 flex items-center justify-center gap-2 active:scale-95"
               >
                 {isDeleting ? (
                   <>
