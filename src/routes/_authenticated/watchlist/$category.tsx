@@ -953,13 +953,13 @@ function WatchlistCategoryPage() {
                 );
               }
 
-              /* MOVIES / K-DRAMAS / WEB SERIES: COVER-FIRST CARD matching Books Design System */
+              /* MOVIES / K-DRAMAS / WEB SERIES: COVER-FIRST CARD WITH OUTSIDE FLOATING HOVER REVEAL */
               if (item.media_type === "movie" || item.media_type === "kdrama" || item.media_type === "web") {
                 return (
                   <li
                     key={item.id}
                     tabIndex={0}
-                    className="group relative rounded-2xl border border-border/40 bg-[#0c0e17] transition-all duration-300 hover:-translate-y-1.5 hover:border-neon/80 hover:shadow-[0_0_25px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_25px_var(--neon)] max-w-[280px] w-full mx-auto sm:max-w-none flex flex-col"
+                    className="group relative rounded-2xl border border-border/40 bg-[#0c0e17] transition-all duration-300 hover:border-neon/80 hover:shadow-[0_0_25px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_25px_var(--neon)] max-w-[280px] w-full mx-auto sm:max-w-none flex flex-col"
                   >
                     {/* 1. Cover Viewport (2:3 Aspect Ratio) */}
                     <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-2xl">
@@ -977,8 +977,8 @@ function WatchlistCategoryPage() {
                       ) : (
                         <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground p-6 text-center">
                           <Film className="h-10 w-10 opacity-40 text-neon" />
-                          <span className="text-xs font-bold uppercase tracking-[0.16em] text-foreground/80">{item.title}</span>
-                          <span className="text-[11px] tracking-wide text-neon/80 font-semibold">{typeLabel(item.media_type)}</span>
+                          <span className="text-xs font-bold uppercase tracking-[0.16em] text-white">{item.title}</span>
+                          <span className="text-[11px] tracking-wide text-white/80 font-semibold">{typeLabel(item.media_type)}</span>
                         </div>
                       )}
 
@@ -993,14 +993,16 @@ function WatchlistCategoryPage() {
                       {/* CRT Scanline & Subtle Vignette Overlay */}
                       <div className="absolute inset-0 scanlines opacity-20 pointer-events-none z-10" />
                       <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] pointer-events-none z-10" />
+                    </div>
 
-                      {/* Hover Action Controls & Title Metadata Overlay */}
-                      <div className="absolute inset-x-0 bottom-0 z-30 p-3 space-y-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-250 ease-out pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto bg-gradient-to-t from-[#07090e]/95 via-[#07090e]/80 to-transparent pt-10">
-                        <div>
-                          <h3 className="font-display text-sm sm:text-base font-bold uppercase tracking-[0.12em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_10px_var(--neon)]">
+                    {/* 2. Outside Floating Hover Details & Action Controls (ALWAYS WHITE TEXT) */}
+                    <div className="absolute top-[100%] inset-x-0 pt-2 z-40 space-y-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-250 ease-out pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
+                      <div className="rounded-xl border border-border/40 bg-[#0c0e17]/95 p-3 space-y-2 shadow-2xl backdrop-blur-md">
+                        <div className="text-center">
+                          <h3 className="font-display text-sm sm:text-base font-bold uppercase tracking-[0.12em] text-white line-clamp-1">
                             {item.title}
                           </h3>
-                          <p className="mt-0.5 text-[11px] font-mono uppercase tracking-[0.16em] text-muted-foreground/90 line-clamp-1">
+                          <p className="mt-0.5 text-[11px] font-mono uppercase tracking-[0.16em] text-white/80 line-clamp-1">
                             {typeLabel(item.media_type)}
                           </p>
                         </div>
@@ -1010,9 +1012,9 @@ function WatchlistCategoryPage() {
                             href={item.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-full min-h-[32px] flex items-center justify-center gap-1.5 rounded-xl border border-neon/60 bg-neon/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-neon hover:bg-neon/20 transition-all shadow-[0_0_10px_var(--neon)] active:scale-95"
+                            className="w-full min-h-[30px] flex items-center justify-center gap-1.5 rounded-lg border border-neon/60 bg-neon/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white hover:bg-neon/20 transition-all shadow-[0_0_10px_var(--neon)] active:scale-95"
                           >
-                            <ExternalLink className="h-3.5 w-3.5 shrink-0" />
+                            <ExternalLink className="h-3 w-3 shrink-0 text-neon" />
                             Open Link
                           </a>
                         )}
@@ -1020,16 +1022,16 @@ function WatchlistCategoryPage() {
                         <div className="flex items-center gap-2 text-xs uppercase tracking-[0.16em]">
                           <button
                             onClick={() => openEditModal(item)}
-                            className="flex-1 min-h-[34px] rounded-xl border border-neon/50 bg-[#0c0e17]/90 hover:border-neon/80 hover:bg-neon/20 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 backdrop-blur-md shadow-lg"
+                            className="flex-1 min-h-[32px] rounded-lg border border-neon/50 bg-[#0c0e17] hover:border-neon/80 hover:bg-neon/20 text-white text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-md"
                           >
-                            <Edit2 className="h-3.5 w-3.5 shrink-0" />
+                            <Edit2 className="h-3.5 w-3.5 shrink-0 text-neon" />
                             Edit
                           </button>
                           <button
                             onClick={() => setDeletingItem(item)}
-                            className="flex-1 min-h-[34px] rounded-xl border border-destructive/50 bg-[#0c0e17]/90 hover:border-destructive/80 hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 backdrop-blur-md shadow-lg"
+                            className="flex-1 min-h-[32px] rounded-lg border border-destructive/50 bg-[#0c0e17] hover:border-destructive/80 hover:bg-destructive/25 text-white hover:text-white text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-md"
                           >
-                            <Trash2 className="h-3.5 w-3.5 shrink-0" />
+                            <Trash2 className="h-3.5 w-3.5 shrink-0 text-destructive" />
                             Delete
                           </button>
                         </div>
