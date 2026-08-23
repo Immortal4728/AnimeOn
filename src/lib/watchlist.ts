@@ -28,8 +28,7 @@ export const FILTERS: { value: "all" | MediaType; label: string }[] = [
 
 export const STATUSES: WatchStatus[] = ["want", "completed"];
 
-export const STATUS_FILTERS: { value: "all" | WatchStatus; label: string }[] = [
-  { value: "all", label: "All" },
+export const STATUS_FILTERS: { value: WatchStatus; label: string }[] = [
   { value: "want", label: "Want to Watch" },
   { value: "completed", label: "Completed" },
 ];
@@ -43,6 +42,50 @@ export function statusLabel(status: string, type: string): string {
       return "Completed";
     default:
       return status;
+  }
+}
+
+export function categorySlugToType(slug?: string): MediaType {
+  if (!slug) return "anime";
+  const normalized = slug.toLowerCase().trim();
+  switch (normalized) {
+    case "anime":
+      return "anime";
+    case "movies":
+    case "movie":
+      return "movie";
+    case "k-dramas":
+    case "kdrama":
+      return "kdrama";
+    case "web-series":
+    case "web":
+      return "web";
+    case "games":
+    case "game":
+      return "game";
+    case "porn":
+      return "porn";
+    default:
+      return "anime";
+  }
+}
+
+export function mediaTypeToSlug(type: MediaType): string {
+  switch (type) {
+    case "anime":
+      return "anime";
+    case "movie":
+      return "movies";
+    case "kdrama":
+      return "k-dramas";
+    case "web":
+      return "web-series";
+    case "game":
+      return "games";
+    case "porn":
+      return "porn";
+    default:
+      return "anime";
   }
 }
 
@@ -68,7 +111,6 @@ export interface WatchlistItem {
   media_type: MediaType;
   shelf_id: string | null;
   shelf_name: string | null;
-  language: string | null;
   status: WatchStatus;
   notes: string | null;
   created_at: string;

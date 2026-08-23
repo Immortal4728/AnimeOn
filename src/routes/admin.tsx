@@ -479,20 +479,30 @@ function AdminPage() {
 
           {/* PAGINATION */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between pt-4 text-xs uppercase tracking-[0.18em]">
-              <button
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                className="px-4 py-2 rounded border border-border/40 hover:bg-secondary/40 disabled:opacity-40 transition-colors"
-              >
-                Previous
-              </button>
-              <div className="flex items-center gap-2">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 text-xs uppercase tracking-[0.18em]">
+              <div className="flex items-center justify-between w-full sm:w-auto gap-2">
+                <button
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 min-h-[40px] rounded border border-border/40 hover:bg-secondary/40 disabled:opacity-40 transition-colors"
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 min-h-[40px] rounded border border-border/40 hover:bg-secondary/40 disabled:opacity-40 transition-colors sm:hidden"
+                >
+                  Next
+                </button>
+              </div>
+
+              <div className="flex items-center gap-1.5 overflow-x-auto max-w-full py-1 scrollbar-none">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                   <button
                     key={page}
                     onClick={() => setCurrentPage(page)}
-                    className={`h-8 w-8 rounded text-center transition ${
+                    className={`h-8 w-8 min-w-[32px] rounded text-center transition ${
                       page === currentPage
                         ? "bg-primary text-primary-foreground font-bold"
                         : "hover:bg-secondary/40 text-muted-foreground"
@@ -502,10 +512,11 @@ function AdminPage() {
                   </button>
                 ))}
               </div>
+
               <button
                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className="px-4 py-2 rounded border border-border/40 hover:bg-secondary/40 disabled:opacity-40 transition-colors"
+                className="px-4 py-2 min-h-[40px] rounded border border-border/40 hover:bg-secondary/40 disabled:opacity-40 transition-colors hidden sm:block"
               >
                 Next
               </button>

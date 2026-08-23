@@ -95,14 +95,14 @@ function Home() {
         />
         <div className="absolute inset-0 -z-10 bg-ink/55" />
 
-        <div className="max-w-3xl space-y-6">
-          <h1 className="font-display text-5xl uppercase tracking-[0.18em] text-foreground drop-shadow-[0_0_28px_var(--neon)] sm:text-7xl">
+        <div className="max-w-3xl space-y-4 sm:space-y-6">
+          <h1 className="font-display text-3xl sm:text-5xl lg:text-7xl uppercase tracking-[0.14em] sm:tracking-[0.18em] text-foreground drop-shadow-[0_0_28px_var(--neon)]">
             ANIME ON
           </h1>
-          <p className="max-w-xl mx-auto text-sm sm:text-base uppercase tracking-[0.25em] text-foreground/80">
+          <p className="max-w-xl mx-auto text-xs sm:text-base uppercase tracking-[0.2em] sm:tracking-[0.25em] text-foreground/80">
             EVERYTHING YOU MEAN TO WATCH. ONE QUIET SHELF.
           </p>
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground/90 pt-2 font-mono">
+          <p className="text-[11px] sm:text-xs uppercase tracking-[0.18em] sm:tracking-[0.2em] text-muted-foreground/90 pt-1 sm:pt-2 font-mono">
             Save what catches your attention. Come back when you're ready.
           </p>
         </div>
@@ -146,7 +146,7 @@ function Home() {
                 Add it to your watchlist in seconds.
               </h3>
               <p className="mt-4 text-xs text-muted-foreground leading-relaxed">
-                Organize by status, language, or format with one simple click.
+                Organize by status or format with one simple click.
               </p>
 
               {/* Atmospheric Graphic Accent */}

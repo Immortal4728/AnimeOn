@@ -45,15 +45,15 @@ function AboutPage() {
       </header>
 
       {/* HERO / INTRO */}
-      <section className="relative pt-36 pb-16 px-6 lg:px-12">
-        <div className="mx-auto max-w-4xl text-center space-y-6">
-          <span className="inline-flex items-center gap-2 rounded-full border border-neon/40 bg-neon/10 px-4 py-1 text-xs font-bold uppercase tracking-[0.25em] text-neon shadow-[0_0_15px_rgba(236,72,153,0.2)]">
+      <section className="relative pt-28 sm:pt-36 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-12">
+        <div className="mx-auto max-w-4xl text-center space-y-4 sm:space-y-6">
+          <span className="inline-flex items-center gap-2 rounded-full border border-neon/40 bg-neon/10 px-3.5 py-1 text-[11px] sm:text-xs font-bold uppercase tracking-[0.25em] text-neon shadow-[0_0_15px_rgba(236,72,153,0.2)]">
             THE PURPOSE
           </span>
-          <h1 className="font-display text-4xl sm:text-6xl font-extrabold uppercase tracking-[0.16em] text-foreground drop-shadow-[0_0_30px_var(--neon)]">
+          <h1 className="font-display text-2xl sm:text-4xl lg:text-6xl font-extrabold uppercase tracking-[0.14em] sm:tracking-[0.16em] text-foreground drop-shadow-[0_0_30px_var(--neon)]">
             ABOUT ANIME ON
           </h1>
-          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Anime On is a minimalist personal shelf designed to keep track of your favorite media without social noise, algorithmic feeds, or bloated clutter.
           </p>
         </div>

@@ -21,7 +21,6 @@ export interface CreateWatchlistItemInput {
   type: MediaType;
   shelfId?: string | null;
   shelfName?: string | null;
-  language: string | null;
   status: WatchStatus;
   notes: string | null;
 }
@@ -166,15 +165,15 @@ export async function deleteShelf(uid: string, shelfId: string): Promise<void> {
 
 export async function fetchUserWatchlist(uid: string): Promise<WatchlistItem[]> {
   if (!uid) return [];
+  console.log("[WATCHLIST] UID:", uid);
+  console.time("[WATCHLIST] fetch");
+
   try {
-    const colRef = collection(db, "users", uid, "watchlist");
-    let snapshot;
-    try {
-      const q = query(colRef, orderBy("createdAt", "desc"));
-      snapshot = await getDocs(q);
-    } catch {
-      snapshot = await getDocs(colRef);
-    }
+    const ref = collection(db, "users", uid, "watchlist");
+    const snapshot = await getDocs(ref);
+
+    console.timeEnd("[WATCHLIST] fetch");
+    console.log("[WATCHLIST] documents:", snapshot.size);
 
     const items = snapshot.docs.map((docSnap) => {
       const data = docSnap.data() as Record<string, any>;
@@ -190,7 +189,6 @@ export async function fetchUserWatchlist(uid: string): Promise<WatchlistItem[]> 
         media_type: (data["type"] || data["media_type"] || "anime") as MediaType,
         shelf_id: data["shelfId"] || data["shelf_id"] || null,
         shelf_name: data["shelfName"] || data["shelf_name"] || null,
-        language: data["language"] || null,
         status: (data["status"] || "want") as WatchStatus,
         notes: data["notes"] || null,
         created_at: createdAt?.toDate
@@ -200,15 +198,17 @@ export async function fetchUserWatchlist(uid: string): Promise<WatchlistItem[]> 
           : new Date().toISOString(),
         updated_at: updatedAt?.toDate
           ? updatedAt.toDate().toISOString()
-          : typeof updatedAt === "string"
-          ? updatedAt
+          : typeof createdAt === "string"
+          ? createdAt
           : new Date().toISOString(),
       };
     });
 
-    return items.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    return items.sort(
+      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
   } catch (error) {
-    console.error(`[Firestore Error] watchlist read failure for uid: ${uid}`, error);
+    console.error("[WATCHLIST] Error fetching user watchlist:", error);
     throw error;
   }
 }
@@ -220,15 +220,6 @@ export async function addWatchlistItem(
   if (!uid) throw new Error("User UID required to create watchlist item");
 
   try {
-    console.log("[FIRESTORE DEBUG] Firebase config:", {
-      projectId: app.options.projectId,
-      appId: app.options.appId,
-      authDomain: app.options.authDomain,
-    });
-    console.log("[FIRESTORE DEBUG] project:", app.options.projectId);
-    console.log("[FIRESTORE DEBUG] auth UID:", uid);
-    console.log("[FIRESTORE DEBUG] collection:", `users/${uid}/watchlist`);
-
     const colRef = collection(db, "users", uid, "watchlist");
 
     const docData: Record<string, any> = {
@@ -238,26 +229,13 @@ export async function addWatchlistItem(
       type: input.type,
       shelfId: input.shelfId || null,
       shelfName: input.shelfName || null,
-      language: input.language || null,
       status: input.status,
       notes: input.notes || null,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
 
-    console.log("attempting Firestore write");
     const docRef = await addDoc(colRef, docData);
-    console.log("🔥 FIRESTORE WRITE SUCCESS:", docRef.id);
-    console.log("[FIRESTORE DEBUG] document path:", docRef.path);
-    console.log("[FIRESTORE DEBUG] document ID:", docRef.id);
-
-    const snapshot = await getDoc(docRef);
-    console.log(
-      "[FIRESTORE DEBUG] read-after-write:",
-      snapshot.exists(),
-      snapshot.data()
-    );
-
     const nowIso = new Date().toISOString();
 
     return {
@@ -269,7 +247,6 @@ export async function addWatchlistItem(
       media_type: input.type,
       shelf_id: input.shelfId || null,
       shelf_name: input.shelfName || null,
-      language: input.language || null,
       status: input.status,
       notes: input.notes || null,
       created_at: nowIso,
@@ -300,11 +277,8 @@ export async function updateWatchlistItem(
     if (updates.type !== undefined) updateData["type"] = updates.type;
     if (updates.shelfId !== undefined) updateData["shelfId"] = updates.shelfId || null;
     if (updates.shelfName !== undefined) updateData["shelfName"] = updates.shelfName || null;
-    if (updates.language !== undefined) updateData["language"] = updates.language || null;
     if (updates.status !== undefined) updateData["status"] = updates.status;
     if (updates.notes !== undefined) updateData["notes"] = updates.notes || null;
-
-    console.log(`[Firestore Update] Updating users/${uid}/watchlist/${itemId}:`, updateData);
     await updateDoc(docRef, updateData);
     console.log(`[Firestore Success] Updated document ID: ${itemId}`);
   } catch (error) {

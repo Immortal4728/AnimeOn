@@ -15,6 +15,8 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedWatchlistRouteImport } from './routes/_authenticated/watchlist'
+import { Route as AuthenticatedWatchlistIndexRouteImport } from './routes/_authenticated/watchlist/index'
+import { Route as AuthenticatedWatchlistCategoryRouteImport } from './routes/_authenticated/watchlist/$category'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -45,20 +47,35 @@ const AuthenticatedWatchlistRoute = AuthenticatedWatchlistRouteImport.update({
   path: '/watchlist',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedWatchlistIndexRoute =
+  AuthenticatedWatchlistIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedWatchlistRoute,
+  } as any)
+const AuthenticatedWatchlistCategoryRoute =
+  AuthenticatedWatchlistCategoryRouteImport.update({
+    id: '/$category',
+    path: '/$category',
+    getParentRoute: () => AuthenticatedWatchlistRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
-  '/watchlist': typeof AuthenticatedWatchlistRoute
+  '/watchlist': typeof AuthenticatedWatchlistRouteWithChildren
+  '/watchlist/$category': typeof AuthenticatedWatchlistCategoryRoute
+  '/watchlist/': typeof AuthenticatedWatchlistIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
-  '/watchlist': typeof AuthenticatedWatchlistRoute
+  '/watchlist/$category': typeof AuthenticatedWatchlistCategoryRoute
+  '/watchlist': typeof AuthenticatedWatchlistIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -67,13 +84,23 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/login': typeof LoginRoute
-  '/_authenticated/watchlist': typeof AuthenticatedWatchlistRoute
+  '/_authenticated/watchlist': typeof AuthenticatedWatchlistRouteWithChildren
+  '/_authenticated/watchlist/$category': typeof AuthenticatedWatchlistCategoryRoute
+  '/_authenticated/watchlist/': typeof AuthenticatedWatchlistIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/admin' | '/login' | '/watchlist'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/login'
+    | '/watchlist'
+    | '/watchlist/$category'
+    | '/watchlist/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/admin' | '/login' | '/watchlist'
+  to:
+    '/' | '/about' | '/admin' | '/login' | '/watchlist/$category' | '/watchlist'
   id:
     | '__root__'
     | '/'
@@ -82,6 +109,8 @@ export interface FileRouteTypes {
     | '/admin'
     | '/login'
     | '/_authenticated/watchlist'
+    | '/_authenticated/watchlist/$category'
+    | '/_authenticated/watchlist/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -136,15 +165,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWatchlistRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/watchlist/': {
+      id: '/_authenticated/watchlist/'
+      path: '/'
+      fullPath: '/watchlist/'
+      preLoaderRoute: typeof AuthenticatedWatchlistIndexRouteImport
+      parentRoute: typeof AuthenticatedWatchlistRoute
+    }
+    '/_authenticated/watchlist/$category': {
+      id: '/_authenticated/watchlist/$category'
+      path: '/$category'
+      fullPath: '/watchlist/$category'
+      preLoaderRoute: typeof AuthenticatedWatchlistCategoryRouteImport
+      parentRoute: typeof AuthenticatedWatchlistRoute
+    }
   }
 }
 
+interface AuthenticatedWatchlistRouteChildren {
+  AuthenticatedWatchlistCategoryRoute: typeof AuthenticatedWatchlistCategoryRoute
+  AuthenticatedWatchlistIndexRoute: typeof AuthenticatedWatchlistIndexRoute
+}
+
+const AuthenticatedWatchlistRouteChildren: AuthenticatedWatchlistRouteChildren =
+  {
+    AuthenticatedWatchlistCategoryRoute: AuthenticatedWatchlistCategoryRoute,
+    AuthenticatedWatchlistIndexRoute: AuthenticatedWatchlistIndexRoute,
+  }
+
+const AuthenticatedWatchlistRouteWithChildren =
+  AuthenticatedWatchlistRoute._addFileChildren(
+    AuthenticatedWatchlistRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedWatchlistRoute: typeof AuthenticatedWatchlistRoute
+  AuthenticatedWatchlistRoute: typeof AuthenticatedWatchlistRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedWatchlistRoute: AuthenticatedWatchlistRoute,
+  AuthenticatedWatchlistRoute: AuthenticatedWatchlistRouteWithChildren,
 }
 
 const AuthenticatedRouteRouteWithChildren =
