@@ -2,6 +2,7 @@ import {
   collection,
   doc,
   getDocs,
+  getDoc,
   addDoc,
   updateDoc,
   deleteDoc,
@@ -10,7 +11,7 @@ import {
   orderBy,
   serverTimestamp,
 } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { app, db } from "@/lib/firebase";
 import type { WatchlistItem, Shelf, MediaType, WatchStatus } from "@/lib/watchlist";
 
 export interface CreateWatchlistItemInput {
@@ -219,6 +220,15 @@ export async function addWatchlistItem(
   if (!uid) throw new Error("User UID required to create watchlist item");
 
   try {
+    console.log("[FIRESTORE DEBUG] Firebase config:", {
+      projectId: app.options.projectId,
+      appId: app.options.appId,
+      authDomain: app.options.authDomain,
+    });
+    console.log("[FIRESTORE DEBUG] project:", app.options.projectId);
+    console.log("[FIRESTORE DEBUG] auth UID:", uid);
+    console.log("[FIRESTORE DEBUG] collection:", `users/${uid}/watchlist`);
+
     const colRef = collection(db, "users", uid, "watchlist");
 
     const docData: Record<string, any> = {
@@ -238,6 +248,15 @@ export async function addWatchlistItem(
     console.log("attempting Firestore write");
     const docRef = await addDoc(colRef, docData);
     console.log("🔥 FIRESTORE WRITE SUCCESS:", docRef.id);
+    console.log("[FIRESTORE DEBUG] document path:", docRef.path);
+    console.log("[FIRESTORE DEBUG] document ID:", docRef.id);
+
+    const snapshot = await getDoc(docRef);
+    console.log(
+      "[FIRESTORE DEBUG] read-after-write:",
+      snapshot.exists(),
+      snapshot.data()
+    );
 
     const nowIso = new Date().toISOString();
 
