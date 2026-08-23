@@ -177,33 +177,30 @@
   font-family: 'Caveat', 'Dancing Script', cursive, Georgia, serif;
 }
 
-@keyframes signatureWrite {
-  0% {
-    clip-path: inset(0 100% 0 0);
-    opacity: 0.1;
-    filter: drop-shadow(0 0 2px var(--neon, #ec4899));
-  }
-  20% {
-    opacity: 1;
-    filter: drop-shadow(0 0 10px var(--neon, #ec4899)) drop-shadow(0 0 18px rgba(168, 85, 247, 0.8));
-  }
-  60% {
-    filter: drop-shadow(0 0 14px var(--neon, #ec4899)) drop-shadow(0 0 22px rgba(168, 85, 247, 0.9));
-  }
-  100% {
-    clip-path: inset(0 0% 0 0);
-    opacity: 1;
-    filter: drop-shadow(0 0 8px var(--neon, #ec4899));
-  }
+.signature-reveal {
+  display: inline-block;
+  max-width: 0%;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: bottom;
+  transition: max-width 0.3s ease-out;
 }
 
-.signature-animation {
-  clip-path: inset(0 100% 0 0);
-  opacity: 0;
-  transition: clip-path 0.3s ease-out, opacity 0.3s ease-out;
+.group:hover .signature-reveal,
+.group:focus-within .signature-reveal {
+  max-width: 100%;
+  transition: max-width 1.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.group:hover .signature-animation,
-.group:focus-within .signature-animation {
-  animation: signatureWrite 1.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+.signature-text {
+  display: inline-block;
+  white-space: nowrap;
+  font-family: 'Caveat', 'Dancing Script', cursive, Georgia, serif;
+  font-size: 1.65rem;
+  font-weight: 700;
+  font-style: italic;
+  color: #fce7f3;
+  text-shadow: 0 0 10px var(--neon, #ec4899), 0 0 20px rgba(236, 72, 153, 0.6);
+  letter-spacing: 0.04em;
+  line-height: 1.2;
 }

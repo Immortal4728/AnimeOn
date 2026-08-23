@@ -882,6 +882,9 @@ function WatchlistCategoryPage() {
 
               /* BOOK CATEGORY: PURE COVER-FIRST BOOK CARD (NO DUPLICATE TEXT BELOW COVER) */
               if (item.media_type === "book") {
+                const authorName = item.author || (item as any).authorName || (item as any).author_name;
+                console.log("[BOOK SIGNATURE DEBUG]", { id: item.id, title: item.title, author: authorName });
+
                 return (
                   <li
                     key={item.id}
@@ -905,7 +908,7 @@ function WatchlistCategoryPage() {
                         <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground p-6 text-center">
                           <BookOpen className="h-10 w-10 opacity-40 text-neon" />
                           <span className="text-xs font-bold uppercase tracking-[0.16em] text-foreground/80">{item.title}</span>
-                          {item.author && <span className="text-[11px] tracking-wide text-neon/80 font-semibold">{item.author}</span>}
+                          {authorName && <span className="text-[11px] tracking-wide text-neon/80 font-semibold">{authorName}</span>}
                         </div>
                       )}
 
@@ -921,17 +924,17 @@ function WatchlistCategoryPage() {
                       <div className="absolute inset-0 scanlines opacity-20 pointer-events-none z-10" />
                       <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] pointer-events-none z-10" />
 
-                      {/* Gradient Overlay at Bottom for Action Controls readability */}
-                      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#07090e]/95 via-[#07090e]/60 to-transparent opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-250 pointer-events-none z-20" />
+                      {/* Gradient Overlay at Bottom for Action Controls & Signature readability */}
+                      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#07090e]/95 via-[#07090e]/70 to-transparent opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-250 pointer-events-none z-15" />
 
                       {/* Signature-style Author Name Reveal on Hover */}
-                      {item.author && (
-                        <div className="absolute inset-x-0 bottom-14 z-25 px-3 text-center pointer-events-none overflow-hidden flex items-center justify-center">
-                          <span
-                            className="signature-animation font-signature inline-block text-xl sm:text-2xl font-bold italic tracking-wider text-pink-100 drop-shadow-[0_0_12px_var(--neon)] whitespace-nowrap overflow-hidden max-w-[90%]"
-                          >
-                            ~ {item.author} ~
-                          </span>
+                      {authorName && (
+                        <div className="absolute inset-x-0 bottom-[58px] z-25 px-3 pointer-events-none flex justify-center items-center">
+                          <div className="signature-reveal">
+                            <span className="signature-text font-signature">
+                              {authorName}
+                            </span>
+                          </div>
                         </div>
                       )}
 
