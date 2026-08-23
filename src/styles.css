@@ -158,17 +158,7 @@
 
 @layer base {
   .scanlines::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: repeating-linear-gradient(
-      to bottom,
-      oklch(0 0 0 / 0.22) 0px,
-      oklch(0 0 0 / 0.22) 1px,
-      transparent 1px,
-      transparent 3px
-    );
+    display: none !important;
   }
 }
 

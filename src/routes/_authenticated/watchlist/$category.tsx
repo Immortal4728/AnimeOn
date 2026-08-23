@@ -670,8 +670,7 @@ function WatchlistCategoryPage() {
                         </div>
                       )}
 
-                      {/* CRT Scanline & Subtle Vignette Overlay */}
-                      <div className="absolute inset-0 scanlines opacity-20 pointer-events-none z-10" />
+                      {/* Subtle Vignette Overlay */}
                       <div className="absolute inset-0 shadow-[inset_0_0_30px_rgba(0,0,0,0.6)] pointer-events-none z-10" />
                     </div>
 
@@ -753,8 +752,7 @@ function WatchlistCategoryPage() {
                       {/* Subtle Bottom Fade onto Image */}
                       <div className="absolute inset-0 bg-gradient-to-t from-[#0c0e17] via-transparent to-transparent opacity-80 pointer-events-none" />
 
-                      {/* CRT Scanline & Subtle Vignette Overlay */}
-                      <div className="absolute inset-0 scanlines opacity-20 pointer-events-none" />
+                      {/* Subtle Vignette Overlay */}
                       <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.4)] pointer-events-none" />
                     </div>
 
@@ -820,8 +818,7 @@ function WatchlistCategoryPage() {
                         </div>
                       )}
 
-                      {/* CRT Scanline & Subtle Vignette Overlay */}
-                      <div className="absolute inset-0 scanlines opacity-20 pointer-events-none" />
+                      {/* Subtle Vignette Overlay */}
                       <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.4)] pointer-events-none" />
                     </div>
 
@@ -916,8 +913,7 @@ function WatchlistCategoryPage() {
                         </span>
                       </div>
 
-                      {/* CRT Scanline & Subtle Vignette Overlay */}
-                      <div className="absolute inset-0 scanlines opacity-20 pointer-events-none z-10" />
+                      {/* Subtle Vignette Overlay */}
                       <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] pointer-events-none z-10" />
 
                       {/* Hover Action Controls — Overlayed on lower cover area */}
@@ -990,8 +986,7 @@ function WatchlistCategoryPage() {
                         </span>
                       </div>
 
-                      {/* CRT Scanline & Subtle Vignette Overlay */}
-                      <div className="absolute inset-0 scanlines opacity-20 pointer-events-none z-10" />
+                      {/* Subtle Vignette Overlay */}
                       <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] pointer-events-none z-10" />
                     </div>
 
@@ -1071,8 +1066,7 @@ function WatchlistCategoryPage() {
                     {/* Gradient Overlay Fade toward Info Section */}
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0c0e17] via-[#0c0e17]/20 to-transparent pointer-events-none" />
 
-                    {/* CRT Scanline & Subtle Vignette Overlay */}
-                    <div className="absolute inset-0 scanlines opacity-20 pointer-events-none" />
+                    {/* Subtle Vignette Overlay */}
                     <div className="absolute inset-0 shadow-[inset_0_0_25px_rgba(0,0,0,0.4)] pointer-events-none" />
 
                     {/* 2. Retro Status Badge */}
