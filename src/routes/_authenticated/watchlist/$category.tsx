@@ -808,10 +808,6 @@ function WatchlistCategoryPage() {
                             {actress}
                           </p>
                         )}
-
-                        <p className="mt-1 text-xs font-mono uppercase tracking-[0.18em] text-muted-foreground/80">
-                          PORN
-                        </p>
                       </div>
 
                       {/* Action Buttons Area */}
