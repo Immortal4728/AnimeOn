@@ -891,8 +891,7 @@ function WatchlistCategoryPage() {
 
               /* BOOK CATEGORY: PURE COVER-FIRST BOOK CARD (ZERO EMPTY SPACE WHEN NOT HOVERED) */
               if (item.media_type === "book") {
-                const authorName = item.author || (item as any).authorName || (item as any).author_name || "Dahlia Adler";
-                console.log("[BOOK SIGNATURE DEBUG]", { id: item.id, title: item.title, author: authorName });
+                const authorName = item.author || (item as any).authorName || (item as any).author_name || "";
 
                 return (
                   <li
@@ -917,7 +916,9 @@ function WatchlistCategoryPage() {
                         <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground p-6 text-center">
                           <BookOpen className="h-10 w-10 opacity-40 text-neon" />
                           <span className="text-xs font-bold uppercase tracking-[0.16em] text-foreground/80">{item.title}</span>
-                          <span className="text-[11px] tracking-wide text-neon/80 font-semibold">{authorName}</span>
+                          {authorName && (
+                            <span className="text-[11px] tracking-wide text-neon/80 font-semibold">{authorName}</span>
+                          )}
                         </div>
                       )}
 
@@ -951,16 +952,18 @@ function WatchlistCategoryPage() {
                       </div>
                     </div>
 
-                    {/* 2. Floating Signature (Absolutely positioned below card bottom edge — zero layout space when idle) */}
-                    <div className="absolute top-[100%] inset-x-0 pt-1.5 sm:pt-2 flex justify-center items-center pointer-events-none z-30 overflow-visible">
-                      <div className="signature-container flex justify-center items-center w-full overflow-visible">
-                        <div className="signature-reveal px-1">
-                          <span className="signature-text font-signature text-[1.1rem] sm:text-[1.65rem]">
-                            {authorName}
-                          </span>
+                    {/* 2. Floating Signature (Only rendered if authorName is present) */}
+                    {authorName && (
+                      <div className="absolute top-[100%] inset-x-0 pt-1.5 sm:pt-2 flex justify-center items-center pointer-events-none z-30 overflow-visible">
+                        <div className="signature-container flex justify-center items-center w-full overflow-visible">
+                          <div className="signature-reveal px-1">
+                            <span className="signature-text font-signature text-[1.1rem] sm:text-[1.65rem]">
+                              {authorName}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </li>
                 );
               }

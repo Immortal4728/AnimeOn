@@ -186,7 +186,7 @@ export async function fetchUserWatchlist(uid: string): Promise<WatchlistItem[]> 
         id: docSnap.id,
         user_id: uid,
         title: data["title"] || "",
-        author: data["author"] || null,
+        author: data["author"] || data["authorName"] || data["author_name"] || null,
         cover_url: data["imageUrl"] || data["cover_url"] || null,
         link: data["link"] || null,
         actressName: data["actressName"] || data["actress_name"] || null,
