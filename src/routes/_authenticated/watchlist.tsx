@@ -79,7 +79,7 @@ function WatchlistPage() {
 
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
-  // Optimized Instant Auth & Asynchronous Concurrent Firestore Fetching
+  // Optimized Auth Resolution & Asynchronous Firestore Fetching
   useEffect(() => {
     let isSubscribed = true;
 
@@ -217,7 +217,7 @@ function WatchlistPage() {
     setIsItemModalOpen(true);
   }
 
-  // Save Item (Create or Edit) with robust error logging and submit lock
+  // Save Item (Create or Edit) with robust error handling and submit lock
   async function handleSaveItem(e: React.FormEvent) {
     e.preventDefault();
     if (!form.title.trim()) {
@@ -225,11 +225,14 @@ function WatchlistPage() {
       return;
     }
 
-    const uid = currentUid || auth.currentUser?.uid || (await supabase.auth.getSession()).data.session?.user?.id;
+    const fbUser = auth.currentUser;
+    const uid = fbUser?.uid || currentUid;
 
     if (!uid) {
-      console.error("Save failed: Authentication UID missing.");
-      toast.error("Authentication required to save items.");
+      console.error("[Save Failed] No authenticated Firebase user UID found.");
+      toast.error("Please sign in with Google to save items.");
+      setIsItemModalOpen(false);
+      navigate({ to: "/login" });
       return;
     }
 
@@ -252,6 +255,7 @@ function WatchlistPage() {
 
     try {
       if (editingItem) {
+        console.log(`[Firestore Update] Updating document ${editingItem.id} for UID ${uid}...`, payload);
         await updateWatchlistItem(uid, editingItem.id, payload);
         setItems((prev) =>
           prev.map((i) =>
@@ -271,14 +275,16 @@ function WatchlistPage() {
         );
         toast.success("Watchlist item updated");
       } else {
+        console.log(`[Firestore Add] Creating new document in users/${uid}/watchlist...`, payload);
         const newItem = await addWatchlistItem(uid, payload);
+        console.log("[Firestore Add Success] Document created:", newItem);
         setItems((prev) => [newItem, ...prev]);
         toast.success("Added to your watchlist");
       }
       setIsItemModalOpen(false);
     } catch (err: any) {
-      console.error("Firestore save error:", err);
-      toast.error(err?.message || "Failed to save item to Firestore");
+      console.error("[Firestore Save Failure]:", err);
+      toast.error(`Save failed: ${err?.message || "Firestore permission or write error"}`);
     } finally {
       setSubmitting(false);
     }
@@ -286,7 +292,8 @@ function WatchlistPage() {
 
   // Update Status directly from Card
   async function handleStatusChange(item: WatchlistItem, status: WatchStatus) {
-    const uid = currentUid || auth.currentUser?.uid || (await supabase.auth.getSession()).data.session?.user?.id;
+    const fbUser = auth.currentUser;
+    const uid = fbUser?.uid || currentUid;
     if (!uid) return;
 
     setItems((prev) => prev.map((i) => (i.id === item.id ? { ...i, status } : i)));
@@ -303,7 +310,8 @@ function WatchlistPage() {
   async function handleDeleteItem(item: WatchlistItem) {
     if (!confirm(`Delete "${item.title}" from your archive?`)) return;
 
-    const uid = currentUid || auth.currentUser?.uid || (await supabase.auth.getSession()).data.session?.user?.id;
+    const fbUser = auth.currentUser;
+    const uid = fbUser?.uid || currentUid;
     if (!uid) return;
 
     setItems((prev) => prev.filter((i) => i.id !== item.id));

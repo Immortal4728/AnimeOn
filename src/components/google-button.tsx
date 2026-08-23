@@ -1,19 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult } from "firebase/auth";
 
 import { auth } from "@/lib/firebase";
-import { lovable } from "@/integrations/lovable/index";
 import { recordUserProfile } from "@/lib/user-registry";
 
 export function GoogleButton({ className = "" }: { className?: string }) {
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    // Process Firebase Auth redirect result if returning from Google OAuth redirect
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result?.user) {
+          const u = result.user;
+          recordUserProfile({
+            id: u.uid,
+            email: u.email,
+            created_at: u.metadata.creationTime
+              ? new Date(u.metadata.creationTime).toISOString()
+              : new Date().toISOString(),
+          });
+          toast.success(`Welcome ${u.displayName || u.email || ""}`);
+          window.location.href = "/watchlist";
+        }
+      })
+      .catch((err) => {
+        console.error("Firebase Redirect Login Error:", err);
+      });
+  }, []);
+
   async function signIn() {
     setLoading(true);
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: "select_account" });
+
     try {
-      // 1. Direct Firebase Google Authentication Popup
-      const provider = new GoogleAuthProvider();
+      // 1. Direct Firebase Google Authentication via Popup
       const userCredential = await signInWithPopup(auth, provider);
 
       if (userCredential.user) {
@@ -21,7 +44,9 @@ export function GoogleButton({ className = "" }: { className?: string }) {
         recordUserProfile({
           id: u.uid,
           email: u.email,
-          created_at: u.metadata.creationTime ? new Date(u.metadata.creationTime).toISOString() : new Date().toISOString(),
+          created_at: u.metadata.creationTime
+            ? new Date(u.metadata.creationTime).toISOString()
+            : new Date().toISOString(),
         });
 
         toast.success(`Welcome ${u.displayName || u.email || ""}`);
@@ -29,28 +54,14 @@ export function GoogleButton({ className = "" }: { className?: string }) {
         return;
       }
     } catch (err: any) {
-      console.warn("Firebase Google Popup notice:", err?.message || err);
-
-      // 2. Fallback to Lovable OAuth if popup is blocked or closed by user
+      console.warn("Firebase Google Popup failed, switching to Redirect flow:", err?.message || err);
       try {
-        const result = await lovable.auth.signInWithOAuth("google", {
-          redirect_uri: window.location.origin,
-        });
-
-        if (result.error) {
-          setLoading(false);
-          toast.error("Could not sign in with Google: " + (err?.message || "Auth Error"));
-          return;
-        }
-
-        if (result.redirected) return;
-        window.location.href = "/watchlist";
-      } catch (fallbackErr: any) {
+        // 2. Firebase Redirect fallback (guarantees Firebase Auth session)
+        await signInWithRedirect(auth, provider);
+      } catch (redirectErr: any) {
         setLoading(false);
-        toast.error("Google sign-in error: " + (err?.message || "Authentication failed"));
+        toast.error("Google sign-in error: " + (redirectErr?.message || err?.message || "Authentication failed"));
       }
-    } finally {
-      setLoading(false);
     }
   }
 
