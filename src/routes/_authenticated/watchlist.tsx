@@ -33,6 +33,7 @@ import {
   addWatchlistItem,
   updateWatchlistItem,
   deleteWatchlistItem,
+  type CreateWatchlistItemInput,
 } from "@/services/watchlist";
 
 export const Route = createFileRoute("/_authenticated/watchlist")({
@@ -62,7 +63,7 @@ function WatchlistPage() {
   const [loading, setLoading] = useState(true);
   const [currentUid, setCurrentUid] = useState<string | null>(null);
 
-  // Track loaded UID to deduplicate concurrent auth calls
+  // Loaded UID tracking for deduplication
   const loadedUidRef = useRef<string | null>(null);
 
   // Navigation & Filter State: Top-level default is ANIME
@@ -74,6 +75,7 @@ function WatchlistPage() {
   const [editingItem, setEditingItem] = useState<WatchlistItem | null>(null);
   const [isItemModalOpen, setIsItemModalOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
+  const [submitting, setSubmitting] = useState(false);
 
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
@@ -215,7 +217,7 @@ function WatchlistPage() {
     setIsItemModalOpen(true);
   }
 
-  // Save Item (Create or Edit) with robust error logging
+  // Save Item (Create or Edit) with robust error logging and submit lock
   async function handleSaveItem(e: React.FormEvent) {
     e.preventDefault();
     if (!form.title.trim()) {
@@ -234,37 +236,51 @@ function WatchlistPage() {
     const isPorn = form.media_type === "porn";
     const isGame = form.media_type === "game";
 
-    const payload = {
+    const payload: CreateWatchlistItemInput = {
       title: form.title.trim(),
-      cover_url: form.cover_url.trim() || null,
+      imageUrl: form.cover_url.trim() || null,
       link: isPorn ? form.link.trim() || null : null,
-      media_type: form.media_type,
-      shelf_id: null,
-      shelf_name: null,
+      type: form.media_type,
+      shelfId: null,
+      shelfName: null,
       language: isPorn || isGame ? null : form.language.trim() || null,
       status: form.status,
       notes: isPorn || isGame ? null : form.notes.trim() || null,
     };
 
-    console.log("Submitting watchlist item for UID:", uid, payload);
+    setSubmitting(true);
 
     try {
       if (editingItem) {
         await updateWatchlistItem(uid, editingItem.id, payload);
         setItems((prev) =>
-          prev.map((i) => (i.id === editingItem.id ? { ...i, ...payload } : i))
+          prev.map((i) =>
+            i.id === editingItem.id
+              ? {
+                  ...i,
+                  title: payload.title,
+                  cover_url: payload.imageUrl,
+                  link: payload.link || null,
+                  media_type: payload.type,
+                  language: payload.language || null,
+                  status: payload.status,
+                  notes: payload.notes || null,
+                }
+              : i
+          )
         );
         toast.success("Watchlist item updated");
       } else {
         const newItem = await addWatchlistItem(uid, payload);
-        console.log("Firestore creation success:", newItem);
         setItems((prev) => [newItem, ...prev]);
         toast.success("Added to your watchlist");
       }
       setIsItemModalOpen(false);
     } catch (err: any) {
-      console.error("Firebase write error in handleSaveItem:", err);
+      console.error("Firestore save error:", err);
       toast.error(err?.message || "Failed to save item to Firestore");
+    } finally {
+      setSubmitting(false);
     }
   }
 
@@ -699,9 +715,10 @@ function WatchlistPage() {
               </button>
               <button
                 type="submit"
-                className="rounded-xl border border-neon/60 bg-primary px-6 py-2.5 font-bold text-primary-foreground shadow-[0_0_25px_var(--neon)] hover:bg-primary/90"
+                disabled={submitting}
+                className="rounded-xl border border-neon/60 bg-primary px-6 py-2.5 font-bold text-primary-foreground shadow-[0_0_25px_var(--neon)] hover:bg-primary/90 disabled:opacity-50"
               >
-                SAVE
+                {submitting ? "SAVING…" : "SAVE"}
               </button>
             </div>
           </form>

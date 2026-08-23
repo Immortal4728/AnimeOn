@@ -15,11 +15,11 @@ import type { WatchlistItem, Shelf, MediaType, WatchStatus } from "@/lib/watchli
 
 export interface CreateWatchlistItemInput {
   title: string;
-  cover_url: string | null;
+  imageUrl: string | null;
   link?: string | null;
-  media_type: MediaType;
-  shelf_id?: string | null;
-  shelf_name?: string | null;
+  type: MediaType;
+  shelfId?: string | null;
+  shelfName?: string | null;
   language: string | null;
   status: WatchStatus;
   notes: string | null;
@@ -27,6 +27,7 @@ export interface CreateWatchlistItemInput {
 
 /* ============================================================================
  * 1. SHELVES API (users/{uid}/shelves/{shelfId})
+ * Standardized Schema: name, mediaType, createdAt, updatedAt
  * ============================================================================ */
 
 export async function fetchUserShelves(uid: string): Promise<Shelf[]> {
@@ -35,23 +36,22 @@ export async function fetchUserShelves(uid: string): Promise<Shelf[]> {
     const colRef = collection(db, "users", uid, "shelves");
     let snapshot;
     try {
-      const q = query(colRef, orderBy("created_at", "asc"));
+      const q = query(colRef, orderBy("createdAt", "asc"));
       snapshot = await getDocs(q);
-    } catch (orderErr) {
-      console.warn("orderBy shelves query failed, falling back to unordered getDocs:", orderErr);
+    } catch {
       snapshot = await getDocs(colRef);
     }
 
     const shelves = snapshot.docs.map((docSnap) => {
       const data = docSnap.data() as Record<string, any>;
-      const createdAt = data["created_at"] || data["createdAt"];
-      const updatedAt = data["updated_at"] || data["updatedAt"];
+      const createdAt = data["createdAt"] || data["created_at"];
+      const updatedAt = data["updatedAt"] || data["updated_at"];
 
       return {
         id: docSnap.id,
         user_id: uid,
         name: data["name"] || "",
-        media_type: (data["media_type"] || data["mediaType"] || "anime") as MediaType,
+        media_type: (data["mediaType"] || data["media_type"] || "anime") as MediaType,
         created_at: createdAt?.toDate
           ? createdAt.toDate().toISOString()
           : typeof createdAt === "string"
@@ -67,7 +67,7 @@ export async function fetchUserShelves(uid: string): Promise<Shelf[]> {
 
     return shelves.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
   } catch (error) {
-    console.error("Firestore shelves read failure:", error);
+    console.error(`[Firestore Error] Failed to fetch shelves for uid: ${uid}`, error);
     return [];
   }
 }
@@ -77,17 +77,14 @@ export async function createShelf(
   name: string,
   mediaType: MediaType
 ): Promise<Shelf> {
-  if (!uid) throw new Error("User UID required");
+  if (!uid) throw new Error("User authentication required");
 
   try {
     const colRef = collection(db, "users", uid, "shelves");
     const docData: Record<string, any> = {
       name: name.trim(),
-      media_type: mediaType,
       mediaType: mediaType,
-      created_at: serverTimestamp(),
       createdAt: serverTimestamp(),
-      updated_at: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
 
@@ -103,7 +100,7 @@ export async function createShelf(
       updated_at: nowIso,
     };
   } catch (error) {
-    console.error("Firestore shelf create failure:", error);
+    console.error(`[Firestore Error] Failed to create shelf for uid: ${uid}`, error);
     throw error;
   }
 }
@@ -119,24 +116,21 @@ export async function renameShelf(
     const docRef = doc(db, "users", uid, "shelves", shelfId);
     await updateDoc(docRef, {
       name: newName.trim(),
-      updated_at: serverTimestamp(),
       updatedAt: serverTimestamp(),
     });
 
     const itemsCol = collection(db, "users", uid, "watchlist");
-    const q1 = query(itemsCol, where("shelf_id", "==", shelfId));
+    const q1 = query(itemsCol, where("shelfId", "==", shelfId));
     const snap1 = await getDocs(q1);
     const updatePromises = snap1.docs.map((d) =>
       updateDoc(d.ref, {
-        shelf_name: newName.trim(),
         shelfName: newName.trim(),
         updatedAt: serverTimestamp(),
-        updated_at: serverTimestamp(),
       })
     );
     await Promise.all(updatePromises);
   } catch (error) {
-    console.error("Firestore shelf rename failure:", error);
+    console.error(`[Firestore Error] Failed to rename shelf ${shelfId}:`, error);
     throw error;
   }
 }
@@ -146,16 +140,13 @@ export async function deleteShelf(uid: string, shelfId: string): Promise<void> {
 
   try {
     const itemsCol = collection(db, "users", uid, "watchlist");
-    const q = query(itemsCol, where("shelf_id", "==", shelfId));
+    const q = query(itemsCol, where("shelfId", "==", shelfId));
     const snap = await getDocs(q);
 
     const movePromises = snap.docs.map((d) =>
       updateDoc(d.ref, {
-        shelf_id: null,
         shelfId: null,
-        shelf_name: null,
         shelfName: null,
-        updated_at: serverTimestamp(),
         updatedAt: serverTimestamp(),
       })
     );
@@ -164,13 +155,15 @@ export async function deleteShelf(uid: string, shelfId: string): Promise<void> {
     const shelfDocRef = doc(db, "users", uid, "shelves", shelfId);
     await deleteDoc(shelfDocRef);
   } catch (error) {
-    console.error("Firestore shelf delete failure:", error);
+    console.error(`[Firestore Error] Failed to delete shelf ${shelfId}:`, error);
     throw error;
   }
 }
 
 /* ============================================================================
  * 2. WATCHLIST ITEMS API (users/{uid}/watchlist/{itemId})
+ * Standardized Schema:
+ * title, imageUrl, type, status, language, notes, shelfId, shelfName, createdAt, updatedAt
  * ============================================================================ */
 
 export async function fetchUserWatchlist(uid: string): Promise<WatchlistItem[]> {
@@ -179,27 +172,27 @@ export async function fetchUserWatchlist(uid: string): Promise<WatchlistItem[]> 
     const colRef = collection(db, "users", uid, "watchlist");
     let snapshot;
     try {
-      const q = query(colRef, orderBy("created_at", "desc"));
+      const q = query(colRef, orderBy("createdAt", "desc"));
       snapshot = await getDocs(q);
-    } catch (orderErr) {
-      console.warn("orderBy watchlist query failed, falling back to unordered getDocs:", orderErr);
+    } catch {
+      // Fallback for missing index or unindexed timestamp ordering
       snapshot = await getDocs(colRef);
     }
 
     const items = snapshot.docs.map((docSnap) => {
       const data = docSnap.data() as Record<string, any>;
-      const createdAt = data["created_at"] || data["createdAt"];
-      const updatedAt = data["updated_at"] || data["updatedAt"];
+      const createdAt = data["createdAt"] || data["created_at"];
+      const updatedAt = data["updatedAt"] || data["updated_at"];
 
       return {
         id: docSnap.id,
         user_id: uid,
         title: data["title"] || "",
-        cover_url: data["cover_url"] || data["imageUrl"] || null,
+        cover_url: data["imageUrl"] || data["cover_url"] || null,
         link: data["link"] || null,
-        media_type: (data["media_type"] || data["type"] || "anime") as MediaType,
-        shelf_id: data["shelf_id"] || data["shelfId"] || null,
-        shelf_name: data["shelf_name"] || data["shelfName"] || null,
+        media_type: (data["type"] || data["media_type"] || "anime") as MediaType,
+        shelf_id: data["shelfId"] || data["shelf_id"] || null,
+        shelf_name: data["shelfName"] || data["shelf_name"] || null,
         language: data["language"] || null,
         status: (data["status"] || "want") as WatchStatus,
         notes: data["notes"] || null,
@@ -219,7 +212,7 @@ export async function fetchUserWatchlist(uid: string): Promise<WatchlistItem[]> 
     return items.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
   } catch (error) {
     console.error(`[Firestore Error] watchlist read failure for uid: ${uid}`, error);
-    return [];
+    throw error;
   }
 }
 
@@ -227,29 +220,23 @@ export async function addWatchlistItem(
   uid: string,
   input: CreateWatchlistItemInput
 ): Promise<WatchlistItem> {
-  if (!uid) throw new Error("User UID required");
+  if (!uid) throw new Error("User UID required to create watchlist item");
 
   try {
     const colRef = collection(db, "users", uid, "watchlist");
 
-    // Clean data object - NO undefined properties permitted in Firestore addDoc
+    // Standardized camelCase schema only
     const docData: Record<string, any> = {
       title: input.title.trim(),
-      cover_url: input.cover_url || null,
-      imageUrl: input.cover_url || null,
+      imageUrl: input.imageUrl || null,
       link: input.link || null,
-      media_type: input.media_type,
-      type: input.media_type,
-      shelf_id: input.shelf_id || null,
-      shelfId: input.shelf_id || null,
-      shelf_name: input.shelf_name || null,
-      shelfName: input.shelf_name || null,
+      type: input.type,
+      shelfId: input.shelfId || null,
+      shelfName: input.shelfName || null,
       language: input.language || null,
       status: input.status,
       notes: input.notes || null,
-      created_at: serverTimestamp(),
       createdAt: serverTimestamp(),
-      updated_at: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
 
@@ -263,11 +250,11 @@ export async function addWatchlistItem(
       id: docRef.id,
       user_id: uid,
       title: input.title.trim(),
-      cover_url: input.cover_url || null,
+      cover_url: input.imageUrl || null,
       link: input.link || null,
-      media_type: input.media_type,
-      shelf_id: input.shelf_id || null,
-      shelf_name: input.shelf_name || null,
+      media_type: input.type,
+      shelf_id: input.shelfId || null,
+      shelf_name: input.shelfName || null,
       language: input.language || null,
       status: input.status,
       notes: input.notes || null,
@@ -290,39 +277,18 @@ export async function updateWatchlistItem(
   try {
     const docRef = doc(db, "users", uid, "watchlist", itemId);
     const updateData: Record<string, any> = {
-      updated_at: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
 
     if (updates.title !== undefined) updateData["title"] = updates.title.trim();
-    if (updates.cover_url !== undefined) {
-      updateData["cover_url"] = updates.cover_url || null;
-      updateData["imageUrl"] = updates.cover_url || null;
-    }
-    if (updates.link !== undefined) {
-      updateData["link"] = updates.link || null;
-    }
-    if (updates.media_type !== undefined) {
-      updateData["media_type"] = updates.media_type;
-      updateData["type"] = updates.media_type;
-    }
-    if (updates.shelf_id !== undefined) {
-      updateData["shelf_id"] = updates.shelf_id || null;
-      updateData["shelfId"] = updates.shelf_id || null;
-    }
-    if (updates.shelf_name !== undefined) {
-      updateData["shelf_name"] = updates.shelf_name || null;
-      updateData["shelfName"] = updates.shelf_name || null;
-    }
-    if (updates.language !== undefined) {
-      updateData["language"] = updates.language || null;
-    }
-    if (updates.status !== undefined) {
-      updateData["status"] = updates.status;
-    }
-    if (updates.notes !== undefined) {
-      updateData["notes"] = updates.notes || null;
-    }
+    if (updates.imageUrl !== undefined) updateData["imageUrl"] = updates.imageUrl || null;
+    if (updates.link !== undefined) updateData["link"] = updates.link || null;
+    if (updates.type !== undefined) updateData["type"] = updates.type;
+    if (updates.shelfId !== undefined) updateData["shelfId"] = updates.shelfId || null;
+    if (updates.shelfName !== undefined) updateData["shelfName"] = updates.shelfName || null;
+    if (updates.language !== undefined) updateData["language"] = updates.language || null;
+    if (updates.status !== undefined) updateData["status"] = updates.status;
+    if (updates.notes !== undefined) updateData["notes"] = updates.notes || null;
 
     console.log(`[Firestore Update] Updating users/${uid}/watchlist/${itemId}:`, updateData);
     await updateDoc(docRef, updateData);
