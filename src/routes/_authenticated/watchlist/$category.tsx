@@ -658,8 +658,8 @@ function WatchlistCategoryPage() {
             </div>
           </div>
         ) : (
-          /* MEDIA CARDS LIST — Wide dashboard responsive grid layout */
-          <ul className="grid gap-6 sm:gap-7 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 justify-start items-start">
+          /* MEDIA CARDS LIST — Wide dashboard responsive grid layout (2 compact cards per row on mobile) */
+          <ul className="grid gap-3 sm:gap-7 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 justify-start items-start">
             {visibleItems.map((item) => {
               /* GAMES CATEGORY: CINEMATIC FULL-COVER VIDEO GAME CARD */
               if (item.media_type === "game") {
@@ -667,7 +667,7 @@ function WatchlistCategoryPage() {
                   <li
                     key={item.id}
                     tabIndex={0}
-                    className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17] transition-all duration-300 hover:-translate-y-2 hover:border-neon/80 hover:shadow-[0_0_35px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_35px_var(--neon)] max-w-[360px] w-full mx-auto sm:max-w-none aspect-[2/3]"
+                    className="group relative overflow-hidden rounded-xl sm:rounded-2xl border border-border/40 bg-[#0c0e17] transition-all duration-300 hover:-translate-y-2 hover:border-neon/80 hover:shadow-[0_0_35px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_35px_var(--neon)] w-full min-w-0 max-w-none aspect-[2/3]"
                   >
                     {/* Full Game Cover Image */}
                     <div className="absolute inset-0 overflow-hidden bg-[#07090e]">
@@ -694,36 +694,36 @@ function WatchlistCategoryPage() {
                     </div>
 
                     {/* Status Badge Top Left */}
-                    <div className="absolute top-3.5 left-3.5 z-20">
-                      <span className="inline-flex items-center gap-2 rounded-lg border border-neon/60 bg-[#07090e]/90 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-neon backdrop-blur-md shadow-[0_0_14px_var(--neon)]">
-                        <span className="h-2 w-2 rounded-full bg-neon animate-pulse shrink-0" />
+                    <div className="absolute top-2 left-2 sm:top-3.5 sm:left-3.5 z-20">
+                      <span className="inline-flex items-center gap-1.5 sm:gap-2 rounded-lg border border-neon/60 bg-[#07090e]/90 px-2 py-0.5 sm:px-3 sm:py-1.5 text-[8px] sm:text-[10px] font-bold uppercase tracking-[0.18em] text-neon backdrop-blur-md shadow-[0_0_14px_var(--neon)]">
+                        <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-neon animate-pulse shrink-0" />
                         {statusLabel(item.status, item.media_type)}
                       </span>
                     </div>
 
                     {/* Bottom Information & Action Overlay */}
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#07090e] via-[#07090e]/90 via-65% to-transparent p-4 sm:p-5 pt-20 z-20 flex flex-col justify-end">
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#07090e] via-[#07090e]/90 via-65% to-transparent p-2.5 sm:p-5 pt-12 sm:pt-20 z-20 flex flex-col justify-end">
                       {/* Game Title */}
                       <div className="transition-transform duration-200 ease-out group-hover:-translate-y-0.5 group-focus-within:-translate-y-0.5">
-                        <h3 className="font-display text-base sm:text-lg font-bold uppercase tracking-[0.14em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
+                        <h3 className="font-display text-xs sm:text-lg font-bold uppercase tracking-[0.14em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
                           {item.title}
                         </h3>
                       </div>
 
                       {/* Compact Action Buttons — Revealed smoothly on hover/focus without empty space when hidden */}
-                      <div className="grid grid-cols-2 gap-2.5 text-xs uppercase tracking-[0.16em] transition-all duration-250 ease-out max-h-0 opacity-0 overflow-hidden group-hover:max-h-14 group-hover:opacity-100 group-hover:mt-2.5 group-focus-within:max-h-14 group-focus-within:opacity-100 group-focus-within:mt-2.5 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
+                      <div className="grid grid-cols-2 gap-1.5 sm:gap-2.5 text-xs uppercase tracking-[0.16em] transition-all duration-250 ease-out max-h-0 opacity-0 overflow-hidden group-hover:max-h-14 group-hover:opacity-100 group-hover:mt-2 sm:group-hover:mt-2.5 group-focus-within:max-h-14 group-focus-within:opacity-100 group-focus-within:mt-2 sm:group-focus-within:mt-2.5 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
                         <button
                           onClick={() => openEditModal(item)}
-                          className="min-h-[38px] rounded-xl border border-border/60 bg-secondary/60 hover:border-neon/70 hover:bg-neon/15 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm backdrop-blur-md"
+                          className="min-h-[30px] sm:min-h-[38px] rounded-xl border border-border/60 bg-secondary/60 hover:border-neon/70 hover:bg-neon/15 hover:text-neon text-foreground text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1 sm:gap-2 active:scale-95 shadow-sm backdrop-blur-md"
                         >
-                          <Edit2 className="h-4 w-4 shrink-0" />
+                          <Edit2 className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
                           Edit
                         </button>
                         <button
                           onClick={() => setDeletingItem(item)}
-                          className="min-h-[38px] rounded-xl border border-border/40 bg-destructive/20 hover:border-destructive/60 hover:bg-destructive/30 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm backdrop-blur-md"
+                          className="min-h-[30px] sm:min-h-[38px] rounded-xl border border-border/40 bg-destructive/20 hover:border-destructive/60 hover:bg-destructive/30 text-destructive hover:text-destructive text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1 sm:gap-2 active:scale-95 shadow-sm backdrop-blur-md"
                         >
-                          <Trash2 className="h-4 w-4 shrink-0" />
+                          <Trash2 className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
                           Delete
                         </button>
                       </div>
@@ -738,10 +738,10 @@ function WatchlistCategoryPage() {
                   <li
                     key={item.id}
                     tabIndex={0}
-                    className="group relative overflow-hidden rounded-[18px] border border-border/40 bg-[#0c0e17]/95 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-neon/80 hover:shadow-[0_0_30px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_30px_var(--neon)] flex flex-col max-w-[320px] w-full mx-auto sm:max-w-none"
+                    className="group relative overflow-hidden rounded-xl sm:rounded-[18px] border border-border/40 bg-[#0c0e17]/95 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-neon/80 hover:shadow-[0_0_30px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_30px_var(--neon)] flex flex-col w-full min-w-0 max-w-none"
                   >
                     {/* 1. Poster Image Viewport (Normalized 2:3 Aspect Ratio) */}
-                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-t-[17px]">
+                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-t-xl sm:rounded-t-[17px]">
                       {item.cover_url ? (
                         <img
                           src={item.cover_url}
@@ -761,8 +761,8 @@ function WatchlistCategoryPage() {
                       )}
 
                       {/* Status Badge Top Left */}
-                      <div className="absolute top-3 left-3 z-10">
-                        <span className="inline-flex items-center gap-1.5 rounded-lg border border-neon/60 bg-[#07090e]/90 px-2.5 py-1 text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] text-neon backdrop-blur-md shadow-[0_0_12px_var(--neon)]">
+                      <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10">
+                        <span className="inline-flex items-center gap-1.5 rounded-lg border border-neon/60 bg-[#07090e]/90 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[8px] sm:text-xs font-bold uppercase tracking-[0.16em] text-neon backdrop-blur-md shadow-[0_0_12px_var(--neon)]">
                           <span className="h-1.5 w-1.5 rounded-full bg-neon animate-pulse shrink-0" />
                           {statusLabel(item.status, item.media_type)}
                         </span>
@@ -776,27 +776,27 @@ function WatchlistCategoryPage() {
                     </div>
 
                     {/* 2. Text Information Section Underneath Poster */}
-                    <div className="p-4 sm:p-4.5 flex flex-col justify-between">
+                    <div className="p-2.5 sm:p-4.5 flex flex-col justify-between">
                       <div>
-                        <h3 className="font-display text-xl sm:text-[22px] leading-tight font-bold uppercase tracking-[0.1em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
+                        <h3 className="font-display text-xs sm:text-[22px] leading-tight font-bold uppercase tracking-[0.1em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
                           {item.title}
                         </h3>
                       </div>
 
                       {/* Hover Action Controls — Collapsible, no empty space when hidden */}
-                      <div className="grid grid-cols-2 gap-2 text-xs uppercase tracking-[0.16em] transition-all duration-250 ease-out max-h-0 opacity-0 overflow-hidden group-hover:max-h-14 group-hover:opacity-100 group-hover:mt-3 group-focus-within:max-h-14 group-focus-within:opacity-100 group-focus-within:mt-3 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
+                      <div className="grid grid-cols-2 gap-1.5 sm:gap-2 text-xs uppercase tracking-[0.16em] transition-all duration-250 ease-out max-h-0 opacity-0 overflow-hidden group-hover:max-h-14 group-hover:opacity-100 group-hover:mt-2 sm:group-hover:mt-3 group-focus-within:max-h-14 group-focus-within:opacity-100 group-focus-within:mt-2 sm:group-focus-within:mt-3 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
                         <button
                           onClick={() => openEditModal(item)}
-                          className="min-h-[36px] rounded-xl border border-neon/50 bg-[#0c0e17] hover:border-neon hover:bg-neon/20 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm"
+                          className="min-h-[30px] sm:min-h-[36px] rounded-xl border border-neon/50 bg-[#0c0e17] hover:border-neon hover:bg-neon/20 hover:text-neon text-foreground text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1 sm:gap-1.5 active:scale-95 shadow-sm"
                         >
-                          <Edit2 className="h-3.5 w-3.5 shrink-0" />
+                          <Edit2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" />
                           Edit
                         </button>
                         <button
                           onClick={() => setDeletingItem(item)}
-                          className="min-h-[36px] rounded-xl border border-destructive/50 bg-[#0c0e17] hover:border-destructive hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm"
+                          className="min-h-[30px] sm:min-h-[36px] rounded-xl border border-destructive/50 bg-[#0c0e17] hover:border-destructive hover:bg-destructive/25 text-destructive hover:text-destructive text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1 sm:gap-1.5 active:scale-95 shadow-sm"
                         >
-                          <Trash2 className="h-3.5 w-3.5 shrink-0" />
+                          <Trash2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" />
                           Delete
                         </button>
                       </div>
@@ -812,10 +812,10 @@ function WatchlistCategoryPage() {
                   <li
                     key={item.id}
                     tabIndex={0}
-                    className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17]/90 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-neon/80 hover:shadow-[0_0_35px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_35px_var(--neon)] flex flex-col max-w-[460px] w-full mx-auto sm:max-w-none col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2"
+                    className="group relative overflow-hidden rounded-xl sm:rounded-2xl border border-border/40 bg-[#0c0e17]/90 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-neon/80 hover:shadow-[0_0_35px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_35px_var(--neon)] flex flex-col w-full min-w-0 max-w-none col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2"
                   >
                     {/* 1. Landscape Cover Viewport (16:9 Aspect Ratio) */}
-                    <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#07090e] rounded-t-2xl">
+                    <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#07090e] rounded-t-xl sm:rounded-t-2xl">
                       {item.cover_url ? (
                         <img
                           src={item.cover_url}
@@ -839,47 +839,47 @@ function WatchlistCategoryPage() {
                     </div>
 
                     {/* 2. Compact Metadata Section Below Thumbnail */}
-                    <div className="px-4 pt-2.5 pb-2.5 sm:px-4.5 sm:pt-3 sm:pb-3 flex flex-col justify-between">
+                    <div className="px-2.5 pt-2 pb-2 sm:px-4.5 sm:pt-3 sm:pb-3 flex flex-col justify-between">
                       <div>
-                        <h3 className="font-display text-[20px] sm:text-[22px] leading-tight font-bold uppercase tracking-[0.08em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
+                        <h3 className="font-display text-xs sm:text-[22px] leading-tight font-bold uppercase tracking-[0.08em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
                           {item.title}
                         </h3>
 
                         {/* Actress/Performer Name (Small gap directly below title) */}
                         {actress && (
-                          <p className="mt-0.5 sm:mt-1 text-[13px] sm:text-[14px] font-mono font-medium tracking-wide text-neon/90 line-clamp-1">
+                          <p className="mt-0.5 sm:mt-1 text-[10px] sm:text-[14px] font-mono font-medium tracking-wide text-neon/90 line-clamp-1">
                             {actress}
                           </p>
                         )}
                       </div>
 
                       {/* Collapsible Action Controls / Link — Revealed smoothly on hover */}
-                      <div className="transition-all duration-250 ease-out max-h-0 opacity-0 overflow-hidden group-hover:max-h-24 group-hover:opacity-100 group-hover:mt-2.5 group-focus-within:max-h-24 group-focus-within:opacity-100 group-focus-within:mt-2.5 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto space-y-2">
+                      <div className="transition-all duration-250 ease-out max-h-0 opacity-0 overflow-hidden group-hover:max-h-24 group-hover:opacity-100 group-hover:mt-2 sm:group-hover:mt-2.5 group-focus-within:max-h-24 group-focus-within:opacity-100 group-focus-within:mt-2 sm:group-focus-within:mt-2.5 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto space-y-1.5 sm:space-y-2">
                         {item.link && (
                           <a
                             href={item.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-full min-h-[36px] flex items-center justify-center gap-1.5 rounded-xl border border-neon/60 bg-neon/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-neon hover:bg-neon/20 transition-all shadow-[0_0_12px_var(--neon)] active:scale-95"
+                            className="w-full min-h-[28px] sm:min-h-[36px] flex items-center justify-center gap-1.5 rounded-xl border border-neon/60 bg-neon/10 px-3 py-1 text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] text-neon hover:bg-neon/20 transition-all shadow-[0_0_12px_var(--neon)] active:scale-95"
                           >
-                            <ExternalLink className="h-3.5 w-3.5 shrink-0" />
+                            <ExternalLink className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" />
                             Open Link
                           </a>
                         )}
 
-                        <div className="grid grid-cols-2 gap-2 text-xs uppercase tracking-[0.16em]">
+                        <div className="grid grid-cols-2 gap-1.5 sm:gap-2 text-[10px] sm:text-xs uppercase tracking-[0.16em]">
                           <button
                             onClick={() => openEditModal(item)}
-                            className="min-h-[36px] rounded-xl border border-border/60 bg-secondary/50 hover:border-neon/70 hover:bg-neon/15 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm"
+                            className="min-h-[28px] sm:min-h-[36px] rounded-xl border border-border/60 bg-secondary/50 hover:border-neon/70 hover:bg-neon/15 hover:text-neon text-foreground text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1 sm:gap-1.5 active:scale-95 shadow-sm"
                           >
-                            <Edit2 className="h-3.5 w-3.5 shrink-0" />
+                            <Edit2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" />
                             Edit
                           </button>
                           <button
                             onClick={() => setDeletingItem(item)}
-                            className="min-h-[36px] rounded-xl border border-destructive/50 bg-destructive/15 hover:border-destructive/60 hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm"
+                            className="min-h-[28px] sm:min-h-[36px] rounded-xl border border-destructive/50 bg-destructive/15 hover:border-destructive/60 hover:bg-destructive/25 text-destructive hover:text-destructive text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1 sm:gap-1.5 active:scale-95 shadow-sm"
                           >
-                            <Trash2 className="h-3.5 w-3.5 shrink-0" />
+                            <Trash2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" />
                             Delete
                           </button>
                         </div>
@@ -898,10 +898,10 @@ function WatchlistCategoryPage() {
                   <li
                     key={item.id}
                     tabIndex={0}
-                    className="group relative rounded-2xl border border-border/40 bg-[#0c0e17] transition-all duration-300 hover:-translate-y-1.5 hover:border-neon/80 hover:shadow-[0_0_25px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_25px_var(--neon)] max-w-[280px] w-full mx-auto sm:max-w-none flex flex-col"
+                    className="group relative rounded-xl sm:rounded-2xl border border-border/40 bg-[#0c0e17] transition-all duration-300 hover:-translate-y-1.5 hover:border-neon/80 hover:shadow-[0_0_25px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_25px_var(--neon)] w-full min-w-0 max-w-none flex flex-col"
                   >
                     {/* 1. Cover Viewport */}
-                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-2xl">
+                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-xl sm:rounded-2xl">
                       {item.cover_url ? (
                         <img
                           src={item.cover_url}
@@ -922,8 +922,8 @@ function WatchlistCategoryPage() {
                       )}
 
                       {/* Status Badge Top Left */}
-                      <div className="absolute top-3 left-3 z-20">
-                        <span className="inline-flex items-center gap-1.5 rounded-lg border border-neon/60 bg-[#07090e]/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-neon backdrop-blur-md shadow-[0_0_12px_var(--neon)]">
+                      <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-20">
+                        <span className="inline-flex items-center gap-1.5 rounded-lg border border-neon/60 bg-[#07090e]/90 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[8px] sm:text-[10px] font-bold uppercase tracking-[0.16em] text-neon backdrop-blur-md shadow-[0_0_12px_var(--neon)]">
                           <span className="h-1.5 w-1.5 rounded-full bg-neon animate-pulse shrink-0" />
                           {statusLabel(item.status, "book")}
                         </span>
@@ -933,29 +933,29 @@ function WatchlistCategoryPage() {
                       <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] pointer-events-none z-10" />
 
                       {/* Hover Action Controls — Overlayed on lower cover area */}
-                      <div className="absolute inset-x-0 bottom-0 z-30 p-2.5 flex items-center gap-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-250 ease-out pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto bg-gradient-to-t from-[#07090e]/95 via-[#07090e]/75 to-transparent pt-8">
+                      <div className="absolute inset-x-0 bottom-0 z-30 p-2 sm:p-2.5 flex items-center gap-1.5 sm:gap-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-250 ease-out pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto bg-gradient-to-t from-[#07090e]/95 via-[#07090e]/75 to-transparent pt-8">
                         <button
                           onClick={() => openEditModal(item)}
-                          className="flex-1 min-h-[34px] rounded-xl border border-neon/50 bg-[#0c0e17]/90 hover:border-neon/80 hover:bg-neon/20 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 backdrop-blur-md shadow-lg"
+                          className="flex-1 min-h-[30px] sm:min-h-[34px] rounded-xl border border-neon/50 bg-[#0c0e17]/90 hover:border-neon/80 hover:bg-neon/20 hover:text-neon text-foreground text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1 sm:gap-1.5 active:scale-95 backdrop-blur-md shadow-lg"
                         >
-                          <Edit2 className="h-3.5 w-3.5 shrink-0" />
+                          <Edit2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" />
                           Edit
                         </button>
                         <button
                           onClick={() => setDeletingItem(item)}
-                          className="flex-1 min-h-[34px] rounded-xl border border-destructive/50 bg-[#0c0e17]/90 hover:border-destructive/80 hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 backdrop-blur-md shadow-lg"
+                          className="flex-1 min-h-[30px] sm:min-h-[34px] rounded-xl border border-destructive/50 bg-[#0c0e17]/90 hover:border-destructive/80 hover:bg-destructive/25 text-destructive hover:text-destructive text-[10px] sm:text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1 sm:gap-1.5 active:scale-95 backdrop-blur-md shadow-lg"
                         >
-                          <Trash2 className="h-3.5 w-3.5 shrink-0" />
+                          <Trash2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" />
                           Delete
                         </button>
                       </div>
                     </div>
 
                     {/* 2. Floating Signature (Absolutely positioned below card bottom edge — zero layout space when idle) */}
-                    <div className="absolute top-[100%] inset-x-0 pt-2 flex justify-center items-center pointer-events-none z-30 overflow-visible">
+                    <div className="absolute top-[100%] inset-x-0 pt-1.5 sm:pt-2 flex justify-center items-center pointer-events-none z-30 overflow-visible">
                       <div className="signature-container flex justify-center items-center w-full overflow-visible">
                         <div className="signature-reveal px-1">
-                          <span className="signature-text font-signature">
+                          <span className="signature-text font-signature text-[1.1rem] sm:text-[1.65rem]">
                             {authorName}
                           </span>
                         </div>
@@ -971,10 +971,10 @@ function WatchlistCategoryPage() {
                   <li
                     key={item.id}
                     tabIndex={0}
-                    className="group relative rounded-2xl border border-border/40 bg-[#0c0e17] transition-all duration-300 hover:border-neon/80 hover:shadow-[0_0_25px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_25px_var(--neon)] max-w-[280px] w-full mx-auto sm:max-w-none flex flex-col"
+                    className="group relative rounded-xl sm:rounded-2xl border border-border/40 bg-[#0c0e17] transition-all duration-300 hover:border-neon/80 hover:shadow-[0_0_25px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_25px_var(--neon)] w-full min-w-0 max-w-none flex flex-col"
                   >
                     {/* 1. Cover Viewport (2:3 Aspect Ratio) */}
-                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-2xl">
+                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-xl sm:rounded-2xl">
                       {item.cover_url ? (
                         <img
                           src={item.cover_url}
@@ -994,8 +994,8 @@ function WatchlistCategoryPage() {
                       )}
 
                       {/* Status Badge Top Left */}
-                      <div className="absolute top-3 left-3 z-20">
-                        <span className="inline-flex items-center gap-1.5 rounded-lg border border-neon/60 bg-[#07090e]/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-neon backdrop-blur-md shadow-[0_0_12px_var(--neon)]">
+                      <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-20">
+                        <span className="inline-flex items-center gap-1.5 rounded-lg border border-neon/60 bg-[#07090e]/90 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[8px] sm:text-[10px] font-bold uppercase tracking-[0.16em] text-neon backdrop-blur-md shadow-[0_0_12px_var(--neon)]">
                           <span className="h-1.5 w-1.5 rounded-full bg-neon animate-pulse shrink-0" />
                           {statusLabel(item.status, item.media_type)}
                         </span>
@@ -1006,10 +1006,10 @@ function WatchlistCategoryPage() {
                     </div>
 
                     {/* 2. Outside Floating Hover Details & Action Controls (ALWAYS WHITE TEXT) */}
-                    <div className="absolute top-[100%] inset-x-0 pt-2 z-40 space-y-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-250 ease-out pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
-                      <div className="rounded-xl border border-border/40 bg-[#0c0e17]/95 p-3 space-y-2 shadow-2xl backdrop-blur-md">
+                    <div className="absolute top-[100%] inset-x-0 pt-1.5 sm:pt-2 z-40 space-y-1.5 sm:space-y-2 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-250 ease-out pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
+                      <div className="rounded-xl border border-border/40 bg-[#0c0e17]/95 p-2 sm:p-3 space-y-1.5 sm:space-y-2 shadow-2xl backdrop-blur-md">
                         <div className="text-center">
-                          <h3 className="font-cinematic text-base sm:text-lg font-bold uppercase tracking-[0.08em] text-white line-clamp-1">
+                          <h3 className="font-cinematic text-xs sm:text-lg font-bold uppercase tracking-[0.08em] text-white line-clamp-1">
                             {item.title}
                           </h3>
                         </div>
@@ -1019,26 +1019,26 @@ function WatchlistCategoryPage() {
                             href={item.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-full min-h-[30px] flex items-center justify-center gap-1.5 rounded-lg border border-neon/60 bg-neon/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white hover:bg-neon/20 transition-all shadow-[0_0_10px_var(--neon)] active:scale-95"
+                            className="w-full min-h-[28px] sm:min-h-[30px] flex items-center justify-center gap-1.5 rounded-lg border border-neon/60 bg-neon/10 px-2 py-1 text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.16em] text-white hover:bg-neon/20 transition-all shadow-[0_0_10px_var(--neon)] active:scale-95"
                           >
                             <ExternalLink className="h-3 w-3 shrink-0 text-neon" />
                             Open Link
                           </a>
                         )}
 
-                        <div className="flex items-center gap-2 text-xs uppercase tracking-[0.16em]">
+                        <div className="flex items-center gap-1.5 sm:gap-2 text-[9px] sm:text-xs uppercase tracking-[0.16em]">
                           <button
                             onClick={() => openEditModal(item)}
-                            className="flex-1 min-h-[32px] rounded-lg border border-neon/50 bg-[#0c0e17] hover:border-neon/80 hover:bg-neon/20 text-white text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-md"
+                            className="flex-1 min-h-[28px] sm:min-h-[32px] rounded-lg border border-neon/50 bg-[#0c0e17] hover:border-neon/80 hover:bg-neon/20 text-white text-[9px] sm:text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1 sm:gap-1.5 active:scale-95 shadow-md"
                           >
-                            <Edit2 className="h-3.5 w-3.5 shrink-0 text-neon" />
+                            <Edit2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0 text-neon" />
                             Edit
                           </button>
                           <button
                             onClick={() => setDeletingItem(item)}
-                            className="flex-1 min-h-[32px] rounded-lg border border-destructive/50 bg-[#0c0e17] hover:border-destructive/80 hover:bg-destructive/25 text-white hover:text-white text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-md"
+                            className="flex-1 min-h-[28px] sm:min-h-[32px] rounded-lg border border-destructive/50 bg-[#0c0e17] hover:border-destructive/80 hover:bg-destructive/25 text-white hover:text-white text-[9px] sm:text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1 sm:gap-1.5 active:scale-95 shadow-md"
                           >
-                            <Trash2 className="h-3.5 w-3.5 shrink-0 text-destructive" />
+                            <Trash2 className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0 text-destructive" />
                             Delete
                           </button>
                         </div>
@@ -1053,10 +1053,10 @@ function WatchlistCategoryPage() {
                 <li
                   key={item.id}
                   tabIndex={0}
-                  className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17]/90 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-neon/80 hover:shadow-[0_0_35px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_35px_var(--neon)] flex flex-col justify-between max-w-[360px] w-full mx-auto sm:max-w-none"
+                  className="group relative overflow-hidden rounded-xl sm:rounded-2xl border border-border/40 bg-[#0c0e17]/90 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-neon/80 hover:shadow-[0_0_35px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_35px_var(--neon)] flex flex-col justify-between w-full min-w-0 max-w-none"
                 >
                   {/* 1. Fixed Poster Image Viewport (Normalized 2/3 Aspect Ratio) */}
-                  <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-t-2xl">
+                  <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-t-xl sm:rounded-t-2xl">
                     {item.cover_url ? (
                       <img
                         src={item.cover_url}
@@ -1082,9 +1082,9 @@ function WatchlistCategoryPage() {
                     <div className="absolute inset-0 shadow-[inset_0_0_25px_rgba(0,0,0,0.4)] pointer-events-none" />
 
                     {/* 2. Retro Status Badge */}
-                    <div className="absolute top-3.5 left-3.5 z-10">
-                      <span className="inline-flex items-center gap-2 rounded-lg border border-neon/60 bg-[#07090e]/90 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-neon backdrop-blur-md shadow-[0_0_14px_var(--neon)]">
-                        <span className="h-2 w-2 rounded-full bg-neon animate-pulse shrink-0" />
+                    <div className="absolute top-2 left-2 sm:top-3.5 sm:left-3.5 z-10">
+                      <span className="inline-flex items-center gap-1.5 sm:gap-2 rounded-lg border border-neon/60 bg-[#07090e]/90 px-2 py-0.5 sm:px-3 sm:py-1.5 text-[8px] sm:text-[10px] font-bold uppercase tracking-[0.18em] text-neon backdrop-blur-md shadow-[0_0_14px_var(--neon)]">
+                        <span className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-neon animate-pulse shrink-0" />
                         {statusLabel(item.status, item.media_type)}
                       </span>
                     </div>
