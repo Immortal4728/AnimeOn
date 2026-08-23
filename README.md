@@ -31,48 +31,6 @@ Anime On is a minimalist, retro-futuristic personal media shelf designed for kee
 
 ---
 
-## 🚀 Getting Started Locally
-
-### Prerequisites
-
-Ensure you have [Node.js](https://nodejs.org/) (v18+) and `npm` installed.
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/immortal4728/AnimeOn.git
-cd AnimeOn
-```
-
-### 2. Install dependencies
-
-```bash
-npm install
-```
-
-### 3. Configure Environment Variables
-
-Create a `.env` file in the root directory with your Firebase configuration:
-
-```env
-VITE_FIREBASE_API_KEY=your_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
-VITE_FIREBASE_PROJECT_ID=your_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
-VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-VITE_FIREBASE_APP_ID=your_app_id
-```
-
-### 4. Start the development server
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) (or the port displayed in your terminal) in your browser.
-
----
-
 ## 🔒 Security & Data Privacy
 
 - **Account Isolation**: Every user's media library and theme settings are bound strictly to their authenticated account UID.
@@ -82,6 +40,6 @@ Open [http://localhost:3000](http://localhost:3000) (or the port displayed in yo
 
 ## 👨‍💻 Developer & Maintenance
 
-Built with ❤️ by **Conan** ([@immortal4728](https://github.com/immortal4728)).
+Built with ❤️ by **Rishi ** ([@immortal4728](https://github.com/immortal4728)).
 
 © 2026 ANIME ON · All rights reserved.
