@@ -971,7 +971,6 @@ function WatchlistCategoryPage() {
                         <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground p-6 text-center">
                           <Film className="h-10 w-10 opacity-40 text-neon" />
                           <span className="text-xs font-bold uppercase tracking-[0.16em] text-white">{item.title}</span>
-                          <span className="text-[11px] tracking-wide text-white/80 font-semibold">{typeLabel(item.media_type)}</span>
                         </div>
                       )}
 
@@ -994,9 +993,6 @@ function WatchlistCategoryPage() {
                           <h3 className="font-display text-sm sm:text-base font-bold uppercase tracking-[0.12em] text-white line-clamp-1">
                             {item.title}
                           </h3>
-                          <p className="mt-0.5 text-[11px] font-mono uppercase tracking-[0.16em] text-white/80 line-clamp-1">
-                            {typeLabel(item.media_type)}
-                          </p>
                         </div>
 
                         {item.link && (
