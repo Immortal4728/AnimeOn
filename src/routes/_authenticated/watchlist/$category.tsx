@@ -599,99 +599,175 @@ function WatchlistCategoryPage() {
             </div>
           </div>
         ) : (
-          /* MEDIA CARDS LIST — Large retro anime VHS archive cases */
+          /* MEDIA CARDS LIST */
           <ul className="grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-stretch">
-            {visibleItems.map((item) => (
-              <li
-                key={item.id}
-                className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17]/90 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-neon/80 hover:shadow-[0_0_35px_var(--neon)] flex flex-col justify-between max-w-[360px] w-full mx-auto sm:max-w-none"
-              >
-                {/* 1. Fixed Poster Image Viewport (Normalized 2/3 Aspect Ratio) */}
-                <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-t-2xl">
-                  {item.cover_url ? (
-                    <img
-                      src={item.cover_url}
-                      alt={item.title}
-                      loading="lazy"
-                      decoding="async"
-                      onError={(e) => {
-                        (e.target as HTMLElement).style.display = "none";
-                      }}
-                      className="h-full w-full object-cover object-center transition-all duration-500 group-hover:scale-[1.04] group-hover:brightness-110"
-                    />
-                  ) : (
-                    <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground p-6 text-center">
-                      <Film className="h-10 w-10 opacity-40 text-neon" />
-                      <span className="text-xs uppercase tracking-[0.2em] font-mono">No cover</span>
+            {visibleItems.map((item) => {
+              /* GAMES CATEGORY: CINEMATIC FULL-COVER VIDEO GAME CARD */
+              if (item.media_type === "game") {
+                return (
+                  <li
+                    key={item.id}
+                    className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17] transition-all duration-300 hover:-translate-y-2 hover:border-neon/80 hover:shadow-[0_0_35px_var(--neon)] max-w-[360px] w-full mx-auto sm:max-w-none aspect-[2/3]"
+                  >
+                    {/* Full Game Cover Image */}
+                    <div className="absolute inset-0 overflow-hidden bg-[#07090e]">
+                      {item.cover_url ? (
+                        <img
+                          src={item.cover_url}
+                          alt={item.title}
+                          loading="lazy"
+                          decoding="async"
+                          onError={(e) => {
+                            (e.target as HTMLElement).style.display = "none";
+                          }}
+                          className="h-full w-full object-cover object-center transition-all duration-500 group-hover:scale-[1.04] group-hover:brightness-110"
+                        />
+                      ) : (
+                        <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground p-6 text-center">
+                          <Film className="h-10 w-10 opacity-40 text-neon" />
+                          <span className="text-xs uppercase tracking-[0.2em] font-mono">No cover</span>
+                        </div>
+                      )}
+
+                      {/* CRT Scanline & Subtle Vignette Overlay */}
+                      <div className="absolute inset-0 scanlines opacity-20 pointer-events-none z-10" />
+                      <div className="absolute inset-0 shadow-[inset_0_0_30px_rgba(0,0,0,0.6)] pointer-events-none z-10" />
                     </div>
-                  )}
 
-                  {/* Gradient Overlay Fade toward Info Section */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0c0e17] via-[#0c0e17]/20 to-transparent pointer-events-none" />
-
-                  {/* CRT Scanline & Subtle Vignette Overlay */}
-                  <div className="absolute inset-0 scanlines opacity-20 pointer-events-none" />
-                  <div className="absolute inset-0 shadow-[inset_0_0_25px_rgba(0,0,0,0.4)] pointer-events-none" />
-
-                  {/* 2. Retro Status Badge */}
-                  {item.media_type !== "porn" && item.media_type !== "game" && (
-                    <div className="absolute top-3.5 left-3.5 z-10">
+                    {/* Status Badge Top Left */}
+                    <div className="absolute top-3.5 left-3.5 z-20">
                       <span className="inline-flex items-center gap-2 rounded-lg border border-neon/60 bg-[#07090e]/90 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-neon backdrop-blur-md shadow-[0_0_14px_var(--neon)]">
                         <span className="h-2 w-2 rounded-full bg-neon animate-pulse shrink-0" />
                         {statusLabel(item.status, item.media_type)}
                       </span>
                     </div>
-                  )}
-                </div>
 
-                {/* 3. Card Information Section & Action Buttons */}
-                <div className="p-5 space-y-4 flex-1 flex flex-col justify-between">
-                  <div>
-                    <h3 className="font-display text-base sm:text-lg font-bold uppercase tracking-[0.14em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
-                      {item.title}
-                    </h3>
-                    {item.media_type !== "porn" && item.media_type !== "game" && (
-                      <p className="mt-1 text-xs font-mono uppercase tracking-[0.18em] text-muted-foreground/80">
-                        {typeLabel(item.media_type)}
-                      </p>
+                    {/* Bottom Information & Action Overlay */}
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#07090e] via-[#07090e]/90 to-transparent p-5 pt-16 z-20 flex flex-col justify-end space-y-3">
+                      <div>
+                        <h3 className="font-display text-base sm:text-lg font-bold uppercase tracking-[0.14em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
+                          {item.title}
+                        </h3>
+                        <p className="mt-1 text-xs font-mono uppercase tracking-[0.18em] text-muted-foreground/90">
+                          VIDEO GAME
+                        </p>
+                      </div>
+
+                      {/* Compact Action Buttons */}
+                      <div className="flex items-center gap-3 text-xs uppercase tracking-[0.16em] pt-1">
+                        <button
+                          onClick={() => openEditModal(item)}
+                          className="flex-1 min-h-[40px] rounded-xl border border-border/60 bg-secondary/50 hover:border-neon/70 hover:bg-neon/15 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm backdrop-blur-md"
+                        >
+                          <Edit2 className="h-4 w-4 shrink-0" />
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => setDeletingItem(item)}
+                          className="flex-1 min-h-[40px] rounded-xl border border-border/40 bg-destructive/15 hover:border-destructive/60 hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm backdrop-blur-md"
+                        >
+                          <Trash2 className="h-4 w-4 shrink-0" />
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </li>
+                );
+              }
+
+              /* STANDARD RETRO VHS ARCHIVE CASE CARD FOR ANIME / MOVIES / K-DRAMAS / WEB / PORN */
+              return (
+                <li
+                  key={item.id}
+                  className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17]/90 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-neon/80 hover:shadow-[0_0_35px_var(--neon)] flex flex-col justify-between max-w-[360px] w-full mx-auto sm:max-w-none"
+                >
+                  {/* 1. Fixed Poster Image Viewport (Normalized 2/3 Aspect Ratio) */}
+                  <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e] rounded-t-2xl">
+                    {item.cover_url ? (
+                      <img
+                        src={item.cover_url}
+                        alt={item.title}
+                        loading="lazy"
+                        decoding="async"
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = "none";
+                        }}
+                        className="h-full w-full object-cover object-center transition-all duration-500 group-hover:scale-[1.04] group-hover:brightness-110"
+                      />
+                    ) : (
+                      <div className="flex h-full flex-col items-center justify-center gap-3 text-muted-foreground p-6 text-center">
+                        <Film className="h-10 w-10 opacity-40 text-neon" />
+                        <span className="text-xs uppercase tracking-[0.2em] font-mono">No cover</span>
+                      </div>
+                    )}
+
+                    {/* Gradient Overlay Fade toward Info Section */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0c0e17] via-[#0c0e17]/20 to-transparent pointer-events-none" />
+
+                    {/* CRT Scanline & Subtle Vignette Overlay */}
+                    <div className="absolute inset-0 scanlines opacity-20 pointer-events-none" />
+                    <div className="absolute inset-0 shadow-[inset_0_0_25px_rgba(0,0,0,0.4)] pointer-events-none" />
+
+                    {/* 2. Retro Status Badge */}
+                    {item.media_type !== "porn" && (
+                      <div className="absolute top-3.5 left-3.5 z-10">
+                        <span className="inline-flex items-center gap-2 rounded-lg border border-neon/60 bg-[#07090e]/90 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-neon backdrop-blur-md shadow-[0_0_14px_var(--neon)]">
+                          <span className="h-2 w-2 rounded-full bg-neon animate-pulse shrink-0" />
+                          {statusLabel(item.status, item.media_type)}
+                        </span>
+                      </div>
                     )}
                   </div>
 
-                  {/* 4. Action Controls Area */}
-                  <div className="space-y-2.5 pt-1">
-                    {item.media_type === "porn" && item.link ? (
-                      <a
-                        href={item.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full min-h-[42px] flex items-center justify-center gap-2 rounded-xl border border-neon/60 bg-neon/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-neon hover:bg-neon/20 transition-all shadow-[0_0_14px_var(--neon)] mb-1 active:scale-95"
-                      >
-                        <ExternalLink className="h-4 w-4 shrink-0" />
-                        Open Link
-                      </a>
-                    ) : null}
+                  {/* 3. Card Information Section & Action Buttons */}
+                  <div className="p-5 space-y-4 flex-1 flex flex-col justify-between">
+                    <div>
+                      <h3 className="font-display text-base sm:text-lg font-bold uppercase tracking-[0.14em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
+                        {item.title}
+                      </h3>
+                      {item.media_type !== "porn" && (
+                        <p className="mt-1 text-xs font-mono uppercase tracking-[0.18em] text-muted-foreground/80">
+                          {typeLabel(item.media_type)}
+                        </p>
+                      )}
+                    </div>
 
-                    {/* Compact Action Buttons */}
-                    <div className="flex items-center gap-3 text-xs uppercase tracking-[0.16em]">
-                      <button
-                        onClick={() => openEditModal(item)}
-                        className="flex-1 min-h-[42px] rounded-xl border border-border/60 bg-secondary/40 hover:border-neon/70 hover:bg-neon/15 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm"
-                      >
-                        <Edit2 className="h-4 w-4 shrink-0" />
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => setDeletingItem(item)}
-                        className="flex-1 min-h-[42px] rounded-xl border border-border/40 bg-destructive/10 hover:border-destructive/60 hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm"
-                      >
-                        <Trash2 className="h-4 w-4 shrink-0" />
-                        Delete
-                      </button>
+                    {/* 4. Action Controls Area */}
+                    <div className="space-y-2.5 pt-1">
+                      {item.media_type === "porn" && item.link ? (
+                        <a
+                          href={item.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full min-h-[42px] flex items-center justify-center gap-2 rounded-xl border border-neon/60 bg-neon/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-neon hover:bg-neon/20 transition-all shadow-[0_0_14px_var(--neon)] mb-1 active:scale-95"
+                        >
+                          <ExternalLink className="h-4 w-4 shrink-0" />
+                          Open Link
+                        </a>
+                      ) : null}
+
+                      {/* Compact Action Buttons */}
+                      <div className="flex items-center gap-3 text-xs uppercase tracking-[0.16em]">
+                        <button
+                          onClick={() => openEditModal(item)}
+                          className="flex-1 min-h-[42px] rounded-xl border border-border/60 bg-secondary/40 hover:border-neon/70 hover:bg-neon/15 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm"
+                        >
+                          <Edit2 className="h-4 w-4 shrink-0" />
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => setDeletingItem(item)}
+                          className="flex-1 min-h-[42px] rounded-xl border border-border/40 bg-destructive/10 hover:border-destructive/60 hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm"
+                        >
+                          <Trash2 className="h-4 w-4 shrink-0" />
+                          Delete
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>
