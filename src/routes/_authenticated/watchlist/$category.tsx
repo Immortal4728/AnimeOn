@@ -599,15 +599,15 @@ function WatchlistCategoryPage() {
             </div>
           </div>
         ) : (
-          /* MEDIA CARDS LIST — 1 card per row on mobile */
-          <ul className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          /* MEDIA CARDS LIST — Premium retro anime archive VHS cards */
+          <ul className="grid gap-4 sm:gap-5 grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
             {visibleItems.map((item) => (
               <li
                 key={item.id}
-                className="group relative overflow-hidden rounded-2xl border border-border/40 bg-card/40 backdrop-blur-md transition-all duration-300 hover:border-neon/60 hover:shadow-[0_0_30px_rgba(236,72,153,0.2)] flex flex-col justify-between"
+                className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17]/90 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-neon/70 hover:shadow-[0_0_30px_rgba(236,72,153,0.3)] flex flex-col justify-between"
               >
-                {/* Cover Image Container */}
-                <div className="relative aspect-[2/3] w-full overflow-hidden bg-secondary/50 max-h-[420px]">
+                {/* Large Artwork Area */}
+                <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#07090e]">
                   {item.cover_url ? (
                     <img
                       src={item.cover_url}
@@ -626,55 +626,62 @@ function WatchlistCategoryPage() {
                     </div>
                   )}
 
-                  {/* Status Badge */}
+                  {/* Gradient overlay toward info section */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0c0e17] via-[#0c0e17]/20 to-transparent pointer-events-none" />
+
+                  {/* CRT texture overlay on cover */}
+                  <div className="absolute inset-0 scanlines opacity-20 pointer-events-none" />
+
+                  {/* Status Badge Over Upper Artwork */}
                   {item.media_type !== "porn" && item.media_type !== "game" && (
-                    <div className="absolute top-3 left-3">
-                      <span className="inline-flex items-center rounded-full border border-black/40 bg-black/75 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-neon backdrop-blur-md shadow-lg">
+                    <div className="absolute top-2.5 left-2.5 z-10">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-neon/50 bg-[#07090e]/85 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-neon backdrop-blur-md shadow-[0_0_12px_rgba(236,72,153,0.35)]">
+                        <span className="h-1.5 w-1.5 rounded-full bg-neon animate-pulse shrink-0" />
                         {statusLabel(item.status, item.media_type)}
                       </span>
                     </div>
                   )}
                 </div>
 
-                {/* Card Information & Actions */}
-                <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
+                {/* Information Section & Compact Action Buttons */}
+                <div className="p-3.5 space-y-2.5 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="font-display text-base sm:text-base font-bold uppercase tracking-[0.12em] text-foreground line-clamp-2 group-hover:text-neon transition-colors">
+                    <h3 className="font-display text-sm font-bold uppercase tracking-[0.12em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_10px_rgba(236,72,153,0.15)]">
                       {item.title}
                     </h3>
                     {item.media_type !== "porn" && item.media_type !== "game" && (
-                      <p className="mt-1 text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+                      <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/80">
                         {typeLabel(item.media_type)}
                       </p>
                     )}
                   </div>
 
-                  {/* External Link & Card Controls */}
-                  <div className="space-y-2 pt-2 border-t border-border/20">
+                  {/* External Link & Action Area */}
+                  <div className="space-y-2 pt-0.5">
                     {item.media_type === "porn" && item.link ? (
                       <a
                         href={item.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-full min-h-[42px] flex items-center justify-center gap-1.5 rounded-xl border border-neon/50 bg-neon/10 px-3 py-2 text-xs font-bold uppercase tracking-[0.16em] text-neon hover:bg-neon/20 transition-all shadow-[0_0_10px_rgba(236,72,153,0.2)] mb-2 active:scale-95"
+                        className="w-full min-h-[36px] flex items-center justify-center gap-1.5 rounded-xl border border-neon/50 bg-neon/10 px-2.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-neon hover:bg-neon/20 transition-all shadow-[0_0_10px_rgba(236,72,153,0.2)] mb-1 active:scale-95"
                       >
                         <ExternalLink className="h-3.5 w-3.5 shrink-0" />
                         Open Link
                       </a>
                     ) : null}
 
-                    {/* Touch optimized Edit & Delete buttons */}
-                    <div className="flex items-center justify-between gap-2 text-xs uppercase tracking-[0.16em]">
+                    {/* Compact Retro Action Buttons */}
+                    <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.16em]">
                       <button
                         onClick={() => openEditModal(item)}
-                        className="flex-1 min-h-[40px] px-3 py-2 rounded-xl bg-secondary/40 hover:bg-secondary/70 text-foreground transition-all flex items-center justify-center gap-1.5 font-bold active:scale-95 border border-border/30 sm:border-transparent sm:bg-transparent sm:text-muted-foreground sm:hover:text-foreground"
+                        className="flex-1 min-h-[36px] sm:min-h-[38px] rounded-xl border border-border/50 bg-secondary/30 hover:border-neon/60 hover:bg-neon/15 hover:text-neon text-foreground text-[11px] font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm"
                       >
                         <Edit2 className="h-3.5 w-3.5 shrink-0" />
                         Edit
                       </button>
                       <button
                         onClick={() => setDeletingItem(item)}
-                        className="flex-1 min-h-[40px] px-3 py-2 rounded-xl bg-destructive/15 hover:bg-destructive/30 text-destructive transition-all flex items-center justify-center gap-1.5 font-bold active:scale-95 border border-destructive/30 sm:border-transparent sm:bg-transparent sm:text-muted-foreground sm:hover:text-destructive"
+                        className="flex-1 min-h-[36px] sm:min-h-[38px] rounded-xl border border-border/30 bg-destructive/10 hover:border-destructive/60 hover:bg-destructive/25 text-destructive/90 hover:text-destructive text-[11px] font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm"
                       >
                         <Trash2 className="h-3.5 w-3.5 shrink-0" />
                         Delete
