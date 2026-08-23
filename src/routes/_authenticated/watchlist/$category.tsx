@@ -794,16 +794,16 @@ function WatchlistCategoryPage() {
                 );
               }
 
-              /* PORN CATEGORY: LANDSCAPE BANNER CARD WITH COMPACT EXTERNAL METADATA */
+              /* PORN CATEGORY: COMPACT LANDSCAPE MEDIA-LIBRARY TILE */
               if (item.media_type === "porn") {
                 const actress = item.actressName || item.actress_name;
                 return (
                   <li
                     key={item.id}
                     tabIndex={0}
-                    className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17]/90 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-neon/80 hover:shadow-[0_0_35px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_35px_var(--neon)] flex flex-col max-w-[400px] w-full mx-auto sm:max-w-none col-span-1 sm:col-span-2 lg:col-span-2 xl:col-span-2"
+                    className="group relative overflow-hidden rounded-2xl border border-border/40 bg-[#0c0e17]/90 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-neon/80 hover:shadow-[0_0_25px_var(--neon)] focus-within:border-neon/80 focus-within:shadow-[0_0_25px_var(--neon)] flex flex-col max-w-[340px] w-full mx-auto sm:max-w-none"
                   >
-                    {/* 1. Landscape Cover Viewport (16:9 Aspect Ratio) */}
+                    {/* 1. Landscape Cover Viewport (Preserved 16:9 Aspect Ratio) */}
                     <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#07090e] rounded-t-2xl">
                       {item.cover_url ? (
                         <img
@@ -825,19 +825,19 @@ function WatchlistCategoryPage() {
 
                       {/* CRT Scanline & Subtle Vignette Overlay */}
                       <div className="absolute inset-0 scanlines opacity-20 pointer-events-none" />
-                      <div className="absolute inset-0 shadow-[inset_0_0_25px_rgba(0,0,0,0.4)] pointer-events-none" />
+                      <div className="absolute inset-0 shadow-[inset_0_0_20px_rgba(0,0,0,0.4)] pointer-events-none" />
                     </div>
 
-                    {/* 2. Compact Metadata Section Outside Image (Padding: 8px 16px 10px) */}
-                    <div className="px-4 pt-2.5 pb-2.5 sm:px-4 sm:pt-2.5 sm:pb-3 flex flex-col justify-between">
+                    {/* 2. Compact Text/Metadata Section Below Thumbnail */}
+                    <div className="px-3.5 pt-2 pb-2 sm:px-3.5 sm:pt-2 sm:pb-2.5 flex flex-col justify-between">
                       <div>
-                        <h3 className="font-display text-[20px] sm:text-[22px] leading-tight font-bold uppercase tracking-[0.08em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
+                        <h3 className="font-display text-[17px] sm:text-[18px] leading-tight font-bold uppercase tracking-[0.08em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_10px_var(--neon)]">
                           {item.title}
                         </h3>
 
-                        {/* Actress Name (Gap 2–4px directly below title) */}
+                        {/* Actress/Performer Name (Tight gap directly below title) */}
                         {actress && (
-                          <p className="mt-0.5 text-[13px] sm:text-[14px] font-mono font-medium tracking-wide text-neon/90 line-clamp-1">
+                          <p className="mt-0.5 text-[12px] sm:text-[13px] font-mono font-medium tracking-wide text-neon/90 line-clamp-1">
                             {actress}
                           </p>
                         )}
@@ -850,7 +850,7 @@ function WatchlistCategoryPage() {
                             href={item.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-full min-h-[34px] flex items-center justify-center gap-1.5 rounded-xl border border-neon/60 bg-neon/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-neon hover:bg-neon/20 transition-all shadow-[0_0_12px_var(--neon)] active:scale-95"
+                            className="w-full min-h-[32px] flex items-center justify-center gap-1.5 rounded-xl border border-neon/60 bg-neon/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-neon hover:bg-neon/20 transition-all shadow-[0_0_10px_var(--neon)] active:scale-95"
                           >
                             <ExternalLink className="h-3.5 w-3.5 shrink-0" />
                             Open Link
@@ -860,14 +860,14 @@ function WatchlistCategoryPage() {
                         <div className="grid grid-cols-2 gap-2 text-xs uppercase tracking-[0.16em]">
                           <button
                             onClick={() => openEditModal(item)}
-                            className="min-h-[34px] rounded-xl border border-border/60 bg-secondary/50 hover:border-neon/70 hover:bg-neon/15 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm"
+                            className="min-h-[32px] rounded-xl border border-border/60 bg-secondary/50 hover:border-neon/70 hover:bg-neon/15 hover:text-neon text-foreground text-[11px] font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm"
                           >
                             <Edit2 className="h-3.5 w-3.5 shrink-0" />
                             Edit
                           </button>
                           <button
                             onClick={() => setDeletingItem(item)}
-                            className="min-h-[34px] rounded-xl border border-border/40 bg-destructive/15 hover:border-destructive/60 hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm"
+                            className="min-h-[32px] rounded-xl border border-destructive/50 bg-destructive/15 hover:border-destructive/60 hover:bg-destructive/25 text-destructive hover:text-destructive text-[11px] font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-1.5 active:scale-95 shadow-sm"
                           >
                             <Trash2 className="h-3.5 w-3.5 shrink-0" />
                             Delete
