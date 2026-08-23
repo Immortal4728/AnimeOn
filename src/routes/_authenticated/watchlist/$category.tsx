@@ -644,28 +644,29 @@ function WatchlistCategoryPage() {
                     </div>
 
                     {/* Bottom Information & Action Overlay */}
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#07090e] via-[#07090e]/90 to-transparent p-5 pt-16 z-20 flex flex-col justify-end space-y-3">
-                      <div>
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#07090e] via-[#07090e]/90 via-65% to-transparent p-4 sm:p-5 pt-20 z-20 flex flex-col justify-end">
+                      {/* Game Title & Platform Subtitle */}
+                      <div className="transition-transform duration-200 ease-out group-hover:-translate-y-0.5 group-focus-within:-translate-y-0.5">
                         <h3 className="font-display text-base sm:text-lg font-bold uppercase tracking-[0.14em] text-foreground line-clamp-1 group-hover:text-neon transition-colors drop-shadow-[0_0_12px_var(--neon)]">
                           {item.title}
                         </h3>
-                        <p className="mt-1 text-xs font-mono uppercase tracking-[0.18em] text-muted-foreground/90">
+                        <p className="mt-0.5 text-xs font-mono uppercase tracking-[0.18em] text-muted-foreground/90">
                           VIDEO GAME
                         </p>
                       </div>
 
-                      {/* Compact Action Buttons — Revealed smoothly on hover/focus */}
-                      <div className="flex items-center gap-3 text-xs uppercase tracking-[0.16em] pt-1 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 translate-y-1.5 group-hover:translate-y-0 group-focus-within:translate-y-0 transition-all duration-200 ease-out pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
+                      {/* Compact Action Buttons — Revealed smoothly on hover/focus without empty space when hidden */}
+                      <div className="grid grid-cols-2 gap-2.5 text-xs uppercase tracking-[0.16em] transition-all duration-250 ease-out max-h-0 opacity-0 overflow-hidden group-hover:max-h-14 group-hover:opacity-100 group-hover:mt-2.5 group-focus-within:max-h-14 group-focus-within:opacity-100 group-focus-within:mt-2.5 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto">
                         <button
                           onClick={() => openEditModal(item)}
-                          className="flex-1 min-h-[40px] rounded-xl border border-border/60 bg-secondary/50 hover:border-neon/70 hover:bg-neon/15 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm backdrop-blur-md"
+                          className="min-h-[38px] rounded-xl border border-border/60 bg-secondary/60 hover:border-neon/70 hover:bg-neon/15 hover:text-neon text-foreground text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm backdrop-blur-md"
                         >
                           <Edit2 className="h-4 w-4 shrink-0" />
                           Edit
                         </button>
                         <button
                           onClick={() => setDeletingItem(item)}
-                          className="flex-1 min-h-[40px] rounded-xl border border-border/40 bg-destructive/15 hover:border-destructive/60 hover:bg-destructive/25 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm backdrop-blur-md"
+                          className="min-h-[38px] rounded-xl border border-border/40 bg-destructive/20 hover:border-destructive/60 hover:bg-destructive/30 text-destructive hover:text-destructive text-xs font-bold uppercase tracking-[0.16em] transition-all flex items-center justify-center gap-2 active:scale-95 shadow-sm backdrop-blur-md"
                         >
                           <Trash2 className="h-4 w-4 shrink-0" />
                           Delete
