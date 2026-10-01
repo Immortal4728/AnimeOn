@@ -2,6 +2,8 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
 import { toast } from "sonner";
 import { Switch } from "@/components/ui/switch";
+import { WatchlistHeader } from "@/components/watchlist/WatchlistHeader";
+import { LogoutConfirmModal } from "@/components/watchlist/LogoutConfirmModal";
 import {
   Sparkles,
   Plus,
@@ -429,106 +431,16 @@ function WatchlistCategoryPage() {
 
       <div className="mx-auto w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] lg:w-[calc(100%-4rem)] max-w-[1700px] space-y-5 sm:space-y-8 pt-3 sm:pt-6">
         {/* TOP NAVBAR HEADER */}
-        <header className="sticky top-2 sm:top-4 z-40 rounded-2xl border border-border/40 bg-[#0c0e17]/80 px-3.5 sm:px-6 py-2.5 sm:py-3.5 backdrop-blur-xl shadow-[0_0_30px_rgba(0,0,0,0.5)]">
-          <div className="flex items-center justify-between gap-2 sm:gap-4">
-            <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
-              <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-neon animate-ping" />
-              <span className="font-display text-sm sm:text-base font-bold uppercase tracking-[0.16em] sm:tracking-[0.2em] text-foreground drop-shadow-[0_0_15px_var(--neon)]">
-                ANIME ON
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2 sm:gap-3">
-              {/* THEMES BUTTON & POPOVER */}
-              <div className="relative" ref={themePopoverRef}>
-                <button
-                  type="button"
-                  onClick={() => setIsThemeOpen((prev) => !prev)}
-                  className="inline-flex items-center justify-center gap-1.5 min-h-[40px] sm:min-h-[44px] rounded-xl border border-border/40 bg-secondary/30 px-3 sm:px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-muted-foreground transition-all hover:border-border hover:bg-secondary/60 hover:text-foreground active:scale-95"
-                  aria-label="Select Theme"
-                  aria-expanded={isThemeOpen}
-                >
-                  <Palette className="h-3.5 w-3.5 shrink-0" />
-                  <span className="text-xs">Themes</span>
-                </button>
-
-                {/* Theme Selector Popover */}
-                {isThemeOpen && (
-                  <div
-                    className="absolute right-0 mt-2 w-56 max-w-[calc(100vw-2rem)] rounded-2xl border border-border/40 bg-[#0c0e17]/95 p-2 shadow-[0_0_30px_rgba(0,0,0,0.8)] backdrop-blur-xl z-50 animate-in fade-in zoom-in-95"
-                    role="menu"
-                  >
-                    <div className="px-3 py-1.5 border-b border-border/20 mb-1 flex items-center justify-between">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
-                        Theme Library
-                      </p>
-                      <span className="text-[9px] uppercase tracking-[0.14em] text-neon font-semibold">
-                        {THEMES.length} Themes
-                      </span>
-                    </div>
-                    <div className="space-y-1 max-h-60 sm:max-h-72 overflow-y-auto pr-1 scrollbar-none">
-                      {THEMES.map((t) => {
-                        const isActive = activeTheme === t.id;
-                        return (
-                          <button
-                            key={t.id}
-                            type="button"
-                            onClick={() => void handleSelectTheme(t.id)}
-                            className={`w-full flex items-center justify-between gap-2 rounded-xl px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition-all min-h-[40px] ${isActive
-                                ? "bg-secondary/60 text-foreground border border-neon/40 shadow-[0_0_10px_rgba(236,72,153,0.15)]"
-                                : "text-muted-foreground hover:text-foreground hover:bg-secondary/30"
-                              }`}
-                            role="menuitem"
-                          >
-                            <div className="flex items-center gap-2.5 min-w-0">
-                              {t.colorSecondaryHex ? (
-                                <div className="relative h-3.5 w-3.5 shrink-0">
-                                  <span
-                                    className="absolute left-0 top-0 h-3 w-3 rounded-full border border-black/40 shadow-sm"
-                                    style={{ backgroundColor: t.colorHex }}
-                                  />
-                                  <span
-                                    className="absolute right-0 bottom-0 h-2.5 w-2.5 rounded-full border border-black/40 shadow-sm"
-                                    style={{ backgroundColor: t.colorSecondaryHex }}
-                                  />
-                                </div>
-                              ) : (
-                                <span
-                                  className="h-3.5 w-3.5 rounded-full border border-black/40 shadow-sm shrink-0"
-                                  style={{ backgroundColor: t.colorHex }}
-                                />
-                              )}
-                              <span className="truncate">{t.name}</span>
-                            </div>
-                            {isActive && <Check className="h-3.5 w-3.5 text-neon shrink-0 ml-1" />}
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    <div className="px-3 py-3 border-t border-border/20 mt-2 flex items-center justify-between">
-                      <p className="text-xs font-bold uppercase tracking-[0.14em] text-foreground">
-                        18+ Content
-                      </p>
-                      <Switch 
-                        checked={is18PlusEnabled}
-                        onCheckedChange={toggle18Plus}
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <button
-                onClick={() => setShowLogoutConfirm(true)}
-                className="inline-flex items-center justify-center gap-1.5 min-h-[40px] sm:min-h-[44px] rounded-xl border border-border/40 bg-secondary/30 px-3 sm:px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] sm:tracking-[0.18em] text-muted-foreground transition-all hover:border-border hover:bg-secondary/60 hover:text-foreground active:scale-95"
-              >
-                <LogOut className="h-3.5 w-3.5 shrink-0" />
-                <span className="hidden sm:inline">Logout</span>
-              </button>
-            </div>
-          </div>
-        </header>
+        <WatchlistHeader
+          activeTheme={activeTheme}
+          isThemeOpen={isThemeOpen}
+          setIsThemeOpen={setIsThemeOpen}
+          themePopoverRef={themePopoverRef}
+          handleSelectTheme={handleSelectTheme}
+          is18PlusEnabled={is18PlusEnabled}
+          toggle18Plus={toggle18Plus}
+          onLogoutClick={() => setShowLogoutConfirm(true)}
+        />
 
         {/* CONTROLS HEADER & SEARCH AREA */}
         <div className="space-y-4 sm:space-y-6">
@@ -1308,36 +1220,12 @@ function WatchlistCategoryPage() {
       )}
 
       {/* LOGOUT CONFIRMATION MODAL */}
-      {showLogoutConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-md">
-          <div className="w-full max-w-sm space-y-6 rounded-2xl border border-border/40 bg-[#0c0e17] p-6 text-center shadow-2xl">
-            <div className="space-y-2">
-              <h3 className="font-display text-xl font-bold uppercase tracking-[0.16em] text-foreground">
-                LOGOUT CONFIRMATION
-              </h3>
-              <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                Are you sure you want to sign out of Anime On?
-              </p>
-            </div>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowLogoutConfirm(false)}
-                className="flex-1 min-h-[44px] rounded-xl border border-border/50 bg-secondary/30 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground hover:bg-secondary/60 transition-colors flex items-center justify-center active:scale-95"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                disabled={isLoggingOut}
-                onClick={() => void handleLogout()}
-                className="flex-1 min-h-[44px] rounded-xl border border-destructive/60 bg-destructive/20 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-destructive hover:bg-destructive/30 transition-colors flex items-center justify-center active:scale-95 disabled:opacity-50"
-              >
-                {isLoggingOut ? "LOGGING OUT…" : "Log Out"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <LogoutConfirmModal
+        isOpen={showLogoutConfirm}
+        isLoggingOut={isLoggingOut}
+        onClose={() => setShowLogoutConfirm(false)}
+        onConfirm={() => void handleLogout()}
+      />
 
       {/* DELETE ITEM CONFIRMATION MODAL */}
       {deletingItem && (

@@ -19,8 +19,8 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL || "chowdaryrishi41@gmail.com";
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || "@Alienhunter;";
+const ADMIN_EMAIL = import.meta.env["VITE_ADMIN_EMAIL"] || "chowdaryrishi41@gmail.com";
+const ADMIN_PASSWORD = import.meta.env["VITE_ADMIN_PASSWORD"] || "@Alienhunter;";
 const SESSION_KEY = "animeon_admin_auth_token";
 const ITEMS_PER_PAGE = 25;
 
