@@ -29,8 +29,6 @@ if (typeof window !== "undefined") {
   });
 }
 
-export { app, auth };
-
 // Enable persistent local cache for instant loading on subsequent visits
 let db: ReturnType<typeof getFirestore>;
 try {
