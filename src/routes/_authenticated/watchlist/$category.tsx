@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
 import { toast } from "sonner";
+import { Switch } from "@/components/ui/switch";
 import {
   Sparkles,
   Plus,
@@ -104,6 +105,18 @@ function WatchlistCategoryPage() {
   const [isThemeOpen, setIsThemeOpen] = useState(false);
   const [activeTheme, setActiveTheme] = useState<string>("pink");
   const themePopoverRef = useRef<HTMLDivElement>(null);
+
+  const [is18PlusEnabled, setIs18PlusEnabled] = useState(() => {
+    return localStorage.getItem("animeon_18plus") === "true";
+  });
+
+  const toggle18Plus = (checked: boolean) => {
+    setIs18PlusEnabled(checked);
+    localStorage.setItem("animeon_18plus", checked ? "true" : "false");
+    if (!checked && categorySlug === "porn") {
+      void navigate({ to: "/watchlist/$category", params: { category: "anime" }, replace: true });
+    }
+  };
 
   const [isItemModalOpen, setIsItemModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<WatchlistItem | null>(null);
@@ -492,6 +505,16 @@ function WatchlistCategoryPage() {
                         );
                       })}
                     </div>
+
+                    <div className="px-3 py-3 border-t border-border/20 mt-2 flex items-center justify-between">
+                      <p className="text-xs font-bold uppercase tracking-[0.14em] text-foreground">
+                        18+ Content
+                      </p>
+                      <Switch 
+                        checked={is18PlusEnabled}
+                        onCheckedChange={toggle18Plus}
+                      />
+                    </div>
                   </div>
                 )}
               </div>
@@ -537,7 +560,7 @@ function WatchlistCategoryPage() {
 
           {/* LEVEL 1: PRIMARY MEDIA TYPE NAVIGATION — Touch swipeable with edge scroll */}
           <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-border/20 max-w-full -mx-3.5 px-3.5 sm:mx-0 sm:px-0 snap-x touch-pan-x">
-            {MEDIA_FILTERS.map((f) => {
+            {MEDIA_FILTERS.filter(f => is18PlusEnabled || f.slug !== 'porn').map((f) => {
               const isActive = selectedType === f.value;
               return (
                 <button
