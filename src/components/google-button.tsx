@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, setPersistence, browserSessionPersistence } from "firebase/auth";
 
 import { auth } from "@/lib/firebase";
 import { recordUserProfile } from "@/lib/user-registry";
@@ -32,6 +32,11 @@ export function GoogleButton({ className = "" }: { className?: string }) {
 
   async function signIn() {
     setLoading(true);
+    try {
+      await setPersistence(auth, browserSessionPersistence);
+    } catch (err) {
+      console.warn("Could not set session persistence:", err);
+    }
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: "select_account" });
 

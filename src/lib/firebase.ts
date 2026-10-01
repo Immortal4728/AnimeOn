@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAnalytics, isSupported, Analytics } from "firebase/analytics";
-import { getAuth } from "firebase/auth";
+import { getAuth, setPersistence, browserSessionPersistence } from "firebase/auth";
 import {
   initializeFirestore,
   persistentLocalCache,
@@ -21,6 +21,15 @@ const firebaseConfig = {
 // Initialize Firebase app (singleton pattern)
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
+
+// Use browserSessionPersistence so closing the browser/tab requires login on next visit
+if (typeof window !== "undefined") {
+  setPersistence(auth, browserSessionPersistence).catch((err) => {
+    console.warn("Could not set session persistence:", err);
+  });
+}
+
+export { app, auth };
 
 // Enable persistent local cache for instant loading on subsequent visits
 let db: ReturnType<typeof getFirestore>;

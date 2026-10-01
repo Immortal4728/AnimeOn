@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState, useMemo } from "react";
 import { toast } from "sonner";
 import { Shield, Lock, Mail, Key, Eye, EyeOff } from "lucide-react";
-import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserSessionPersistence } from "firebase/auth";
 
 import { auth } from "@/lib/firebase";
 import { supabase } from "@/integrations/supabase/client";
@@ -127,6 +127,7 @@ function AdminPage() {
 
       // 1. Authenticate via Firebase Auth SDK
       try {
+        await setPersistence(auth, browserSessionPersistence);
         const userCred = await signInWithEmailAndPassword(auth, cleanEmail, cleanPassword);
         if (userCred.user && userCred.user.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
           firebaseAuthSuccess = true;
