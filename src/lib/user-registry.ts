@@ -1,4 +1,5 @@
-import { supabase } from "@/integrations/supabase/client";
+import { doc, setDoc, getDocs, collection, query, orderBy } from "firebase/firestore";
+import { db } from "./firebase";
 
 export interface RegisteredUser {
   id: string;
@@ -15,17 +16,19 @@ export function recordUserProfile(user: { id: string; email: string | null; crea
     created_at: user.created_at || new Date().toISOString(),
   };
 
-  // 1. Sync to Supabase profiles table
-  supabase
-    .from("profiles")
-    .upsert(profile, { onConflict: "id" })
-    .then(({ error }) => {
-      if (error) {
-        console.info("Supabase profile sync info:", error.message);
-      }
+  // 1. Sync directly to Firebase Firestore users/profiles
+  if (user.id) {
+    const userRef = doc(db, "users", user.id);
+    setDoc(userRef, {
+      uid: user.id,
+      email: profile.email,
+      lastLoginAt: profile.created_at,
+    }, { merge: true }).catch((err) => {
+      console.info("Firestore user profile sync note:", err?.message || err);
     });
+  }
 
-  // 2. Persist to local registry (ensures dashboard works seamlessly even with RLS)
+  // 2. Persist to local registry
   try {
     const raw = localStorage.getItem(REGISTRY_KEY);
     const registry: RegisteredUser[] = raw ? JSON.parse(raw) : [];
@@ -51,26 +54,21 @@ export function recordUserProfile(user: { id: string; email: string | null; crea
 export async function fetchAllUsers(): Promise<RegisteredUser[]> {
   const userMap = new Map<string, RegisteredUser>();
 
-  // 1. Fetch from Supabase profiles
+  // 1. Fetch from Firestore users collection
   try {
-    const { data } = await supabase
-      .from("profiles")
-      .select("id, email, created_at")
-      .order("created_at", { ascending: false });
-
-    if (data && data.length > 0) {
-      data.forEach((p) => {
-        if (p.id) {
-          userMap.set(p.id, {
-            id: p.id,
-            email: p.email,
-            created_at: p.created_at || new Date().toISOString(),
-          });
-        }
+    const usersRef = collection(db, "users");
+    const snapshot = await getDocs(query(usersRef));
+    snapshot.forEach((d) => {
+      const data = d.data();
+      const uid = d.id;
+      userMap.set(uid, {
+        id: uid,
+        email: data.email || null,
+        created_at: data.lastLoginAt || data.createdAt || new Date().toISOString(),
       });
-    }
+    });
   } catch (e) {
-    console.warn("Supabase profile query note:", e);
+    console.warn("Firestore user fetch note:", e);
   }
 
   // 2. Merge local persistent registry

@@ -5,7 +5,6 @@ import { Shield, Lock, Mail, Key, Eye, EyeOff } from "lucide-react";
 import { signInWithEmailAndPassword, onAuthStateChanged, setPersistence, browserSessionPersistence } from "firebase/auth";
 
 import { auth } from "@/lib/firebase";
-import { supabase } from "@/integrations/supabase/client";
 import { fetchAllUsers, recordUserProfile } from "@/lib/user-registry";
 
 export const Route = createFileRoute("/admin")({
@@ -19,8 +18,8 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-const ADMIN_EMAIL = import.meta.env["VITE_ADMIN_EMAIL"] || "chowdaryrishi41@gmail.com";
-const ADMIN_PASSWORD = import.meta.env["VITE_ADMIN_PASSWORD"] || "@Alienhunter;";
+const ADMIN_EMAIL = import.meta.env["VITE_ADMIN_EMAIL"] || "";
+const ADMIN_PASSWORD = import.meta.env["VITE_ADMIN_PASSWORD"] || "";
 const SESSION_KEY = "animeon_admin_auth_token";
 const ITEMS_PER_PAGE = 25;
 
@@ -170,7 +169,6 @@ function AdminPage() {
     sessionStorage.removeItem(SESSION_KEY);
     localStorage.removeItem(SESSION_KEY);
     await auth.signOut();
-    await supabase.auth.signOut();
     setIsAuthenticated(false);
     toast.info("Admin logged out");
   };

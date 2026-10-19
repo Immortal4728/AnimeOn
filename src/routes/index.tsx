@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { ArrowRight, Sparkles, Bookmark, CheckCircle2 } from "lucide-react";
 
 import retroHero from "@/assets/retro-hero.jpg";
-import { supabase } from "@/integrations/supabase/client";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -30,8 +31,8 @@ function Home() {
   const [, setHoveredCategory] = useState<string | null>(null);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: "/watchlist", replace: true });
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) navigate({ to: "/watchlist", replace: true });
     });
 
     const handleScroll = () => {
@@ -43,7 +44,10 @@ function Home() {
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      unsubscribe();
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, [navigate]);
 
   return (
